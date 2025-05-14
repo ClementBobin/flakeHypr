@@ -1,19 +1,18 @@
 {
   inputs,
+  vars,
   ...
 }:
 let
   pkgs = import inputs.hydenix.inputs.hydenix-nixpkgs {
     inherit (inputs.hydenix.lib) system;
     config.allowUnfree = true;
-    config.allowBroken = true;
     overlays = [
       inputs.hydenix.lib.overlays
       (final: prev: {
         userPkgs = import inputs.nixpkgs {
           inherit (inputs.hydenix.lib) system;
           config.allowUnfree = true;
-          config.allowBroken = true;
         };
       })
     ];
@@ -28,6 +27,20 @@ in
     inputs.hydenix.lib.nixOsModules
     ./hardware-configuration.nix
     ../../modules/system/hosts/oak
+
+
+    # === GPU-specific configurations ===
+
+    /*
+      For drivers, we are leveraging nixos-hardware
+      Most common drivers are below, but you can see more options here: https://github.com/NixOS/nixos-hardware
+    */
+
+    #! EDIT THIS SECTION
+    # === Other common modules ===
+    inputs.hydenix.inputs.nixos-hardware.nixosModules.common-pc
+    inputs.hydenix.inputs.nixos-hardware.nixosModules.common-pc-ssd
+    inputs.hydenix.inputs.nixos-hardware.nixosModules.asus-fa507nv
   ];
 
   home-manager = {
@@ -36,30 +49,17 @@ in
     extraSpecialArgs = {
       inherit inputs;
     };
-    users."richen" =
+    users."${vars.user}" =
       { ... }:
       {
         imports = [
-          ../../modules/hm/users/richen
+          ../../modules/hm/hosts/oak
+          ../../modules/hm/desktops
         ];
 
         desktops.hydenix = {
           enable = true;
           hostname = "oak";
-        };
-
-        modules = {
-          common = {
-            easyeffects.enable = true;
-            git.enable = true;
-            dev.enable = true;
-            expo-dev.enable = true;
-            obs.enable = true;
-            games.enable = true;
-            zsh.enable = true;
-          };
-          # TODO: make obsidian.nix work on any host
-          obsidian.enable = false;
         };
       };
   };
@@ -67,13 +67,13 @@ in
   hydenix = {
     enable = true;
     hostname = "oak";
-    timezone = "America/Vancouver";
-    locale = "en_CA.UTF-8";
+    timezone = "Europe/Paris";
+    locale = "fr_FR.UTF-8";
   };
 
-  users.users.richen = {
+  users.users.${vars.user} = {
     isNormalUser = true;
-    initialPassword = "hydenix";
+    initialPassword = "epsilon21C";
     extraGroups = [
       "wheel"
       "networkmanager"
@@ -81,4 +81,6 @@ in
     ];
     shell = pkgs.zsh;
   };
+
+  boot.kernelParams = ["video=HDMI-A-1:1920x1080@60"];
 }
