@@ -7,10 +7,10 @@
   ];
 
   modules = {
-    # TODO: should be able to enable after install
-    boot.enable = true;
-    steam.enable = true;
-    dev.enable = true;
-    gamescope.enable = true;
+    games.steam.enable = true;
+    networks.vpn.tailscale.enable = true;
+    backup.syncthing.enable = true;
+    virtualisation.docker.enable = true;
+    dev.php.enable = true;
   };
 }

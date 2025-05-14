@@ -1,5 +1,6 @@
 {
   inputs,
+  vars,
   ...
 }:
 let
@@ -36,12 +37,12 @@ in
     extraSpecialArgs = {
       inherit inputs;
     };
-    users."richen" =
+    users."${vars.user}" =
       { ... }:
       {
-        imports = [
-          ../../modules/hm/users/richen
-        ];
+        #imports = [
+          #../../modules/hm/users/richen
+        #];
 
         desktops.hydenix = {
           enable = true;
@@ -71,7 +72,7 @@ in
     locale = "en_CA.UTF-8";
   };
 
-  users.users.richen = {
+  users.users.${vars.user} = {
     isNormalUser = true;
     initialPassword = "hydenix";
     extraGroups = [
