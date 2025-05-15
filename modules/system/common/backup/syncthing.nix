@@ -2,6 +2,7 @@
   pkgs,
   config,
   lib,
+  vars,
   ...
 }:
 
@@ -18,6 +19,12 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    services.syncthing.enable = true;
+    services.syncthing = {
+      enable = true;
+      user = "${vars.user}";
+      dataDir = "/home/${vars.user}";  # default location for new folders
+      configDir = "/home/${vars.user}/.config/syncthing";
+      openDefaultPorts = true;
+    };
   };
 }

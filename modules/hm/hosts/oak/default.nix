@@ -32,6 +32,7 @@
       chrome.enable = true;
     };
     documentation = {
+      obsidian.enable = false;
       onlyoffice.enable = true;
     };
     dev = {
