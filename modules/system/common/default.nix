@@ -18,6 +18,8 @@
     ./virtualisation/docker.nix
     
     ./linux-cachyos.nix
+
+    ./nix-garbage.nix
   ];
 
   # TODO: move this somewhere?

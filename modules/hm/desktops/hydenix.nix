@@ -53,7 +53,6 @@ in
         webcord.enable = false;
         vesktop.enable = false;
       };
-      editors.default = "nvim";
       git = {
         enable = true;
         name = "mirage";
@@ -86,6 +85,28 @@ in
           input {
 		        kb_layout = fr
 	        }
+
+          # Example monitor configuration
+          # Replace names like HDMI-A-1, DP-1, etc. with the actual names of your monitors (use `hyprctl monitors` to list)
+          # monitor=<name>,<resolution>@<refresh>,<positionX>x<positionY>,<scale>
+
+          # Main display
+          # monitor=HDMI-A-1,auto,0x0,1
+
+          # Place DP-1 to the right of HDMI-A-1
+          # monitor=DP-1,auto,1920x0,1
+
+          # Place eDP-1 (e.g., laptop screen) above HDMI-A-1
+          # monitor=eDP-1,auto,0x-1080,1
+
+          # Place DP-2 below HDMI-A-1
+          # monitor=DP-2,auto,0x1080,1
+
+          # Place DP-3 diagonally bottom-right of HDMI-A-1
+          # monitor=DP-3,auto,1920x1080,1
+
+          # Disable an unused monitor (example)
+          # monitor=DP-4,disable
         '';
         force = true;
         mutable = true;

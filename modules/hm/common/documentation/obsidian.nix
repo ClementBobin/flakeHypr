@@ -17,7 +17,7 @@ let
     owner = "HyDE-Project";
     repo = "obsidian";
     rev = "main";
-    sha256 = "sha256-dqGWP2KsjUjb65gnulZ+fe6wGcfaudhT0cpTw2QcUEI=";
+    sha256 = "sha256-y3OdO+jTehW87doiieW6w6FmRc+L017Zoy86Cx6tHmg=";
   };
 
   # Script to create and monitor hardlinks
@@ -27,6 +27,7 @@ let
 
     # Create obsidian projects directory if it doesn't exist
     mkdir -p "$OBSIDIAN_DIR"
+    mkdir -p "$DEV_DIR"
 
     # Variable to track last update time
     last_update=0

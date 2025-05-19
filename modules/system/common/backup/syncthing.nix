@@ -16,14 +16,26 @@ in
       default = false;
       description = "Enable syncthing";
     };
+
+    dirSync = lib.mkOption {
+      type = lib.types.str;
+      default = "/";
+      description = "Directory containing sync principal";
+    };
+
+    subDir = lib.mkOption {
+      type = lib.types.str;
+      default = "";
+      description = "Directory containing sync sub";
+    };
   };
 
   config = lib.mkIf cfg.enable {
     services.syncthing = {
       enable = true;
       user = "${vars.user}";
-      dataDir = "/home/${vars.user}";  # default location for new folders
-      configDir = "/home/${vars.user}/.config/syncthing";
+      dataDir = "${cfg.dirSync}/${cfg.subDir}";  # default location for new folders
+      configDir = "${cfg.dirSync}/.config/syncthing";
       openDefaultPorts = true;
     };
   };

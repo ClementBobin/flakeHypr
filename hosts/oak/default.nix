@@ -43,6 +43,8 @@ in
     inputs.hydenix.inputs.nixos-hardware.nixosModules.asus-fa507nv
   ];
 
+  boot.kernelParams = [ "video=HDMI-A-1:e" ];
+
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
@@ -73,7 +75,7 @@ in
 
   users.users.${vars.user} = {
     isNormalUser = true;
-    initialPassword = "epsilon21C";
+    #initialPassword = "${vars.user}";
     extraGroups = [
       "wheel"
       "networkmanager"
@@ -81,6 +83,4 @@ in
     ];
     shell = pkgs.zsh;
   };
-
-  boot.kernelParams = ["video=HDMI-A-1:1920x1080@60"];
 }

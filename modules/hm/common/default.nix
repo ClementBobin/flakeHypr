@@ -3,6 +3,8 @@
 }:
 {
   imports = [
+    ./communication/mail/bluemail.nix
+    ./communication/mail/thunderbird.nix
     ./communication/teams.nix
 
     ./dev/dbeaver.nix
@@ -42,6 +44,7 @@
 
     ./shell/btop.nix
     ./shell/fzf.nix
+    ./shell/navi.nix
     ./shell/ranger.nix
     ./shell/starship.nix
     ./shell/tools.nix

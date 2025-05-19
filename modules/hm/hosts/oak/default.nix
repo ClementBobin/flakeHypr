@@ -15,6 +15,7 @@
       fzf.enable = true;
       ranger.enable = true;
       tools.enable = true;
+      navi.enable = true;
     };
     games = {
       mangohud.enable = false;
@@ -32,7 +33,7 @@
       chrome.enable = true;
     };
     documentation = {
-      obsidian.enable = false;
+      obsidian.enable = true;
       onlyoffice.enable = true;
     };
     dev = {
@@ -46,6 +47,10 @@
     };
     communication = {
       teams.enable = true;
+      mail = {
+        bluemail.enable = false;
+        thunderbird.enable = true;
+      };
     };
   };
 }
