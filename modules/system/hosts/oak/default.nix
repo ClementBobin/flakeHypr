@@ -1,8 +1,6 @@
 { inputs, ... }:
 {
   imports = [
-    # TODO: oak private modules
-    # inputs.richendots-private.nixosModules.oak
     ../../common
   ];
 
@@ -11,7 +9,11 @@
       enable = true;
       autoOptimiseStore = true;
     };
-    games.steam.enable = true;
+    games = {
+      enable = true;
+      steam.enable = true;
+      lutris.enable = true;
+    };
     networks.vpn.tailscale.enable = true;
     backup.syncthing = {
       enable = true;

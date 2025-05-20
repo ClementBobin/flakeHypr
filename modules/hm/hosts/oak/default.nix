@@ -18,7 +18,7 @@
       navi.enable = true;
     };
     games = {
-      mangohud.enable = false;
+      mangohud.enable = true;
       minecraft.enable = true;
     };
     security = {
@@ -40,14 +40,16 @@
       onlyoffice.enable = true;
     };
     dev = {
-      dbeaver.enable = true;
+      editor = {
+        dbeaver.enable = true;
+        jetbrains.enable = true;
+        vs-code.enable = true;
+      };
       dotnet.enable = true;
       flutter.enable = true;
-      jetbrains.enable = true;
       nix.enable = true;
       node.enable = true;
       python.enable = true;
-      vs-code.enable = true;
     };
     communication = {
       teams.enable = true;

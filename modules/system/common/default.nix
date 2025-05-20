@@ -7,7 +7,7 @@
     ./dev/php.nix
 
     ./games/gamescope.nix
-    ./games/steam.nix
+    ./games/games.nix
 
     ./hardware/gpu/amd.nix
     ./hardware/autologin.nix
@@ -16,7 +16,7 @@
     ./networks/vpn/tailscale.nix
 
     ./virtualisation/docker.nix
-    
+
     ./linux-cachyos.nix
 
     ./nix-garbage.nix

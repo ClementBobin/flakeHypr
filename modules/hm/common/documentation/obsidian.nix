@@ -74,7 +74,8 @@ let
     DEV_DIR="${cfg.devDir}"
 
     # Create obsidian projects directory if it doesn't exist
-    mkdir -p "$OBSIDIAN_DIR" "DEV_DIR"
+    mkdir -p "$OBSIDIAN_DIR"
+    mkdir -p "DEV_DIR"
 
     # Variable to track last update time
     last_update=0
@@ -84,13 +85,13 @@ let
     update_links() {
       current_time=$(date +%s)
       time_diff=$((current_time - last_update))
-      
+
       # Only update if enough time has passed since last update
       if [ $time_diff -ge $update_interval ]; then
         find "$DEV_DIR" -maxdepth "${toString cfg.searchLinkerDepth}" -name "TODO.md" | while read -r todo_file; do
           project_name=$(basename "$(dirname "$todo_file")")
           target_link="$OBSIDIAN_DIR/$project_name-todo.md"
-          
+
           # Remove existing link if it exists
           rm -f "$target_link"
           # Create new hardlink
@@ -122,9 +123,9 @@ in
       type    = lib.types.enum [ "none" "git-push-temp" ];
       default = "none";
       description = ''
-        Backup strategy.  
-        • none – disable backups  
-        • git-push-temp – commit & push vault to the **temp** branch
+        Backup strategy.
+        • none – disable backups
+        • git-push-temp – commit & push vault to the **temp** branch
       '';
     };
 
@@ -166,7 +167,7 @@ in
       ".config/hyde/wallbash/Wall-Ways/obsidian.dcol" = {
         source   = obsidianDcol; force = true; mutable = true;
       };
-      "obsidian/home/.obsidian/themes/Wallbash" = {
+      "Documents/obsidian/home/.obsidian/themes/Wallbash" = {
         source   = wallbashTheme; recursive = true; force = true; mutable = true;
       };
     };

@@ -49,6 +49,7 @@ in
 
     hydenix.hm = {
       enable = true;
+      gaming.enable = false;
       editors = {
         vscode.enable = false;
         neovim = false;
