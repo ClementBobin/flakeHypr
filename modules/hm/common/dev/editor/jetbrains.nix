@@ -1,10 +1,10 @@
 { pkgs, lib, config, ... }:
 
 let
-  cfg = config.modules.common.dev.jetbrains;
+  cfg = config.modules.common.dev.editor.jetbrains;
 in
 {
-  options.modules.common.dev.jetbrains = {
+  options.modules.common.dev.editor.jetbrains = {
     enable = lib.mkOption {
       type = lib.types.bool;
       default = false;

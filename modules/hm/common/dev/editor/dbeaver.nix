@@ -1,10 +1,10 @@
 { pkgs, lib, config, ... }:
 
 let
-  cfg = config.modules.common.dev.dbeaver;
+  cfg = config.modules.common.dev.editor.dbeaver;
 in
 {
-  options.modules.common.dev.dbeaver = {
+  options.modules.common.dev.editor.dbeaver = {
     enable = lib.mkOption {
       type = lib.types.bool;
       default = false;

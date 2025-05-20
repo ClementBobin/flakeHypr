@@ -16,13 +16,6 @@ in
 
     environment.systemPackages = (with pkgs; [
       steam
-
-      # Uncomment as needed:
-      # inputs.nix-gaming.packages.${pkgs.system}.northstar-proton
-      # inputs.nix-gaming.packages.${pkgs.system}.viper
-      # inputs.nix-gaming.packages.${pkgs.system}.roblox-player
-      # inputs.nix-gaming.packages.${pkgs.system}.rocket-league
-      # inputs.nix-gaming.packages.${pkgs.system}.star-citizen
     ]);
 
     environment.sessionVariables = {

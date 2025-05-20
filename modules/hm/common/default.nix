@@ -7,22 +7,22 @@
     ./communication/mail/thunderbird.nix
     ./communication/teams.nix
 
-    ./dev/dbeaver.nix
+    ./dev/editor/dbeaver.nix
+    ./dev/editor/jetbrains.nix
+    ./dev/editor/vs-code.nix
     ./dev/dotnet.nix
     ./dev/flutter.nix
     ./dev/gitkraken.nix
-    ./dev/jetbrains.nix
     ./dev/nix.nix
     ./dev/node.nix
     ./dev/python.nix
-    ./dev/vs-code.nix
 
     ./documentation/obsidian.nix
     ./documentation/okular.nix
     ./documentation/onlyoffice.nix
 
     ./driver/chrome.nix
-    
+
     ./emulator/playonlinux.nix
     ./emulator/proton.nix
     ./emulator/wine.nix
@@ -31,6 +31,10 @@
 
     ./games/mangohud.nix
     ./games/minecraft.nix
+    ./games/roblox.nix
+    ./games/rocket-league.nix
+    ./games/star-citizen.nix
+    ./games/titanfall2.nix
 
     ./multimedia/easyeffects.nix
     ./multimedia/gimp.nix

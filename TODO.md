@@ -9,6 +9,5 @@
 - VMs: [hostname]-vm (fern-vm, oak-vm, cedar-vm)
 
 - [ ] hydenix: some yubikey touch detection for hyprlock and waybar <https://github.com/maximbaz/yubikey-touch-detector>
-- [ ] game
 - [ ] bluemail
 - [ ] obsi wallpaper
