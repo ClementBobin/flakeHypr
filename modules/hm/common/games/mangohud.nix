@@ -21,7 +21,7 @@ in
           # Configure general mangohud settings
           settings = {
             fps_limit = 144;
-            toggle_fps_limit = "Shift_L+F1";
+            toggle_fps_limit = "Shift_L+F2";
             legacy_layout = false;
 
             gpu_stats = true;
@@ -79,8 +79,8 @@ in
             round_corners = 10;
 
             font_size = 14;
-            toggle_hud = "Shift_L+F12";
-            toggle_logging = "Shift_L+F2";
+            toggle_hud = "Shift_L+F1";
+            toggle_logging = "Shift_L+F4";
             upload_log = "Shift_L+F5";
             reload_cfg = "Super_L+Alt_L+M";
 
