@@ -49,6 +49,10 @@ in
 
     hydenix.hm = {
       enable = true;
+      editors = {
+        vscode.enable = false;
+        neovim = false;
+      };
       social = {
         webcord.enable = false;
         vesktop.enable = false;

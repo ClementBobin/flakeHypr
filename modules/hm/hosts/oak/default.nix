@@ -33,7 +33,10 @@
       chrome.enable = true;
     };
     documentation = {
-      obsidian.enable = true;
+      obsidian = {
+        enable = true;
+        backupMethod  = "git-push-temp";
+      };
       onlyoffice.enable = true;
     };
     dev = {
@@ -44,6 +47,7 @@
       nix.enable = true;
       node.enable = true;
       python.enable = true;
+      vs-code.enable = true;
     };
     communication = {
       teams.enable = true;

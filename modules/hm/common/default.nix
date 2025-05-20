@@ -15,6 +15,7 @@
     ./dev/nix.nix
     ./dev/node.nix
     ./dev/python.nix
+    ./dev/vs-code.nix
 
     ./documentation/obsidian.nix
     ./documentation/okular.nix
