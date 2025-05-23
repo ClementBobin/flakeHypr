@@ -12,9 +12,11 @@
     ./dev/editor/vs-code.nix
     ./dev/dotnet.nix
     ./dev/flutter.nix
-    ./dev/gitkraken.nix
     ./dev/nix.nix
-    ./dev/node.nix
+    ./dev/node/graphite.nix
+    ./dev/node/localtunnel.nix
+    ./dev/node/node.nix
+    ./dev/node/vercel.nix
     ./dev/python.nix
 
     ./documentation/obsidian.nix
@@ -34,7 +36,7 @@
     ./games/roblox.nix
     ./games/rocket-league.nix
     ./games/star-citizen.nix
-    ./games/titanfall2.nix
+    ./games/northstar.nix
 
     ./multimedia/easyeffects.nix
     ./multimedia/gimp.nix
@@ -55,5 +57,6 @@
     ./shell/tools.nix
 
     ./utilities/filezilla.nix
+    ./utilities/gitkraken.nix
   ];
 }

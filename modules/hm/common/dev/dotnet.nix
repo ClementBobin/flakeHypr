@@ -2,25 +2,26 @@
 
 let
   cfg = config.modules.common.dev.dotnet;
+
+  dotnetVersions = cfg.sdk-versions;
+
+  dotnetPackages = map (v: pkgs."dotnet-sdk_${v}") dotnetVersions;
 in
 {
   options.modules.common.dev.dotnet = {
     enable = lib.mkOption {
       type = lib.types.bool;
       default = false;
-      description = "Enable dotnet development environment";
+      description = "Enable .NET development environment";
     };
-
-    installMethod = lib.mkOption {
-      type = lib.types.enum [ "hm" "sys" ];
-      default = "hm";
-      description = "Choose whether to install dotnet via home-manager or directly in the environment.";
+    sdk-versions = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [ "8" ];
+      description = "List of .NET SDK versions to install (e.g. ["6" "7" "8"])";
     };
   };
 
   config = lib.mkIf cfg.enable {
-    home.packages = lib.mkIf (cfg.installMethod == "hm") (with pkgs; [
-      dotnet-sdk_8
-    ]);
+    home.packages = dotnetPackages;
   };
 }

@@ -10,17 +10,11 @@ in
       default = false;
       description = "Enable shell-tools";
     };
-
-    installMethod = lib.mkOption {
-      type = lib.types.enum [ "hm" "sys" ];
-      default = "hm";
-      description = "Choose whether to install shell-tools via home-manager or directly in the environment.";
-    };
   };
 
   config = lib.mkIf cfg.enable {
     # Conditional installation of tools based on the install method
-    home.packages = lib.mkIf (cfg.installMethod == "hm") (with pkgs; [
+    home.packages = (with pkgs; [
       tree
     ]);
   };

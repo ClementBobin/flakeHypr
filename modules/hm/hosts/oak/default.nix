@@ -22,7 +22,10 @@
       minecraft.enable = true;
     };
     security = {
-      clamav.enable = true;
+      clamav = {
+        enable = true;
+        gui.enable = true;
+      };
       stacer.enable = true;
     };
     multimedia = {
@@ -48,7 +51,12 @@
       dotnet.enable = true;
       flutter.enable = true;
       nix.enable = true;
-      node.enable = true;
+      node = {
+        enable = true;
+        graphite.enable = true;
+        vercel.enable = true;
+        localtunnel.enable = true;
+      };
       python.enable = true;
     };
     communication = {

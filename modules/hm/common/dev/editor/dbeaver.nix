@@ -10,16 +10,10 @@ in
       default = false;
       description = "Enable dbeaver development";
     };
-
-    installMethod = lib.mkOption {
-      type = lib.types.enum [ "hm" "sys" ];
-      default = "hm";
-      description = "Choose whether to install dbeaver tools via home-manager or directly in the environment.";
-    };
   };
 
   config = lib.mkIf cfg.enable {
-    home.packages = lib.mkIf (cfg.installMethod == "hm") (with pkgs; [
+    home.packages = (with pkgs; [
       dbeaver-bin
     ]);
   };
