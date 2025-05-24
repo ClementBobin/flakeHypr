@@ -5,7 +5,7 @@ let
   cfg = config.modules.common.dev.python;
 
   # add home directory to devShell.shellPaths if not already present
-  homePath = "."; # or: builtins.toString config.home.homeDirectory
+  homePath = "./Templates"; # or: builtins.toString config.home.homeDirectory
   devShellPaths = lib.unique (
     (lib.optionals (cfg.devShell.shellPaths == []) [ homePath ])
     ++ cfg.devShell.shellPaths
