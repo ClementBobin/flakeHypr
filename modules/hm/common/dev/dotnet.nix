@@ -5,7 +5,8 @@ let
 
   dotnetVersions = cfg.sdk-versions;
 
-  dotnetPackages = map (v: pkgs."dotnet-sdk_${v}") dotnetVersions;
+  dotnetPackages = (map (v: pkgs."dotnet-sdk_${v}") dotnetVersions) ++ (map (pkgName: pkgs.${pkgName}) cfg.extraPackages);
+
 in
 {
   options.modules.common.dev.dotnet = {
@@ -18,6 +19,11 @@ in
       type = lib.types.listOf lib.types.str;
       default = [ "8" ];
       description = "List of .NET SDK versions to install (e.g. ["6" "7" "8"])";
+    };
+    extraPackages = lib.mkOption {
+      type = lib.types.listOf lib.types.package;
+      default = [];
+      description = "Additional .NET packages to install; need to specify dotnetPackages.{name of package}";
     };
   };
 

@@ -57,7 +57,10 @@
         vercel.enable = true;
         localtunnel.enable = true;
       };
-      python.enable = true;
+      python = {
+        enable = true;
+        devShell.enable = true;
+      };
     };
     communication = {
       teams.enable = true;

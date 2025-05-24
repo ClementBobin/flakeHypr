@@ -18,7 +18,7 @@ let
     managerPkg
   ];
 
-  allNodePackages = lib.flatten (map nodeWithPackageManager cfg.versions);
+  allNodePackages = lib.flatten (map nodeWithPackageManager cfg.versions) ++ (map (pkgName: pkgs.${pkgName}) cfg.extraPackages);
 in
 {
   options.modules.common.dev.node = {
@@ -36,6 +36,12 @@ in
       type = lib.types.listOf lib.types.str;
       default = [ "20" ];
       description = "List of Node.js versions to install (e.g. ["18" "20"])";
+    };
+
+    extraPackages = lib.mkOption {
+      type = lib.types.listOf lib.types.package;
+      default = [];
+      description = "Additional node packages to install; need to specify nodePackages.{name of package}";
     };
   };
 

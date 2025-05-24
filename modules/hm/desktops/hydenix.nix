@@ -88,8 +88,8 @@ in
       ".config/hypr/userprefs.conf" = lib.mkForce {
         text = ''
           input {
-		        kb_layout = fr
-	        }
+            kb_layout = fr
+          }
 
           # Example monitor configuration
           # Replace names like HDMI-A-1, DP-1, etc. with the actual names of your monitors (use `hyprctl monitors` to list)
