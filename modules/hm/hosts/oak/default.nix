@@ -26,7 +26,7 @@
         enable = true;
         gui.enable = true;
       };
-      stacer.enable = true;
+      stacer.enable = false;
     };
     multimedia = {
       gimp.enable = true;
@@ -55,7 +55,7 @@
         enable = true;
         graphite.enable = true;
         vercel.enable = true;
-        localtunnel.enable = true;
+        localtunnel.enable = false;
       };
       python.enable = true;
     };
