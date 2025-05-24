@@ -55,7 +55,7 @@
         enable = true;
         graphite.enable = true;
         vercel.enable = true;
-        localtunnel.enable = false;
+        localtunnel.enable = true;
       };
       python.enable = true;
     };

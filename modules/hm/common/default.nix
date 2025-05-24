@@ -16,6 +16,7 @@
     ./dev/node/graphite.nix
     ./dev/node/localtunnel.nix
     ./dev/node/node.nix
+    ./dev/node/pm2.nix
     ./dev/node/vercel.nix
     ./dev/python.nix
 

@@ -15,7 +15,7 @@
 
     ./networks/vpn/tailscale.nix
 
-    ./virtualisation/docker.nix
+    ./virtualisation/containers/containers.nix
 
     ./linux-cachyos.nix
 
