@@ -13,7 +13,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    # Conditional installation of tools based on the install method
+    # Install shell tools via home-manager
     home.packages = (with pkgs; [
       tree
     ]);
