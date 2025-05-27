@@ -15,14 +15,18 @@
       fzf.enable = true;
       ranger.enable = true;
       tools.enable = true;
+      navi.enable = true;
     };
     games = {
-      mangohud.enable = false;
+      mangohud.enable = true;
       minecraft.enable = true;
     };
     security = {
-      clamav.enable = true;
-      stacer.enable = true;
+      clamav = {
+        enable = true;
+        gui.enable = true;
+      };
+      stacer.enable = false;
     };
     multimedia = {
       gimp.enable = true;
@@ -32,19 +36,38 @@
       chrome.enable = true;
     };
     documentation = {
+      obsidian = {
+        enable = true;
+        backupMethod  = "git-push-temp";
+      };
       onlyoffice.enable = true;
     };
     dev = {
-      dbeaver.enable = true;
+      editor = {
+        dbeaver.enable = true;
+        jetbrains.enable = true;
+        vs-code.enable = true;
+      };
       dotnet.enable = true;
       flutter.enable = true;
-      jetbrains.enable = true;
       nix.enable = true;
-      node.enable = true;
-      python.enable = true;
+      node = {
+        enable = true;
+        graphite.enable = true;
+        vercel.enable = true;
+        localtunnel.enable = true;
+      };
+      python = {
+        enable = true;
+        devShell.enable = true;
+      };
     };
     communication = {
       teams.enable = true;
+      mail = {
+        bluemail.enable = false;
+        thunderbird.enable = true;
+      };
     };
   };
 }

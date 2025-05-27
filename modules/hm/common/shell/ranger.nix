@@ -10,16 +10,10 @@ in
       default = false;
       description = "Enable shell-ranger";
     };
-
-    installMethod = lib.mkOption {
-      type = lib.types.enum [ "hm" "sys" ];
-      default = "hm";
-      description = "Choose how to install shell-ranger.";
-    };
   };
 
   config = lib.mkIf config.modules.common.shell.ranger.enable {
-    home.packages = lib.mkIf (cfg.installMethod == "hm") (with pkgs; [
+    home.packages = (with pkgs; [
       ranger
     ]);
   };

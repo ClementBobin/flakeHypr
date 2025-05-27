@@ -1,15 +1,25 @@
 { inputs, ... }:
 {
   imports = [
-    # TODO: oak private modules
-    # inputs.richendots-private.nixosModules.oak
     ../../common
   ];
 
   modules = {
-    games.steam.enable = true;
+    nix-garbage = {
+      enable = true;
+      autoOptimiseStore = true;
+    };
+    games = {
+      enable = true;
+      steam.enable = true;
+      lutris.enable = true;
+    };
     networks.vpn.tailscale.enable = true;
-    backup.syncthing.enable = true;
+    backup.syncthing = {
+      enable = true;
+      dirSync = "/home/mirage";
+      subDir = "Documents";
+    };
     virtualisation.docker.enable = true;
     dev.php.enable = true;
   };

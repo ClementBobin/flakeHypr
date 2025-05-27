@@ -8,19 +8,23 @@ in
     enable = lib.mkOption {
       type = lib.types.bool;
       default = false;
-      description = "Enable clamav.";
+      description = "Enable ClamAV antivirus tools.";
     };
 
-    installMethod = lib.mkOption {
-      type = lib.types.enum [ "hm" "sys" ];
-      default = "hm";
-      description = "Choose whether to install clamav via home-manager or directly in the environment.";
+    gui = {
+      enable = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = "Enable ClamTK GUI for ClamAV.";
+      };
     };
   };
 
   config = lib.mkIf cfg.enable {
-    home.packages = lib.mkIf (cfg.installMethod == "hm") (with pkgs; [
+    home.packages = with pkgs; [
       clamav
-    ]);
+    ] ++ lib.optionals cfg.gui.enable [
+      clamtk
+    ];
   };
 }

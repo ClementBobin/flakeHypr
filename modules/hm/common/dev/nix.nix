@@ -10,18 +10,12 @@ in
       default = false;
       description = "Enable nix development environment";
     };
-
-    installMethod = lib.mkOption {
-      type = lib.types.enum [ "hm" "sys" ];
-      default = "hm";
-      description = "Choose whether to install nix-related tools via home-manager or directly in the environment.";
-    };
   };
 
   config = lib.mkIf cfg.enable {
     # Conditional installation of nix-related tools
     # Check if Home Manager or system-wide installation is preferred
-    home.packages = lib.mkIf (cfg.installMethod == "hm") (with pkgs; [
+    home.packages = (with pkgs; [
       nixfmt-rfc-style
       nix-direnv
       direnv
