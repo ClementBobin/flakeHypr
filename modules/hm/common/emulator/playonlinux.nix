@@ -5,11 +5,7 @@ let
 in
 {
   options.modules.common.emulator.playonlinux = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable playonlinux development environment";
-    };
+    enable = lib.mkEnableOption "Enable PlayOnLinux, a graphical frontend for Wine";
   };
 
   config = lib.mkIf cfg.enable {

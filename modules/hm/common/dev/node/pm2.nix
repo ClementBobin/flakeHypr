@@ -5,11 +5,7 @@ let
 in
 {
   options.modules.common.dev.node.pm2 = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable pm2 for node development environment";
-    };
+    enable = lib.mkEnableOption "Enable PM2 process manager for Node.js applications";
   };
 
   config = lib.mkIf cfg.enable {

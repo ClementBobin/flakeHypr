@@ -5,11 +5,7 @@ let
 in
 {
   options.modules.common.emulator.proton = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable proton development environment";
-    };
+    enable = lib.mkEnableOption "Enable Proton, a compatibility layer for running Windows games on Linux";
   };
 
   config = lib.mkIf cfg.enable {

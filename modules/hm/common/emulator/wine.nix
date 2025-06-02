@@ -5,11 +5,7 @@ let
 in
 {
   options.modules.common.emulator.wine = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable wine development environment";
-    };
+    enable = lib.mkEnableOption "Enable Wine, a compatibility layer for running Windows applications on Linux";
   };
 
   config = lib.mkIf cfg.enable {

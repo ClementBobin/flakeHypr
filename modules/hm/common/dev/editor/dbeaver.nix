@@ -5,11 +5,7 @@ let
 in
 {
   options.modules.common.dev.editor.dbeaver = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable dbeaver development";
-    };
+    enable = lib.mkEnableOption "Enable DBeaver database management tool";
   };
 
   config = lib.mkIf cfg.enable {

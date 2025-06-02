@@ -5,11 +5,7 @@ let
 in
 {
   options.modules.common.dev.editor.jetbrains = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable jetbrains development";
-    };
+    enable = lib.mkEnableOption "Enable JetBrains IDEs for development";
   };
 
   config = lib.mkIf cfg.enable {

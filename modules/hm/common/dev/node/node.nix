@@ -6,7 +6,11 @@ let
   # Function to get node + package manager for a given version
   nodeWithPackageManager = version: let
     nodeAttr = "nodejs_${version}";
-    nodePkg = pkgs.${nodeAttr};
+
+    # Validate that the Node.js version exists
+    nodePkg = if builtins.hasAttr nodeAttr pkgs
+      then pkgs.${nodeAttr}
+      else throw "Node.js version ${version} not available in nixpkgs";
 
     managerPkg = {
       pnpm = pkgs.pnpm;
@@ -22,11 +26,7 @@ let
 in
 {
   options.modules.common.dev.node = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable Node.js development environment";
-    };
+    enable = lib.mkEnableOption "Enable Node.js development environment";
     package-manager = lib.mkOption {
       type = lib.types.enum [ "pnpm" "yarn" "npm" ];
       default = "pnpm";

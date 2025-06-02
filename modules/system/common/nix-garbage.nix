@@ -5,11 +5,7 @@ let
 in
 {
   options.modules.nix-garbage = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable Nix settings";
-    };
+    enable = lib.mkEnableOption "Enable automatic garbage collection for Nix";
 
     dates = lib.mkOption {
       type = lib.types.str;
@@ -33,7 +29,7 @@ in
   config = lib.mkIf cfg.enable {
     nix = {
       settings = {
-        auto-optimise-store = lib.mkForce cfg.autoOptimiseStore;
+        auto-optimise-store = cfg.autoOptimiseStore;
       };
 
       gc = {

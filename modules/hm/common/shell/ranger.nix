@@ -5,11 +5,7 @@ let
 in
 {
   options.modules.common.shell.ranger = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable shell-ranger";
-    };
+    enable = lib.mkEnableOption "Enable Ranger (file manager)";
   };
 
   config = lib.mkIf config.modules.common.shell.ranger.enable {

@@ -5,11 +5,7 @@ let
 in
 {
   options.modules.common.dev.node.localtunnel = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable localtunnel for node development environment";
-    };
+    enable = lib.mkEnableOption "Enable LocalTunnel for Node.js development";
   };
 
   config = lib.mkIf cfg.enable {

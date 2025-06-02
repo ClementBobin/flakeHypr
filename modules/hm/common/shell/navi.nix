@@ -5,17 +5,13 @@ let
 in
 {
   options.modules.common.shell.navi = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable shell-navi";
-    };
+    enable = lib.mkEnableOption "Enable Navi (CLI cheat sheet tool)";
   };
 
     config = lib.mkIf cfg.enable {
       # Configure navi
       programs.navi = {
-        # Enable btop
+        # Enable navi
         enable = true;
       };
   };

@@ -54,9 +54,10 @@ in
     users."${vars.user}" =
       { ... }:
       {
+        # hm import
         imports = [
-          ../../modules/hm/hosts/oak
           ../../modules/hm/desktops
+          ../../modules/hm/hosts/oak
         ];
 
         desktops.hydenix = {

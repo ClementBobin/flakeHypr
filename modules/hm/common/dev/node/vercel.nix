@@ -5,11 +5,7 @@ let
 in
 {
   options.modules.common.dev.node.vercel = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable vercel for node development environment";
-    };
+    enable = lib.mkEnableOption "Enable Vercel CLI for Node.js deployments";
   };
 
   config = lib.mkIf cfg.enable {

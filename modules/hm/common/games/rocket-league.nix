@@ -5,11 +5,7 @@ let
 in
 {
   options.modules.common.games.rocket-league = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable games rocket-league";
-    };
+    enable = lib.mkEnableOption "Enable Rocket League Launcher";
   };
 
   config = lib.mkIf cfg.enable {

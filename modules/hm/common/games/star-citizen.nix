@@ -5,11 +5,7 @@ let
 in
 {
   options.modules.common.games.star-citizen = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable games star-citizen";
-    };
+    enable = lib.mkEnableOption "Enable Star Citizen Launcher";
   };
 
   config = lib.mkIf cfg.enable {

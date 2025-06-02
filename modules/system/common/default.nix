@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, inputs, ... }:
 {
   imports = [
     ./backup/syncthing.nix
@@ -15,6 +15,8 @@
 
     ./networks/vpn/tailscale.nix
 
+    ./security/antivirus.nix
+
     ./virtualisation/containers/containers.nix
 
     ./linux-cachyos.nix
@@ -26,7 +28,7 @@
   # For dolphin udisks2 permission for click mounting disks
   security.polkit.extraConfig = ''
     polkit.addRule(function(action, subject) {
-      if (action.id.indexOf("org.freedesktop.udisks2.") == 0 && 
+      if (action.id.indexOf("org.freedesktop.udisks2.") == 0 &&
           subject.isInGroup("users")) {
           return polkit.Result.YES;
       }

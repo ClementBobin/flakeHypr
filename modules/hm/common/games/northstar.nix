@@ -5,11 +5,7 @@ let
 in
 {
   options.modules.common.games.northstar = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable games northstar-proton";
-    };
+    enable = lib.mkEnableOption "Enable Northstar (Titanfall 2 mod) with Proton and Viper";
   };
 
   config = lib.mkIf cfg.enable {

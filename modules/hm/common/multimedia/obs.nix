@@ -5,11 +5,7 @@ let
 in
 {
   options.modules.common.multimedia.obs = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable obs";
-    };
+    enable = lib.mkEnableOption "Enable OBS Studio for video recording and streaming";
   };
 
   config = lib.mkIf cfg.enable {

@@ -18,15 +18,11 @@
       navi.enable = true;
     };
     games = {
-      mangohud.enable = true;
-      minecraft.enable = true;
-    };
-    security = {
-      clamav = {
+      mangohud = {
         enable = true;
-        gui.enable = true;
+        cpu_text = "Ryzen 7 7435HS";
       };
-      stacer.enable = false;
+      minecraft.enable = true;
     };
     multimedia = {
       gimp.enable = true;
@@ -50,7 +46,10 @@
       };
       dotnet.enable = true;
       flutter.enable = true;
-      nix.enable = true;
+      global-tools = {
+        act-github.enable = true;
+        nix.enable = true;
+      };
       node = {
         enable = true;
         graphite.enable = true;
@@ -69,5 +68,6 @@
         thunderbird.enable = true;
       };
     };
+    utilities.scalar.enable = false;
   };
 }

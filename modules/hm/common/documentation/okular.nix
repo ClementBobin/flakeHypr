@@ -5,11 +5,7 @@ let
 in
 {
   options.modules.common.documentation.okular = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable okular";
-    };
+    enable = lib.mkEnableOption "Enable Okular document viewer";
   };
 
   config = lib.mkIf cfg.enable {

@@ -5,11 +5,7 @@ let
 in
 {
   options.modules.common.multimedia.parsec = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable parsec";
-    };
+    enable = lib.mkEnableOption "Enable Parsec for remote desktop access";
   };
 
   config = lib.mkIf cfg.enable {

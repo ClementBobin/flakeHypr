@@ -5,11 +5,7 @@ let
 in
 {
   options.modules.common.engine.unity = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable unity support.";
-    };
+    enable = lib.mkEnableOption "Enable Unity Hub for managing Unity installations";
   };
 
   config = lib.mkIf cfg.enable {

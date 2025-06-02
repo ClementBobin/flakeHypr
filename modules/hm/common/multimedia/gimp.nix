@@ -5,11 +5,7 @@ let
 in
 {
   options.modules.common.multimedia.gimp = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable gimp";
-    };
+    enable = lib.mkEnableOption "Enable GIMP image editor";
   };
 
   config = lib.mkIf cfg.enable {

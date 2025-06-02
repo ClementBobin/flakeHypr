@@ -5,16 +5,12 @@ let
 in
 {
   options.modules.common.communication.teams = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable teams";
-    };
+    enable = lib.mkEnableOption "Enable Microsoft Teams for Linux";
   };
 
   config = lib.mkIf cfg.enable {
-    home.packages = (with pkgs; [
+    home.packages = with pkgs; [
       teams-for-linux
-    ]);
+    ];
   };
 }

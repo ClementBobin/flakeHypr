@@ -5,11 +5,7 @@ let
 in
 {
   options.modules.common.utilities.gitkraken = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable gitkraken development";
-    };
+    enable = lib.mkEnableOption "Enable GitKraken (Git GUI client)";
   };
 
   config = lib.mkIf cfg.enable {

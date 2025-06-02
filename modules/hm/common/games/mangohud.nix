@@ -5,10 +5,21 @@ let
 in
 {
   options.modules.common.games.mangohud = {
-    enable = lib.mkOption {
+    enable = lib.mkEnableOption "Enable MangoHud, a Vulkan and OpenGL overlay layer for monitoring performance";
+    cpu_text = lib.mkOption {
+      type = lib.types.str;
+      default = "";
+      description = "Custom CPU text to display (leave empty for auto-detection)";
+    };
+    gpu_text = lib.mkOption {
+      type = lib.types.str;
+      default = "";
+      description = "Custom GPU text to display (leave empty for auto-detection)";
+    };
+    enableSessionWide = lib.mkOption {
       type = lib.types.bool;
       default = false;
-      description = "Enable games mangohud";
+      description = "Enable mangohud session-wide";
     };
   };
 
@@ -16,7 +27,7 @@ in
     # Enable mangohud
         programs.mangohud = {
           enable = true;
-          enableSessionWide = true;
+          enableSessionWide = cfg.enableSessionWide;
 
           # Configure general mangohud settings
           settings = {
@@ -43,7 +54,7 @@ in
             cpu_load_value = [ 50 90 ];
             cpu_load_color = [ "FFFFFF" "FFAA7F" "CC0000" ];
             cpu_color = "2e97cb";
-            cpu_text = "Ryzen 7 7435HS";
+            cpu_text = if cfg.cpu_text != "" then cfg.cpu_text else null;
 
             io_color = "a491d3";
             swap = true;
@@ -57,6 +68,7 @@ in
             engine_color = "eb5b5b";
 
             gpu_name = true;
+            gpu_text = if cfg.gpu_text != "" then cfg.gpu_text else "";
             gpu_color = "2e9762";
 
             vulkan_driver = true;

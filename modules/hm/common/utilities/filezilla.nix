@@ -5,15 +5,11 @@ let
 in
 {
   options.modules.common.utilities.filezilla = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable filezilla";
-    };
+    enable = lib.mkEnableOption "Enable FileZilla (FTP client)";
   };
 
   config = lib.mkIf cfg.enable {
-    # Home-manager or system-wide installation based on installMethod
+    # Install shell tools via home-manager
     home.packages = (with pkgs; [
       filezilla
     ]);

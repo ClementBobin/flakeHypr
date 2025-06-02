@@ -1,8 +1,6 @@
 { inputs, ... }:
 {
   imports = [
-    inputs.richendots-private.nixosModules.fern
-    inputs.richendots-private.serviceModules.keepassxc-sync
     ../../common
     ./drivers.nix
     ./plex.nix

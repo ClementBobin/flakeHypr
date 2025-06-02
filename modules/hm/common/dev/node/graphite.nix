@@ -5,11 +5,7 @@ let
 in
 {
   options.modules.common.dev.node.graphite = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable graphite for node development environment";
-    };
+    enable = lib.mkEnableOption "Enable Graphite CLI for Node.js";
   };
 
   config = lib.mkIf cfg.enable {

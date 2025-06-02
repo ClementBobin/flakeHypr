@@ -12,18 +12,10 @@ in
 {
   options.modules.virtualisation = {
     docker = {
-      enable = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = "Enable docker";
-      };
+      enable = lib.mkEnableOption "Enable Docker support";
     };
     podman = {
-      enable = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = "Enable podman";
-      };
+      enable = lib.mkEnableOption "Enable podman";
     };
   };
   config = lib.mkMerge [

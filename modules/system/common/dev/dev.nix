@@ -10,11 +10,7 @@ let
 in
 {
   options.modules.dev-global = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable dev global";
-    };
+    enable = lib.mkEnableOption "Enable global development tools and libraries";
   };
 
   config = lib.mkIf cfg.enable {

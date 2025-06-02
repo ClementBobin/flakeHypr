@@ -5,11 +5,7 @@ let
 in
 {
   options.modules.common.dev.flutter = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable flutter development environment";
-    };
+    enable = lib.mkEnableOption "Enable Flutter development environment";
     extraPackages = lib.mkOption {
       type = lib.types.listOf lib.types.package;
       default = [];

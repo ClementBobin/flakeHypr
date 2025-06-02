@@ -8,21 +8,21 @@ let
   name = "bluemail-with-gpu";
   phases = [ "installPhase" ];
   buildInputs = [ pkgs.makeWrapper ];
-  installPhase = ''
-    mkdir -p $out/bin
-    cp -r ${bluemail}/* $out/
-    substituteInPlace $out/share/applications/bluemail.desktop \
-      --replace "Exec=bluemail" "Exec=bluemail-gpu"
-    makeWrapper ${bluemail}/bin/bluemail $out/bin/bluemail-gpu --add-flags "--in-process-gpu"
-  '';
+  bluemailWithGPU = pkgs.symlinkJoin {
+    name = "bluemail-with-gpu";
+    paths = [ bluemail ];
+    buildInputs = [ pkgs.makeWrapper ];
+    postBuild = ''
+      rm $out/bin/bluemail
+      makeWrapper ${bluemail}/bin/bluemail $out/bin/bluemail --add-flags "--in-process-gpu"
+    '';
+  };
 };
 
 in {
   options = {
-    modules.common.communication.mail.bluemail.enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable the bluemail emailclient.";
+    modules.common.communication.mail.bluemail = {
+      enable = lib.mkEnableOption "Enable Bluemail without GPU support";
     };
   };
 

@@ -5,11 +5,7 @@ let
 in
 {
   options.modules.common.games.roblox = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable games roblox";
-    };
+    enable = lib.mkEnableOption "Enable Roblox Player";
   };
 
   config = lib.mkIf cfg.enable {

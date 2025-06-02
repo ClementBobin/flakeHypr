@@ -5,11 +5,7 @@ let
 in
 {
   options.modules.common.games.minecraft = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable games minecraft";
-    };
+    enable = lib.mkEnableOption "Enable Minecraft Launcher";
   };
 
   config = lib.mkIf cfg.enable {

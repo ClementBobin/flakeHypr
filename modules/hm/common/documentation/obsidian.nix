@@ -75,7 +75,7 @@ let
 
     # Create obsidian projects directory if it doesn't exist
     mkdir -p "$OBSIDIAN_DIR"
-    mkdir -p "DEV_DIR"
+    mkdir -p "$DEV_DIR"
 
     # Variable to track last update time
     last_update=0
@@ -161,13 +161,13 @@ in
 
     home.packages = with pkgs; [ obsidian inotify-tools jq gawk ];
 
-    home.sessionVariables.OBSIDIAN_VAULT = "${defaultObsiPath}/Documents/obsidian";
+    home.sessionVariables.OBSIDIAN_VAULT = "${defaultObsiPath}/obsidian";
 
     home.file = {
       ".config/hyde/wallbash/Wall-Ways/obsidian.dcol" = {
         source   = obsidianDcol; force = true; mutable = true;
       };
-      "Documents/obsidian/home/.obsidian/themes/Wallbash" = {
+      "${config.home.sessionVariables.OBSIDIAN_VAULT}/home/.obsidian/themes/Wallbash" = {
         source   = wallbashTheme; recursive = true; force = true; mutable = true;
       };
     };

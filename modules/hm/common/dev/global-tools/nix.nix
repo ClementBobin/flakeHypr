@@ -1,15 +1,11 @@
 { pkgs, lib, config, ... }:
 
 let
-  cfg = config.modules.common.dev.nix;
+  cfg = config.modules.common.dev.global-tools.nix;
 in
 {
-  options.modules.common.dev.nix = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable nix development environment";
-    };
+  options.modules.common.dev.global-tools.nix = {
+    enable = lib.mkEnableOption "Enable Nix development environment";
   };
 
   config = lib.mkIf cfg.enable {
@@ -21,6 +17,7 @@ in
       direnv
       nix-output-monitor
       nix-fast-build
+      act
     ]);
 
     # Programs configuration should be inside the config block

@@ -5,11 +5,7 @@ let
 in
 {
   options.modules.common.documentation.onlyoffice = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable onlyofffice";
-    };
+    enable = lib.mkEnableOption "Enable OnlyOffice document editor";
   };
 
   config = lib.mkIf cfg.enable {

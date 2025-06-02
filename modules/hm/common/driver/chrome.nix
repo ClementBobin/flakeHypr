@@ -5,11 +5,7 @@ let
 in
 {
   options.modules.common.driver.chrome = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable chrome driver";
-    };
+    enable = lib.mkEnableOption "Enable Chrome WebDriver (chromedriver)";
   };
 
   config = lib.mkIf cfg.enable {

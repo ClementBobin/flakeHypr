@@ -10,4 +10,13 @@
 
 - [ ] hydenix: some yubikey touch detection for hyprlock and waybar <https://github.com/maximbaz/yubikey-touch-detector>
 - [ ] bluemail
-- [ ] obsi wallpaper
+- [ ] purlple screen?
+- [ ] scalar
+- [x] rust
+- [x] ClamAV UI
+- [ ] Navi default nix template
+- [ ] find replacement for diskonaut
+- [ ] Flutter
+- [x] create own module for act-github
+- [ ] Update flake
+- [ ] Test workflows

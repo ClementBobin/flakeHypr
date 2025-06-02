@@ -5,11 +5,7 @@ let
 in
 {
   options.modules.common.multimedia.stremio = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable stremio";
-    };
+    enable = lib.mkEnableOption "Enable Stremio media center";
   };
 
   config = lib.mkIf cfg.enable {

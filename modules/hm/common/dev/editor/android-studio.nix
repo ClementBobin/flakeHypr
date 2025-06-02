@@ -4,12 +4,8 @@ let
   cfg = config.modules.common.dev.editor.android-studio;
 in
 {
-  options.modules.common.dev.android-studio = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable android-studio development environment";
-    };
+  options.modules.common.dev.editor.android-studio = {
+    enable = lib.mkEnableOption "Enable Android Studio development environment";
   };
 
   config = lib.mkIf cfg.enable {

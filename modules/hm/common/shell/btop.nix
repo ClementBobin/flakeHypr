@@ -5,11 +5,7 @@ let
 in
 {
   options.modules.common.shell.btop = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable btop";
-    };
+    enable = lib.mkEnableOption "Enable btop system monitor";
   };
 
   config = lib.mkIf cfg.enable {

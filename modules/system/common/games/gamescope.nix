@@ -12,11 +12,7 @@ let
 in
 {
   options.modules.games.gamescope = {
-    enable = mkOption {
-      type = types.bool;
-      default = false;
-      description = "Enable gamescope";
-    };
+    enable = mkEnableOption "Enable Gamescope compositor for gaming";
   };
 
   config = mkIf cfg.enable {

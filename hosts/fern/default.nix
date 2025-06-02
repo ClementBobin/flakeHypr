@@ -40,9 +40,6 @@ in
     users."${vars.user}" =
       { ... }:
       {
-        #imports = [
-          #../../modules/hm/users/richen
-        #];
 
         desktops.hydenix = {
           enable = true;
@@ -59,8 +56,6 @@ in
             games.enable = true;
             zsh.enable = true;
           };
-          # TODO: make obsidian.nix work on any host
-          obsidian.enable = true;
         };
       };
   };
@@ -74,7 +69,7 @@ in
 
   users.users.${vars.user} = {
     isNormalUser = true;
-    initialPassword = "hydenix";
+    initialPassword = ${vars.user};
     extraGroups = [
       "wheel"
       "networkmanager"

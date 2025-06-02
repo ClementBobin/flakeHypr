@@ -5,11 +5,7 @@ let
 in
 {
   options.modules.common.multimedia.mpv = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable mpv";
-    };
+    enable = lib.mkEnableOption "Enable mpv media player with custom scripts";
   };
 
   config = lib.mkIf cfg.enable {

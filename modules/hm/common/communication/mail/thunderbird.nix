@@ -5,11 +5,7 @@ let
 in
 {
   options.modules.common.communication.mail.thunderbird = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable thunderbird";
-    };
+    enable = lib.mkEnableOption "Enable Thunderbird email client";
   };
 
   config = lib.mkIf cfg.enable {

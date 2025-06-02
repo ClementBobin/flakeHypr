@@ -5,7 +5,7 @@ let
   cfg = config.modules.common.dev.python;
 
   # add home directory to devShell.shellPaths if not already present
-  homePath = "./Templates"; # or: builtins.toString config.home.homeDirectory
+  homePath = cfg.devShell.defaultPath; # or: builtins.toString config.home.homeDirectory
   devShellPaths = lib.unique (
     (lib.optionals (cfg.devShell.shellPaths == []) [ homePath ])
     ++ cfg.devShell.shellPaths
@@ -22,6 +22,8 @@ let
     extraPkgsMapped = map (pkg: pythonPkgs.${pkg}) cfg.extraPackages;
   in
     # Special case for Python 3.12 when using hydenix.hm
+    # hydenix.hm already provides the Python 3.12 interpreter,
+    # so only pipx and pip (plus extras) are needed here.
     if version == "312" && config.hydenix.hm.enable then
       [ pythonPkgs.pipx pythonPkgs.pip ] ++ extraPkgsMapped
     else
@@ -48,7 +50,7 @@ let
         if [ -f "pyproject.toml" ] || [ -f "requirements.txt" ]; then
           if [ ! -d ".venv" ]; then
             echo "🔧 No .venv found. Creating it..."
-            ${pkgs."python${cfg.defaultVersion}"}/bin/python -m venv .venv
+            python -m venv .venv
           fi
 
           source .venv/bin/activate
@@ -63,11 +65,7 @@ let
 in {
   options.modules.common.dev.python = {
     # Main toggle
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable Python development environment";
-    };
+    enable = lib.mkEnableOption "Enable Python development environment";
 
     # List of Python versions to install
     versions = lib.mkOption {
@@ -96,13 +94,20 @@ in {
     tools.enable = lib.mkEnableOption "Install dev tools (pytest, black, flake8)";
 
     # Dev shell generation
-    devShell.enable = lib.mkEnableOption "Generate a shell.nix file";
+    devShell = {
+      enable = lib.mkEnableOption "Generate a shell.nix file";
+      defaultPath = lib.mkOption {
+        type = lib.types.str;
+        default = "./Templates";
+        description = "Default path for shell.nix generation";
+      };
 
-    # Additional paths to generate shell.nix in (besides $HOME)
-    devShell.shellPaths = lib.mkOption {
-      type = lib.types.listOf lib.types.str;
-      default = [];
-      description = "Additional relative paths to create shell.nix (besides home)";
+      # Additional paths to generate shell.nix in (besides $HOME)
+      shellPaths = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [];
+        description = "Additional relative paths to create shell.nix (besides home)";
+      };
     };
   };
 
