@@ -10,12 +10,13 @@ in
 
   config = lib.mkIf cfg.enable {
     home.packages = (with pkgs; [
-      userPkgs.jetbrains.webstorm
+      jetbrains.webstorm
       #userPkgs.jetbrains.gateway
       #userPkgs.jetbrains-toolbox
-      userPkgs.jetbrains.rider
-      userPkgs.jetbrains.phpstorm
-      userPkgs.jetbrains.datagrip
+      jetbrains.rider
+      jetbrains.phpstorm
+      jetbrains.datagrip
+      jetbrains.idea-ultimate
     ]);
   };
 }
