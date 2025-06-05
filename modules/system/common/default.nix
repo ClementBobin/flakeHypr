@@ -4,6 +4,8 @@
     ./backup/syncthing.nix
 
     ./dev/dev.nix
+    ./dev/flatpak.nix
+    ./dev/flutter.nix
     ./dev/php.nix
 
     ./games/gamescope.nix

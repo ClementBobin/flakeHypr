@@ -28,6 +28,12 @@
       gui.enable = true;
     };
     virtualisation.docker.enable = true;
-    dev.php.enable = true;
+    dev = {
+      php.enable = true;
+      flutter = {
+        enable = true;
+        withAndroid = true;
+      };
+    };
   };
 }

@@ -43,9 +43,9 @@
         dbeaver.enable = true;
         jetbrains.enable = true;
         vs-code.enable = true;
+        android-studio.enable = true;
       };
       dotnet.enable = true;
-      flutter.enable = true;
       global-tools = {
         act-github.enable = true;
         nix.enable = true;
@@ -55,6 +55,7 @@
         graphite.enable = true;
         vercel.enable = true;
         localtunnel.enable = true;
+        prisma.enable = true;
       };
       python = {
         enable = true;
@@ -64,10 +65,9 @@
     communication = {
       teams.enable = true;
       mail = {
-        bluemail.enable = false;
         thunderbird.enable = true;
       };
     };
-    utilities.scalar.enable = false;
+    utilities.scalar.enable = true;
   };
 }

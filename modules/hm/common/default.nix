@@ -10,15 +10,16 @@
     ./dev/editor/dbeaver.nix
     ./dev/editor/jetbrains.nix
     ./dev/editor/vs-code.nix
+    ./dev/editor/android-studio.nix
     ./dev/global-tools/act-github.nix
     ./dev/global-tools/nix.nix
     ./dev/node/graphite.nix
     ./dev/node/localtunnel.nix
     ./dev/node/node.nix
     ./dev/node/pm2.nix
+    ./dev/node/prisma.nix
     ./dev/node/vercel.nix
     ./dev/dotnet.nix
-    ./dev/flutter.nix
     ./dev/python.nix
     ./dev/rust.nix
 
@@ -32,7 +33,7 @@
     ./emulator/proton.nix
     ./emulator/wine.nix
 
-    ./engine/unity.nix
+    ./engine/engine.nix
 
     ./games/mangohud.nix
     ./games/minecraft.nix

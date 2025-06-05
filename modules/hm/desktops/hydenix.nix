@@ -13,8 +13,8 @@ in
 {
 
   imports = [
-    inputs.hydenix.lib.homeModules
     ../common
+    inputs.hydenix.lib.homeModules
   ];
 
   options.desktops.hydenix = {
@@ -61,7 +61,7 @@ in
       git = {
         enable = true;
         name = "mirage";
-        email = "clementbobin21@gmail.com";
+        email = "119869686+ClementBobin@users.noreply.github.com";
       };
       theme = {
         active = "Tokyo Night";
