@@ -5,21 +5,11 @@ let
 in
 {
   options.modules.common.multimedia.obs = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable obs";
-    };
-    
-    installMethod = lib.mkOption {
-      type = lib.types.enum [ "hm" "sys" ];
-      default = "hm";
-      description = "Choose whether to install OBS-related tools via home-manager or directly in the environment.";
-    };
+    enable = lib.mkEnableOption "Enable OBS Studio for video recording and streaming";
   };
 
   config = lib.mkIf cfg.enable {
-    home.packages = lib.mkIf (cfg.installMethod == "hm") (with pkgs; [
+    home.packages = (with pkgs; [
       v4l-utils
     ]);
 

@@ -5,21 +5,11 @@ let
 in
 {
   options.modules.common.multimedia.parsec = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable parsec";
-    };
-
-    installMethod = lib.mkOption {
-      type = lib.types.enum [ "hm" "sys" ];
-      default = "hm";
-      description = "Choose whether to install parsec via home-manager or directly in the environment.";
-    };
+    enable = lib.mkEnableOption "Enable Parsec for remote desktop access";
   };
 
   config = lib.mkIf cfg.enable {
-    home.packages = lib.mkIf (cfg.installMethod == "hm") (with pkgs; [
+    home.packages = (with pkgs; [
       parsec-bin
     ]);
   };

@@ -12,8 +12,8 @@ in
 {
 
   imports = [
-    inputs.nixos-hardware.nixosModules.common-gpu-amd
-    inputs.nixos-hardware.nixosModules.common-cpu-intel
+    inputs.hydenix.inputs.nixos-hardware.nixosModules.common-gpu-amd
+    inputs.hydenix.inputs.nixos-hardware.nixosModules.common-cpu-intel
   ];
 
   options.modules.fern.drivers = {

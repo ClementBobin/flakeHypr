@@ -12,11 +12,7 @@ in
 {
   imports = [ inputs.chaotic.nixosModules.default ];
   options.modules.linux-cachyos = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable linux-cachyos";
-    };
+    enable = lib.mkEnableOption "Enable Chaotic-AUR (CachyOS) support";
   };
 
   config = lib.mkIf cfg.enable {

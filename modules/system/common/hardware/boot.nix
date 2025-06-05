@@ -11,11 +11,7 @@ in
 {
 
   options.modules.hardware.boot = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable boot configuration";
-    };
+    enable = lib.mkEnableOption "Enable boot configuration for Hydenix systems";
   };
 
   config = lib.mkIf cfg.enable {

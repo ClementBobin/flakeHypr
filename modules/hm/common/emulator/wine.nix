@@ -5,21 +5,11 @@ let
 in
 {
   options.modules.common.emulator.wine = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable wine development environment";
-    };
-
-    installMethod = lib.mkOption {
-      type = lib.types.enum [ "hm" "sys" ];
-      default = "hm";
-      description = "Choose whether to install wine-related tools via home-manager or directly in the environment.";
-    };
+    enable = lib.mkEnableOption "Enable Wine, a compatibility layer for running Windows applications on Linux";
   };
 
   config = lib.mkIf cfg.enable {
-    home.packages = lib.mkIf (cfg.installMethod == "hm") (with pkgs; [
+    home.packages = (with pkgs; [
       wine
       winetricks
     ]);

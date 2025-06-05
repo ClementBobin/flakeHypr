@@ -9,6 +9,8 @@
     nixpkgs-stable.url = "github:nixos/nixpkgs/release-24.05";
     nix-gaming.url = "github:fufexan/nix-gaming";
 
+    flake-utils.url = "github:numtide/flake-utils";
+
     # Hydenix and its nixpkgs - kept separate to avoid conflicts
     hydenix = {
       # Available inputs:

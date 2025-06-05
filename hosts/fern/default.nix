@@ -40,27 +40,14 @@ in
     users."${vars.user}" =
       { ... }:
       {
-        #imports = [
-          #../../modules/hm/users/richen
-        #];
+        # hm import
+        imports = [
+          ../../modules/hm/desktops
+        ];
 
         desktops.hydenix = {
           enable = true;
           hostname = "fern";
-        };
-
-        modules = {
-          common = {
-            easyeffects.enable = true;
-            git.enable = true;
-            dev.enable = true;
-            expo-dev.enable = true;
-            obs.enable = true;
-            games.enable = true;
-            zsh.enable = true;
-          };
-          # TODO: make obsidian.nix work on any host
-          obsidian.enable = true;
         };
       };
   };
@@ -74,7 +61,7 @@ in
 
   users.users.${vars.user} = {
     isNormalUser = true;
-    initialPassword = "hydenix";
+    initialPassword = "${vars.user}";
     extraGroups = [
       "wheel"
       "networkmanager"

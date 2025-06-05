@@ -5,22 +5,12 @@ let
 in
 {
   options.modules.common.shell.tools = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable shell-tools";
-    };
-
-    installMethod = lib.mkOption {
-      type = lib.types.enum [ "hm" "sys" ];
-      default = "hm";
-      description = "Choose whether to install shell-tools via home-manager or directly in the environment.";
-    };
+    enable = lib.mkEnableOption "Enable common shell tools";
   };
 
   config = lib.mkIf cfg.enable {
-    # Conditional installation of tools based on the install method
-    home.packages = lib.mkIf (cfg.installMethod == "hm") (with pkgs; [
+    # Install shell tools via home-manager
+    home.packages = (with pkgs; [
       tree
     ]);
   };

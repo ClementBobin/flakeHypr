@@ -6,7 +6,10 @@
 let
   pkgs = import inputs.hydenix.inputs.hydenix-nixpkgs {
     inherit (inputs.hydenix.lib) system;
-    config.allowUnfree = true;
+    config = {
+      android_sdk.accept_license = true;
+      allowUnfree = true;
+    };
     overlays = [
       inputs.hydenix.lib.overlays
       (final: prev: {
@@ -19,7 +22,6 @@ let
   };
 in
 {
-
   nixpkgs.pkgs = pkgs;
 
   imports = [
@@ -43,6 +45,8 @@ in
     inputs.hydenix.inputs.nixos-hardware.nixosModules.asus-fa507nv
   ];
 
+  boot.kernelParams = [ "video=HDMI-A-1:e" ];
+
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
@@ -52,9 +56,10 @@ in
     users."${vars.user}" =
       { ... }:
       {
+        # hm import
         imports = [
-          ../../modules/hm/hosts/oak
           ../../modules/hm/desktops
+          ../../modules/hm/hosts/oak
         ];
 
         desktops.hydenix = {
@@ -73,7 +78,7 @@ in
 
   users.users.${vars.user} = {
     isNormalUser = true;
-    initialPassword = "epsilon21C";
+    #initialPassword = "${vars.user}";
     extraGroups = [
       "wheel"
       "networkmanager"
@@ -81,6 +86,4 @@ in
     ];
     shell = pkgs.zsh;
   };
-
-  boot.kernelParams = ["video=HDMI-A-1:1920x1080@60"];
 }

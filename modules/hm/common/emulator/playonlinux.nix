@@ -5,21 +5,11 @@ let
 in
 {
   options.modules.common.emulator.playonlinux = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable playonlinux development environment";
-    };
-
-    installMethod = lib.mkOption {
-      type = lib.types.enum [ "hm" "sys" ];
-      default = "hm";
-      description = "Choose whether to install playonlinux-related tools via home-manager or directly in the environment.";
-    };
+    enable = lib.mkEnableOption "Enable PlayOnLinux, a graphical frontend for Wine";
   };
 
   config = lib.mkIf cfg.enable {
-    home.packages = lib.mkIf (cfg.installMethod == "hm") (with pkgs; [
+    home.packages = (with pkgs; [
       playonlinux
     ]);
   };

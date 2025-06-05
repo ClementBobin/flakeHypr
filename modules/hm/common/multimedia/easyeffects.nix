@@ -16,11 +16,7 @@ let
 in
 {
   options.modules.common.multimedia.easyeffects = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "EasyEffects audio effects";
-    };
+    enable = lib.mkEnableOption "Enable EasyEffects audio processing tool";
   };
 
   config = lib.mkIf cfg.enable {

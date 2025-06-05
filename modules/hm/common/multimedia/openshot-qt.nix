@@ -5,11 +5,7 @@ let
 in
 {
   options.modules.common.multimedia.openshot-qt = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable openshot-qt";
-    };
+    enable = lib.mkEnableOption "Enable OpenShot video editor";
   };
 
   config = lib.mkIf cfg.enable {

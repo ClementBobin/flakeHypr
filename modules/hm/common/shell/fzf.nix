@@ -5,11 +5,7 @@ let
 in
 {
   options.modules.common.shell.fzf = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable shell-fzf";
-    };
+    enable = lib.mkEnableOption "Enable FZF (fuzzy finder)";
   };
 
   config.home.packages = (with pkgs; [

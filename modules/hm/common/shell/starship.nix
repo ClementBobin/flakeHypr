@@ -10,11 +10,7 @@ let
 in
 {
   options.modules.common.shell.starship = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable starship.";
-    };
+    enable = lib.mkEnableOption "Enable Starship (cross-shell prompt)";
   };
 
   config = lib.mkIf cfg.enable {
