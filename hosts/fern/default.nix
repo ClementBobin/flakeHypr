@@ -40,22 +40,14 @@ in
     users."${vars.user}" =
       { ... }:
       {
+        # hm import
+        imports = [
+          ../../modules/hm/desktops
+        ];
 
         desktops.hydenix = {
           enable = true;
           hostname = "fern";
-        };
-
-        modules = {
-          common = {
-            easyeffects.enable = true;
-            git.enable = true;
-            dev.enable = true;
-            expo-dev.enable = true;
-            obs.enable = true;
-            games.enable = true;
-            zsh.enable = true;
-          };
         };
       };
   };
@@ -69,7 +61,7 @@ in
 
   users.users.${vars.user} = {
     isNormalUser = true;
-    initialPassword = ${vars.user};
+    initialPassword = "${vars.user}";
     extraGroups = [
       "wheel"
       "networkmanager"
