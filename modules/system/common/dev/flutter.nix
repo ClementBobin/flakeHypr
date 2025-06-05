@@ -1,0 +1,41 @@
+{ pkgs, lib, config, ... }:
+
+let
+  cfg = config.modules.dev.flutter;
+
+  # Android SDK configuration
+  buildToolsVersion = "30.0.3";
+  androidComposition = pkgs.androidenv.composeAndroidPackages {
+    buildToolsVersions = [ buildToolsVersion "28.0.3" ];
+    platformVersions = [ "31" "28" ];
+    abiVersions = [ "armeabi-v7a" "arm64-v8a" ];
+  };
+  androidSdk = androidComposition.androidsdk;
+in
+{
+  options.modules.dev.flutter = {
+    enable = lib.mkEnableOption "Flutter development environment";
+
+    withAndroid = lib.mkEnableOption "Include Android SDK tooling";
+  };
+
+  config = lib.mkIf cfg.enable {
+    environment.systemPackages =
+      [ pkgs.flutter pkgs.jdk11 ]
+      ++ lib.optional cfg.withAndroid androidSdk;
+
+    # Environment variables
+    environment.variables = {
+      JAVA_HOME = "${pkgs.jdk11}";
+      ANDROID_HOME = lib.mkIf cfg.withAndroid "${androidSdk}/libexec/android-sdk";
+    };
+
+    # Shell profile additions
+    environment.shellInit = ''
+      export PATH="$JAVA_HOME/bin:$PATH"
+      ${lib.optionalString cfg.withAndroid ''
+        export PATH="$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools:$PATH"
+      ''}
+    '';
+  };
+}
