@@ -17,7 +17,7 @@ in
       direnv
       nix-output-monitor
       nix-fast-build
-      act
+      openssl
     ]);
 
     # Programs configuration should be inside the config block
