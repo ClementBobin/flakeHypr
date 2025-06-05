@@ -5,60 +5,60 @@ with lib;
 let
   cfg = config.modules.common.utilities.scalar;
 
-  scalar-source = pkgs.stdenv.mkDerivation {
-    name = "scalar-desktop";
-    src = pkgs.fetchurl {
-      url = "https://download.scalar.com/linux/deb/x64";
-      sha256 = "sha256-8OvULS7qo1rLyEHXnacsjQzkS/J3OEXwhvIDfoP7Hh8=";
-    };
-
-    nativeBuildInputs = [ pkgs.xz pkgs.gnutar ];
-
-    unpackPhase = ''
-      ar x $src
-      tar -xf data.tar.xz
-
-      mkdir -p $out
-      cp -r opt usr $out/
-
-      # Rename the exposed binary to avoid conflict with Git's `scalar`
-      mkdir -p $out/bin
-      ln -s $out/opt/Scalar/scalar-app $out/bin/scalar-api-desktop
-    '';
+  scalar-deb = pkgs.fetchurl {
+    url = "https://download.scalar.com/linux/deb/x64";
+    sha256 = "sha256-R/pf8Df3qYufiDKwTJLEztfcqJ9/+nXclHQqQi+uF3A=";
   };
 
-  scalarFHS = pkgs.buildFHSEnvBubblewrap {
+  scalar-app = pkgs.stdenv.mkDerivation {
     name = "scalar-desktop";
-    targetPkgs = pkgs: with pkgs; [
-      scalar-source
-      dbus
-      glib
-      atk
-      pango
-      cairo
-      gtk3
-      xorg.libX11
-      xorg.libXfixes
-      xorg.libXcomposite
-      xorg.libXdamage
-      xorg.libXrandr
-      xorg.libxcb
-      xorg.libXext
-      xorg.libxshmfence
-      libxkbcommon
-      alsa-lib
-      libdrm
-      mesa
-      vulkan-loader
-      nss
-      nspr
-      cups
-      libpulseaudio
-    ];
-    runScript = "scalar-api-desktop";
+    src = scalar-deb;
 
-    # (Optional) Volume bind for user home, if the app writes configs
-    extraBwrapArgs = [ "--bind" "/home" "/home" ];
+    nativeBuildInputs = [ pkgs.autoPatchelfHook pkgs.dpkg pkgs.makeWrapper ];
+    buildInputs = with pkgs; [
+      alsa-lib
+      mesa
+      libdrm
+      libglvnd
+      vulkan-loader
+      libva
+      gtk3
+      libsecret
+      nss
+      xorg.libXdamage
+      xorg.libXtst
+      xorg.libXcomposite
+      xorg.libXrandr
+    ];
+
+    unpackPhase = "dpkg -x $src .";
+
+    installPhase = ''
+      # Install application
+      mkdir -p $out/opt/Scalar
+      cp -r opt/Scalar/* $out/opt/Scalar/
+
+      # Install desktop file and icons from usr/share
+      mkdir -p $out/share
+      cp -r usr/share/* $out/share/
+
+      # Fix the Exec path in the desktop file
+      substituteInPlace $out/share/applications/scalar-app.desktop \
+        --replace "Exec=/opt/Scalar/scalar-app" "Exec=$out/bin/scalar-desktop"
+
+      # Create binary wrapper with proper library paths
+      mkdir -p $out/bin
+      makeWrapper $out/opt/Scalar/scalar-app $out/bin/scalar-desktop \
+        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath (with pkgs; [
+          alsa-lib
+          mesa
+          libdrm
+          libglvnd
+          vulkan-loader
+          libva
+        ])} \
+        --prefix PATH : ${lib.makeBinPath [ pkgs.xorg.xrandr ]}
+    '';
   };
 
 in {
@@ -67,6 +67,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    home.packages = [ scalarFHS ];
+    home.packages = [ scalar-app ];
+    xdg.enable = true;
   };
 }
