@@ -1,0 +1,21 @@
+{ pkgs, lib, config, ... }:
+
+let
+  cfg = config.modules.common.shell.disk-usage;
+  validTools = [ "ncdu" "diskonaut" "gdu" "dust" "parallel-disk-usage" "squirreldisk" ];
+in
+{
+  options.modules.common.shell.disk-usage = {
+    enable = lib.mkEnableOption "Enable Disk Usage Analyzers";
+
+    tools = lib.mkOption {
+      type = lib.types.listOf (lib.types.enum validTools);
+      default = [ "squirreldisk" ];
+      description = "List of disk usage analyzers to install.";
+    };
+  };
+
+  config = lib.mkIf cfg.enable {
+    home.packages = builtins.map (tool: pkgs.${tool}) cfg.tools;
+  };
+}
