@@ -4,10 +4,6 @@ let
 
   bluemail = pkgs.bluemail;
 
-  bluemailWithGPU = pkgs.stdenv.mkDerivation {
-  name = "bluemail-with-gpu";
-  phases = [ "installPhase" ];
-  buildInputs = [ pkgs.makeWrapper ];
   bluemailWithGPU = pkgs.symlinkJoin {
     name = "bluemail-with-gpu";
     paths = [ bluemail ];
@@ -17,7 +13,6 @@ let
       makeWrapper ${bluemail}/bin/bluemail $out/bin/bluemail --add-flags "--in-process-gpu"
     '';
   };
-};
 
 in {
   options = {
@@ -27,6 +22,6 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    home.packages = with pkgs; [ bluemailWithGPU ];
+    home.packages = [ bluemailWithGPU ];
   };
 }
