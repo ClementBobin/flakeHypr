@@ -6,10 +6,10 @@
 }:
 
 let
-  cfg = config.modules.dev-global;
+  cfg = config.modules.dev.dev-global;
 in
 {
-  options.modules.dev-global = {
+  options.modules.dev.dev-global = {
     enable = lib.mkEnableOption "Enable global development tools and libraries";
   };
 
