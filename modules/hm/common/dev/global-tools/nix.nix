@@ -28,7 +28,7 @@ in
     };
 
     programs.zsh = {
-      initExtra = pkgs.lib.mkAfter ''
+      initExtra = lib.mkAfter ''
         source ${pkgs.nix-index}/etc/profile.d/command-not-found.sh
       '';
     };

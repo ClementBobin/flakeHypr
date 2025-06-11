@@ -62,12 +62,10 @@ in
   config = lib.mkIf cfg.enable {
     home.packages = allNodePackages;
 
-    home.file = lib.mkIf cfg.allowGlobalInstalls {
-      "${lib.removePrefix (config.home.homeDirectory + "/") npmGlobalPath}" = {
-        source = pkgs.runCommand "create-npm-global" {} ''
-          mkdir -p $out/bin
-        '';
-      };
+    home.activation = lib.mkIf cfg.allowGlobalInstalls {
+      createNpmGlobalDir = lib.hm.dag.entryAfter ["writeBoundary"] ''
+        mkdir -p "${npmGlobalPath}/bin"
+      '';
     };
 
     home.shellAliases = lib.mkIf cfg.allowGlobalInstalls {

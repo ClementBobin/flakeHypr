@@ -4,7 +4,6 @@
 {
   imports = [
     ./communication/mail
-    ./communication/mail/bluemail.nix
     ./communication/teams.nix
 
     ./dev/editor/dbeaver.nix

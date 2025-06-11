@@ -8,7 +8,7 @@ let
   # Map service names to their corresponding packages
   serviceToPackage = {
     thunderbird = pkgs.thunderbird-latest;
-    bluemail = null;  # Will be filtered out
+    bluemail    = (import ./bluemail.nix { inherit pkgs lib config; }).bluemailWithGPU;
   };
 
   # Get packages for enabled services, filtering out nulls

@@ -25,7 +25,9 @@ in {
       clamtk
     ];
 
-    services.clamav.daemon.enable = lib.mkIf (cfg.engine == "clamav") true;
-    services.clamav.updater.enable = lib.mkIf (cfg.engine == "clamav") true;
+    services = lib.mkIf (cfg.engine == "clamav") {
+      clamav.daemon.enable   = true;
+      clamav.updater.enable  = true;
+    };
   };
 }

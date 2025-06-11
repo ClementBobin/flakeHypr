@@ -32,7 +32,7 @@ in
 
     # Environment variables
     environment.variables = lib.mkMerge [
-      { JAVA_HOME = "${pkgs.jdk11}"; }
+      { JAVA_HOME = "${cfg.jdkPackage}"; }
       (lib.mkIf cfg.withAndroid {
         ANDROID_HOME = "${androidSdk}/libexec/android-sdk";
       })

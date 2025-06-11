@@ -42,10 +42,11 @@ in
     home.packages = with pkgs; (
       # Wine ecosystem
       (lib.optionals (cfg.wine.enable) [
-        (if cfg.wine.version == "stable" then wine else
-         if cfg.wine.version == "staging" then wineStaging else
-         if cfg.wine.version == "wayland" then wineWow else
-         wine)
+        ({
+          stable = wine;
+          staging = wineStaging;
+          wayland = wineWayland;
+        }.${cfg.wine.version} or wine)
         winetricks
       ]) ++
       

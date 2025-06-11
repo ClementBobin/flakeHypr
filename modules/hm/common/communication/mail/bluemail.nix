@@ -7,9 +7,9 @@ let
   bluemailWithGPU = pkgs.symlinkJoin {
     name = "bluemail-with-gpu";
     paths = [ bluemail ];
-    buildInputs = [ pkgs.makeWrapper ];
+    nativeBuildInputs = [ pkgs.makeWrapper ];
     postBuild = ''
-      rm $out/bin/bluemail
+      rm -f $out/bin/bluemail
       makeWrapper ${bluemail}/bin/bluemail $out/bin/bluemail --add-flags "--in-process-gpu"
     '';
   };

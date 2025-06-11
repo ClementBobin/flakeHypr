@@ -63,24 +63,29 @@ let
         
         # Handle directory patterns
         if [[ "$pattern" =~ /$ ]]; then
-          echo "\${rel_path}\${pattern}" >> "$TMP_FILE"
+          echo "${rel_path}${pattern}" >> "$TMP_FILE"
         else
           # Handle normal patterns with proper directory prefix
           if [[ "$pattern" =~ / ]]; then
             # Pattern contains subdirectories
-            echo "\${rel_path}\${pattern}" >> "$TMP_FILE"
+            echo "${rel_path}${pattern}" >> "$TMP_FILE"
           else
             # Simple pattern applies to all levels
-            echo "**/\${pattern}" >> "$TMP_FILE"
+            echo "**/${pattern}" >> "$TMP_FILE"
           fi
         fi
       done < "$gitignore"
-    '';
+    done
+
+    # Move temporary file to output
+    mv "$TMP_FILE" "$OUTPUT_FILE"
+    echo "Updated $OUTPUT_FILE with patterns from .gitignore files"
+  '';
 in
 {
   options.modules.common.extra.ignore-file-retriever = {
     enable = lib.mkEnableOption "Enable ignore file retriever script to create .stignore from .gitignore patterns";
-  
+
     templatePath = lib.mkOption {
       type = lib.types.str;
       default = "~/Templates/gitignore/.stignore.template";
@@ -112,7 +117,7 @@ in
       pkgs.inotify-tools
     ];
 
-    home.file."${templatePath}".text = lib.mkIf (!lib.pathExists templatePath) ''
+    home.file."${templatePath}".text = lib.mkIf (!lib.pathExists (expandPath cfg.templatePath)) ''
       # Syncthing ignore patterns
       # Generated from .gitignore files
       # (?!).*
