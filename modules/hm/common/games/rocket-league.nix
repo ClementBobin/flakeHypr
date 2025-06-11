@@ -5,7 +5,7 @@ let
 in
 {
   options.modules.common.games.rocket-league = {
-    enable = lib.mkEnableOption "Enable Rocket League Launcher";
+    enable = lib.mkEnableOption "Enable Rocket League game installation via nix-gaming";
   };
 
   config = lib.mkIf cfg.enable {

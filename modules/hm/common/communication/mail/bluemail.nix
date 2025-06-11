@@ -17,7 +17,7 @@ let
 in {
   options = {
     modules.common.communication.mail.bluemail = {
-      enable = lib.mkEnableOption "Enable Bluemail without GPU support";
+      enable = lib.mkEnableOption "Enable BlueMail email client with GPU support";
     };
   };
 

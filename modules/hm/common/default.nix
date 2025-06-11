@@ -3,8 +3,8 @@
 }:
 {
   imports = [
+    ./communication/mail
     ./communication/mail/bluemail.nix
-    ./communication/mail/thunderbird.nix
     ./communication/teams.nix
 
     ./dev/editor/dbeaver.nix
@@ -14,7 +14,6 @@
     ./dev/global-tools/act-github.nix
     ./dev/global-tools/nix.nix
     ./dev/node/graphite.nix
-    ./dev/node/localtunnel.nix
     ./dev/node/node.nix
     ./dev/node/pm2.nix
     ./dev/node/prisma.nix
@@ -29,11 +28,11 @@
 
     ./driver/chrome.nix
 
-    ./emulator/playonlinux.nix
-    ./emulator/proton.nix
-    ./emulator/wine.nix
+    ./emulator
 
     ./engine/engine.nix
+
+    #./extra/ignore-file-retriever.nix
 
     ./games/mangohud.nix
     ./games/minecraft.nix
@@ -49,6 +48,8 @@
     ./multimedia/openshot-qt.nix
     ./multimedia/parsec.nix
     ./multimedia/stremio.nix
+
+    ./network/tunnel.nix
 
     ./shell/btop.nix
     ./shell/fzf.nix

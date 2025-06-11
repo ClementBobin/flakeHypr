@@ -5,12 +5,10 @@ let
 in
 {
   options.modules.common.dev.global-tools.act-github = {
-    enable = lib.mkEnableOption "Enable Nix development environment";
+    enable = lib.mkEnableOption "Enable act for running GitHub Actions locally";
   };
 
   config = lib.mkIf cfg.enable {
-    # Conditional installation of act-related tools
-    # Check if Home Manager or system-wide installation is preferred
     home.packages = (with pkgs; [
       act
     ]);

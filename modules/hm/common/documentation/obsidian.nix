@@ -62,7 +62,10 @@ let
       fi
       git add -A
       git commit -m "Backup on $(date -u +"%Y-%m-%dT%H:%M:%SZ")" || echo "  Nothing new to commit"
-      git push origin temp
+      if ! git push origin temp; then
+        echo "⚠️  Failed to push $VAULT to remote"
+        continue
+      fi
     done
   '';
 

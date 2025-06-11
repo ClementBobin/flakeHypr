@@ -54,7 +54,6 @@
         enable = true;
         graphite.enable = true;
         vercel.enable = true;
-        localtunnel.enable = true;
         prisma.enable = true;
       };
       python = {
@@ -65,9 +64,25 @@
     communication = {
       teams.enable = true;
       mail = {
-        thunderbird.enable = true;
+        enable = true;
+        services = ["thunderbird"];
+      };
+    };
+    network.tunnel = {
+      enable = true;
+      service = ["localtunnel" "ngrok"];
+      localtunnel.port = 8080;
+      ngrok = {
+        port = 3000;
       };
     };
     utilities.scalar.enable = true;
+    #extra = {
+      #ignore-file-retriever = {
+        #enable = true;
+        #watchMode = true;
+        #watchPaths = [ "~/Documents" ];
+      #};
+    #};
   };
 }

@@ -28,3 +28,4 @@ jobs:
           nix flake check
           git checkout flake.nix
           rm -f flake.lock
+          

@@ -3,6 +3,8 @@
 let
   cfg = config.modules.common.dev.node;
 
+  npmGlobalPath = lib.replaceStrings ["~"] [config.home.homeDirectory] cfg.npmGlobalPrefix;
+
   # Function to get node + package manager for a given version
   nodeWithPackageManager = version: let
     nodeAttr = "nodejs_${version}";
@@ -16,7 +18,7 @@ let
       pnpm = pkgs.pnpm;
       yarn = pkgs.yarn;
       npm = nodePkg; # included with node
-    }.${cfg.package-manager};
+    }.${cfg.packageManager};
   in [
     nodePkg
     managerPkg
@@ -27,7 +29,7 @@ in
 {
   options.modules.common.dev.node = {
     enable = lib.mkEnableOption "Enable Node.js development environment";
-    package-manager = lib.mkOption {
+    packageManager = lib.mkOption {
       type = lib.types.enum [ "pnpm" "yarn" "npm" ];
       default = "pnpm";
       description = "Package manager to use for Node.js development";
@@ -43,9 +45,35 @@ in
       default = [];
       description = "Additional node packages to install; need to specify nodePackages.{name of package}";
     };
+
+    allowGlobalInstalls = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = "Whether to allow global package installations via npm/yarn/pnpm";
+    };
+
+    npmGlobalPrefix = lib.mkOption {
+      type = lib.types.str;
+      default = "~/.npm-global";
+      description = "Directory for npm global installations";
+    };
   };
 
   config = lib.mkIf cfg.enable {
     home.packages = allNodePackages;
+
+    home.file = lib.mkIf cfg.allowGlobalInstalls {
+      "${lib.removePrefix (config.home.homeDirectory + "/") npmGlobalPath}" = {
+        source = pkgs.runCommand "create-npm-global" {} ''
+          mkdir -p $out/bin
+        '';
+      };
+    };
+
+    home.shellAliases = lib.mkIf cfg.allowGlobalInstalls {
+      npm-g = "npm install --global";
+      pnpm-g = "pnpm add --global";
+      yarn-g = "yarn global add";
+    };
   };
 }

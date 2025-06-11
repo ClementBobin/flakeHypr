@@ -19,7 +19,8 @@ in {
   #### ⚙ Configuration
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
-      (lib.mkIf (cfg.engine == "clamav") clamav)
+    ] ++ lib.optionals (cfg.engine == "clamav") [
+      clamav
     ] ++ lib.optionals (cfg.engine == "clamav" && cfg.gui.enable) [
       clamtk
     ];

@@ -17,18 +17,26 @@ in
     enable = lib.mkEnableOption "Flutter development environment";
 
     withAndroid = lib.mkEnableOption "Include Android SDK tooling";
+
+    jdkPackage = lib.mkOption {
+      type = lib.types.package;
+      default = pkgs.jdk17;
+      description = "Java Development Kit package to use for Flutter development";
+    };
   };
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages =
-      [ pkgs.flutter pkgs.jdk11 ]
+      [ pkgs.flutter cfg.jdkPackage ]
       ++ lib.optional cfg.withAndroid androidSdk;
 
     # Environment variables
-    environment.variables = {
-      JAVA_HOME = "${pkgs.jdk11}";
-      ANDROID_HOME = lib.mkIf cfg.withAndroid "${androidSdk}/libexec/android-sdk";
-    };
+    environment.variables = lib.mkMerge [
+      { JAVA_HOME = "${pkgs.jdk11}"; }
+      (lib.mkIf cfg.withAndroid {
+        ANDROID_HOME = "${androidSdk}/libexec/android-sdk";
+      })
+    ];
 
     # Shell profile additions
     environment.shellInit = ''

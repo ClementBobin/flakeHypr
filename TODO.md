@@ -20,3 +20,4 @@
 - [ ] Update flake
 - [ ] Test workflows
 - [x] Prisma module
+- [ ] fix printing

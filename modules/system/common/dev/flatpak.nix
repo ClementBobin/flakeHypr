@@ -27,8 +27,8 @@ in
       wantedBy = [ "multi-user.target" ];
       path = [ pkgs.flatpak ];
       script = ''
-        ${lib.concatStringsSep "\n" (map (url: ''
-          flatpak remote-add --if-not-exists flathub-${lib.replaceStrings ["/" ":"] ["-" "_"] url} ${url}
+        ${lib.concatStringsSep "\n" (lib.imap0 (i: url: ''
+          flatpak remote-add --if-not-exists flathub-repo-${toString i} ${url}
         '') cfg.flathubRepoUrls)}
       '';
     };

@@ -3,9 +3,9 @@
 let
   cfg = config.modules.common.dev.rust;
 
-  rustDefaultPackages = ["rustc" "cargo" "rust-analyzer" "clippy" "rustfmt"];
+  rustDefaultPackages = with pkgs; [rustc cargo rust-analyzer clippy rustfmt];
 
-  rustPackages = (map (v: pkgs."${v}") rustDefaultPackages) ++ (map (pkgName: pkgs.${pkgName}) cfg.extraPackages);
+  rustPackages = rustDefaultPackages ++ (map (pkgName: pkgs.${pkgName}) cfg.extraPackages);
 
 in
 {

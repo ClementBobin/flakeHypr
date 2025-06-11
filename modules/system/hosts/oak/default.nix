@@ -1,4 +1,4 @@
-{ inputs, ... }:
+{ vars, ... }:
 {
   imports = [
     ../../common
@@ -17,9 +17,10 @@
     networks = {
       vpn.tailscale.enable = true;
     };
+    virtualisation.docker.enable = true;
     backup.syncthing = {
       enable = true;
-      dirSync = "/home/mirage";
+      dirSync = "/home/${vars.user}";
       subDir = "Documents";
     };
     security.antivirus = {
@@ -27,7 +28,6 @@
       engine = "clamav";
       gui.enable = true;
     };
-    virtualisation.docker.enable = true;
     dev = {
       php.enable = true;
       flutter = {

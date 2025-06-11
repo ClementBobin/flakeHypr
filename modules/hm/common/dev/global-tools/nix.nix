@@ -9,8 +9,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    # Conditional installation of nix-related tools
-    # Check if Home Manager or system-wide installation is preferred
+    # Install nix-related tools via home-manager
     home.packages = (with pkgs; [
       nixfmt-rfc-style
       nix-direnv
