@@ -18,7 +18,7 @@ in {
 
   #### ⚙ Configuration
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = lib.optionalList (cfg.engine == "clamav") [pkgs.clamav] ++ lib.optionalList (cfg.engine == "clamav" && cfg.gui.enable) [pkgs.clamtk];
+    environment.systemPackages = lib.optionals (cfg.engine == "clamav") [pkgs.clamav] ++ lib.optionals (cfg.engine == "clamav" && cfg.gui.enable) [pkgs.clamtk];
 
     services = lib.mkIf (cfg.engine == "clamav") {
       clamav.daemon.enable   = true;
