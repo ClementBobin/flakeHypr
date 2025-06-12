@@ -89,11 +89,4 @@ in
     ];
     shell = pkgs.zsh;
   };
-
-  services = {
-    printing = {                            # CUPS
-      enable = true;
-      drivers = [ pkgs.cnijfilter2 ];
-    };
-  };
 }

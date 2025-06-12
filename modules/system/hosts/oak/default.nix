@@ -15,6 +15,7 @@
       lutris.enable = true;
     };
     networks = {
+      print.enable = true;
       vpn.tailscale.enable = true;
     };
     virtualisation.docker.enable = true;

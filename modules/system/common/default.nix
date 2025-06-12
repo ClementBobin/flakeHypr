@@ -15,6 +15,7 @@
     ./hardware/autologin.nix
     ./hardware/boot.nix
 
+    ./networks/print/print.nix
     ./networks/vpn/tailscale.nix
 
     ./security/antivirus.nix
