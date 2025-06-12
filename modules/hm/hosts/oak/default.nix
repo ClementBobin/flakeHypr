@@ -54,8 +54,10 @@
       };
       node = {
         enable = true;
-        graphite.enable = true;
-        vercel.enable = true;
+        cli = {
+          enable = true;
+          elements = ["vercel" "graphite"];
+        };
         prisma.enable = true;
       };
       python = {

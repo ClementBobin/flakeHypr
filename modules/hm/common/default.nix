@@ -14,11 +14,10 @@
     ./dev/editor/android-studio.nix
     ./dev/global-tools/act-github.nix
     ./dev/global-tools/nix.nix
-    ./dev/node/graphite.nix
     ./dev/node/node.nix
     ./dev/node/pm2.nix
     ./dev/node/prisma.nix
-    ./dev/node/vercel.nix
+    ./dev/node/cli.nix
     ./dev/dotnet.nix
     ./dev/python.nix
     ./dev/rust.nix
