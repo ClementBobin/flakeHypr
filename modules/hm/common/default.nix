@@ -22,7 +22,6 @@
     ./dev/rust.nix
 
     ./documentation/obsidian.nix
-    ./documentation/okular.nix
     ./documentation/onlyoffice.nix
 
     ./driver/chrome.nix
