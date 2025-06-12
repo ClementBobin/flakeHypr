@@ -30,7 +30,7 @@
     };
     browser = {
       enable = true;
-      emulators = ["chromium" "firefox"];
+      emulators = ["chrome" "firefox"];
       driver.enable = true;
     };
     documentation = {
