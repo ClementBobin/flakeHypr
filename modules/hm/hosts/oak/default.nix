@@ -28,8 +28,10 @@
       gimp.enable = true;
       stremio.enable = true;
     };
-    driver = {
-      chrome.enable = true;
+    browser = {
+      enable = true;
+      emulators = ["chromium" "firefox"];
+      driver.enable = true;
     };
     documentation = {
       obsidian = {

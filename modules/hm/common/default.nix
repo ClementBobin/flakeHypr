@@ -3,6 +3,8 @@
 }:
 {
   imports = [
+    ./browser
+
     ./communication/mail
     ./communication/teams.nix
 
@@ -23,8 +25,6 @@
 
     ./documentation/obsidian.nix
     ./documentation/onlyoffice.nix
-
-    ./driver/chrome.nix
 
     ./emulator
 
