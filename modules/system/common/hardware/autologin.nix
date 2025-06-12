@@ -9,11 +9,7 @@ let
 in
 {
   options.modules.hardware.autologin = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable autologin";
-    };
+    enable = lib.mkEnableOption "Enable autologin for SDDM";
 
     user = lib.mkOption {
       type = lib.types.str;

@@ -5,21 +5,11 @@ let
 in
 {
   options.modules.common.documentation.okular = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable okular";
-    };
-
-    installMethod = lib.mkOption {
-      type = lib.types.enum [ "hm" "sys" ];
-      default = "hm";
-      description = "Choose whether to install okular via home-manager or directly in the environment.";
-    };
+    enable = lib.mkEnableOption "Enable Okular document viewer";
   };
 
   config = lib.mkIf cfg.enable {
-    home.packages = lib.mkIf (cfg.installMethod == "hm") (with pkgs; [
+    home.packages = (with pkgs; [
       okular
     ]);
   };

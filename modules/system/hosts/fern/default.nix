@@ -1,8 +1,6 @@
 { inputs, ... }:
 {
   imports = [
-    inputs.richendots-private.nixosModules.fern
-    inputs.richendots-private.serviceModules.keepassxc-sync
     ../../common
     ./drivers.nix
     ./plex.nix
@@ -13,9 +11,9 @@
   ];
 
   modules = {
-    autologin.enable = false;
-    boot.enable = true;
-    steam.enable = true;
+    hardware.autologin.enable = false;
+    hardware.boot.enable = true;
+    games.steam.enable = true;
 
     # fern specific modules
     fern = {

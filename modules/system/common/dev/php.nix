@@ -5,11 +5,7 @@ let
 in
 {
   options.modules.dev.php = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable php development environment";
-    };
+    enable = lib.mkEnableOption "Enable PHP development environment";
 
     installMethod = lib.mkOption {
       type = lib.types.enum [ "hm" "sys" ];

@@ -5,11 +5,7 @@ let
 in
 {
   options.modules.hardware.gpu.amd = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable amd tools";
-    };
+    enable = lib.mkEnableOption "Enable AMD GPU support with Vulkan tools";
   };
 
   config = lib.mkIf cfg.enable {

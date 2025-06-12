@@ -9,14 +9,12 @@ let
 in
 {
   options.modules.networks.vpn.tailscale = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable tailscale.";
-    };
+    enable = lib.mkEnableOption "Enable Tailscale VPN support";
   };
 
   config = lib.mkIf cfg.enable {
-    services.tailscale.enable = true;
+    services.tailscale = {
+      enable = true;
+    };
   };
 }
