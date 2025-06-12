@@ -3,7 +3,10 @@
 let
   cfg = config.modules.common.dev.node;
 
-  npmGlobalPath = lib.replaceStrings ["~"] [config.home.homeDirectory] cfg.npmGlobalPrefix;
+  expandPath = path: if lib.hasPrefix "~/" path
+    then "${config.home.homeDirectory}/${lib.removePrefix "~/" path}"
+    else path;
+  npmGlobalPath = expandPath cfg.npmGlobalPrefix;
 
   # Function to get node + package manager for a given version
   nodeWithPackageManager = version: let

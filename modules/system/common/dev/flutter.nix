@@ -65,9 +65,7 @@ in
       })
     ];
 
-    programs = {
-      adb.enable = true;
-    };
+    programs = lib.mkIf cfg.withAndroid { adb.enable = true; };
 
     users.users.${vars.user} = {
       extraGroups = [
@@ -77,7 +75,7 @@ in
 
     # Shell profile additions
     environment.shellInit = ''
-      export PATH="$JAVA_HOME/bin:$PATH"
+      export PATH="$JAVA_HOME/bin:${pkgs.flutter}/bin:${pkgs.flutter}/bin/cache/dart-sdk/bin:$PATH"
       ${lib.optionalString cfg.withAndroid ''
       export PATH="$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/emulator:$ANDROID_HOME/platform-tools:$PATH"
       ''}
