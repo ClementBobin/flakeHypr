@@ -26,6 +26,12 @@ in
         default = "staging";
         description = "Wine version to install";
       };
+
+      prefix = lib.mkOption {
+        type = lib.types.str;
+        default = "${config.home.homeDirectory}/.wine";
+        description = "Custom WINEPREFIX value";
+      };
     };
 
     proton = {
@@ -73,7 +79,7 @@ in
 
     # Environment variables for Wine/Proton
     home.sessionVariables = lib.mkIf (cfg.wine.enable || cfg.proton.enable) {
-      WINEPREFIX = "${config.home.homeDirectory}/.wine";
+      WINEPREFIX = cfg.wine.prefix;
       WINEARCH = "win64";
     };
   };

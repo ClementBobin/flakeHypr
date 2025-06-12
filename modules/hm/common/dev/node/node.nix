@@ -17,12 +17,9 @@ let
     managerPkg = {
       pnpm = pkgs.pnpm;
       yarn = pkgs.yarn;
-      npm = nodePkg; # included with node
+      npm = null;    # npm ships with node, no extra package
     }.${cfg.packageManager};
-  in [
-    nodePkg
-    managerPkg
-  ];
+  in lib.filter (x: x != null) [ nodePkg managerPkg ];
 
   allNodePackages = lib.flatten (map nodeWithPackageManager cfg.versions) ++ (map (pkgName: pkgs.${pkgName}) cfg.extraPackages);
 in

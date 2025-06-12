@@ -15,13 +15,6 @@ let
   };
 
 in {
-  options = {
-    modules.common.communication.mail.bluemail = {
-      enable = lib.mkEnableOption "Enable BlueMail email client with GPU support";
-    };
-  };
-
-  config = lib.mkIf cfg.enable {
-    home.packages = [ bluemailWithGPU ];
-  };
+  # export for other module
+  bluemailWithGPU = bluemailWithGPU;
 }

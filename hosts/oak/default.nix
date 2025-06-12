@@ -16,6 +16,7 @@ let
         userPkgs = import inputs.nixpkgs {
           inherit (inputs.hydenix.lib) system;
           config.allowUnfree = true;
+          android_sdk.accept_license = true;
         };
       })
     ];

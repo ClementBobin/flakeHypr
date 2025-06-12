@@ -3,9 +3,10 @@
 let
   cfg = config.modules.common.extra.ignore-file-retriever;
 
-  expandPath = path: lib.removeSuffix "/" (
-    lib.replaceStrings ["~"] [config.home.homeDirectory] path
-  );
+  expandPath = path: if lib.hasPrefix "~/" path then
+    lib.removeSuffix "/" (lib.replacePrefix "~/" "${config.home.homeDirectory}/" path)
+  else
+    lib.removeSuffix "/" path;
 
   templatePath = expandPath cfg.templatePath;
   outputPath = expandPath cfg.outputPath;
@@ -77,8 +78,10 @@ let
       done < "$gitignore"
     done
 
-    # Move temporary file to output
-    mv "$TMP_FILE" "$OUTPUT_FILE"
+    # Re-assemble final file: template + generated patterns
+    cat "$TEMPLATE_FILE" > "$OUTPUT_FILE"
+    cat "$TMP_FILE"      >> "$OUTPUT_FILE"
+    rm "$TMP_FILE"
     echo "Updated $OUTPUT_FILE with patterns from .gitignore files"
   '';
 in
