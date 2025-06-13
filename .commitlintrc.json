@@ -7,8 +7,7 @@
       ],
       "subject-case": [
         2,
-        "always",
-        "lower-case"
+        "always"
       ],
       "scope-empty": [
         0,
