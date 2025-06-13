@@ -112,7 +112,8 @@
         burn-iso = isoConfig.burn-iso;
 
         rb = pkgs.writeShellScriptBin "rb" ''
-          host=$1
+          set -euo pipefail
+          host=${1:-}
           case "$host" in
             "oak")
               ${pkgs.deploy-rs}/bin/deploy --skip-checks .#oak ;;
@@ -122,7 +123,7 @@
               ${pkgs.deploy-rs}/bin/deploy --skip-checks .#oak
               ${pkgs.deploy-rs}/bin/deploy --skip-checks .#fern
               ;;
-            *) echo "Usage: rb [oak|fern|all]" ;;
+            *) echo "Usage: rb [oak|fern|all]" >&2; exit 1 ;;
           esac
         '';
       };
