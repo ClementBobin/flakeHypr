@@ -9,15 +9,46 @@ in
 
     steam = {
       compatToolsPath = lib.mkOption {
-      type = lib.types.str;
-      default = "$HOME/.steam/root/compatibilitytools.d";
-      description = "Path for Steam compatibility tools";
+        type = lib.types.str;
+        default = "$HOME/.steam/root/compatibilitytools.d";
+        description = "Path for Steam compatibility tools";
       };
       enable = lib.mkEnableOption "Enable Steam support";
     };
 
     lutris.enable = lib.mkEnableOption "Enable Lutris support";
     heroic.enable = lib.mkEnableOption "Enable Heroic support";
+
+    gamemode = {
+      enable = lib.mkEnableOption "Enable GameMode support";
+      enableRenice = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = "Enable renice support in GameMode";
+      };
+      notificationCommands = lib.mkOption {
+        type = lib.types.attrsOf lib.types.str;
+        default = {
+          start = "notify-send 'GameMode started'";
+          end = "notify-send 'GameMode ended'";
+        };
+        description = "Custom notification commands for GameMode start and end events";
+      };
+      generalSettings = lib.mkOption {
+        type = lib.types.attrsOf lib.types.int;
+        default = {
+          inhibit_screensaver = 1;
+        };
+        description = "General GameMode settings";
+      };
+      gpuSettings = lib.mkOption {
+        type = lib.types.attrsOf lib.types.str;
+        default = {
+          apply_gpu_optimisations = "accept-responsibility";
+        };
+        description = "GPU-related GameMode settings";
+      };
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -31,25 +62,19 @@ in
     };
 
     programs = lib.mkMerge [
-      (lib.mkIf cfg.steam.enable {
+      (lib.mkIf cfg.gamemode.enable {
         gamemode = {
           enable = true;
-          enableRenice = true;
+          enableRenice = cfg.gamemode.enableRenice;
           settings = {
-            general = {
-              inhibit_screensaver = 1;
-            };
-
-            gpu = {
-              apply_gpu_optimisations = "accept-responsibility";
-            };
-
-            custom = {
-              start = "notify-send 'GameMode started'";
-              end = "notify-send 'GameMode ended'";
-            };
+            general = cfg.gamemode.generalSettings;
+            gpu = cfg.gamemode.gpuSettings;
+            custom = cfg.gamemode.notificationCommands;
           };
         };
+      })
+
+      (lib.mkIf cfg.steam.enable {
         gamescope = {
           enable = true;
           capSysNice = true;
