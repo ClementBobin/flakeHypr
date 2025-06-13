@@ -9,8 +9,8 @@ in
 
     steam = {
       compatToolsPath = lib.mkOption {
-        type = lib.types.str;
-        default = "$HOME/.steam/root/compatibilitytools.d";
+        type = lib.types.path;
+        default = "${config.users.users.${config.primaryUser}.home}/.steam/root/compatibilitytools.d";
         description = "Path for Steam compatibility tools";
       };
       enable = lib.mkEnableOption "Enable Steam support";
@@ -35,7 +35,7 @@ in
         description = "Custom notification commands for GameMode start and end events";
       };
       generalSettings = lib.mkOption {
-        type = lib.types.attrsOf lib.types.int;
+        type = lib.types.attrsOf (lib.types.oneOf [ lib.types.int lib.types.bool lib.types.str ]);
         default = {
           inhibit_screensaver = 1;
         };
