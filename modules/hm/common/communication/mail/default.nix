@@ -19,7 +19,7 @@ in
   options.modules.common.communication.mail = {
     services = lib.mkOption {
       type = lib.types.listOf (lib.types.enum ["thunderbird" "bluemail"]);
-      default = ["thunderbird"];
+      default = [];
       description = "List of mail services to enable";
     };
   };
