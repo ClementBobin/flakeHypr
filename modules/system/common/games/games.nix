@@ -10,7 +10,7 @@ in
     steam = {
       compatToolsPath = lib.mkOption {
         type = lib.types.path;
-        default = "${config.users.users.${config.primaryUser}.home}/.steam/root/compatibilitytools.d";
+        default = "${builtins.getEnv "HOME"}/.steam/root/compatibilitytools.d";
         description = "Path for Steam compatibility tools";
       };
       enable = lib.mkEnableOption "Enable Steam support";
