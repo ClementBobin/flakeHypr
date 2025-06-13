@@ -32,7 +32,24 @@ in
 
     programs = lib.mkMerge [
       (lib.mkIf cfg.steam.enable {
-        gamemode.enable = true;
+        gamemode = {
+          enable = true;
+          enableRenice = true;
+          settings = {
+            general = {
+              inhibit_screensaver = 1;
+            };
+
+            gpu = {
+              apply_gpu_optimisations = "accept-responsibility";
+            };
+
+            custom = {
+              start = "notify-send 'GameMode started'";
+              end = "notify-send 'GameMode ended'";
+            };
+          };
+        };
         gamescope = {
           enable = true;
           capSysNice = true;
