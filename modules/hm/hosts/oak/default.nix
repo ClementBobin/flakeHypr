@@ -34,11 +34,13 @@
       driver.enable = true;
     };
     documentation = {
+      enable = true;
+      editor = ["onlyoffice"];
+      
       obsidian = {
         enable = true;
         backupMethod  = "git-push-temp";
       };
-      onlyoffice.enable = true;
     };
     dev = {
       editor = {

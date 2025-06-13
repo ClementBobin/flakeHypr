@@ -23,7 +23,7 @@
     ./dev/rust.nix
 
     ./documentation/obsidian.nix
-    ./documentation/onlyoffice.nix
+    ./documentation
 
     ./emulator
 
