@@ -59,7 +59,7 @@ in
       {
         # hm import
         imports = [
-          ../../modules/hm/desktops
+          ../../modules/hm/desktops/hydenix.nix
           ../../modules/hm/hosts/oak
         ];
 
