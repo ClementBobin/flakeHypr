@@ -14,8 +14,8 @@ in
 
   config = {
     home.packages = (with pkgs; [
-      (lib.optionals (lib.elem "onlyoffice" cfg.editor) onlyoffice-bin)
-      (lib.optionals (lib.elem "okular" cfg.editor) okular)
+      (lib.optional (lib.elem "onlyoffice" cfg.editor) onlyoffice-bin) ++
+      (lib.optional (lib.elem "okular" cfg.editor) okular)
     ]);
   };
 }
