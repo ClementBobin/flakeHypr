@@ -133,7 +133,6 @@ in {
       (if cfg.managePowerProfiles then [
         "mem_sleep_default=deep"
         "power_supply.wakeup=disabled"
-        "usbcore.autosuspend=-1"
         "libata.force=noncq"
         "pcie_aspm=force"
       ] else []) ++
