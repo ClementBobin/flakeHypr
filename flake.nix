@@ -125,16 +125,15 @@
             *) echo "Usage: rb [oak|fern|all]" ;;
           esac
         '';
+      };
 
-
-        # Only check the specific deployment node
-        checks.${system} = {
-          oak-check = inputs.deploy-rs.lib.${system}.deployChecks {
-            nodes.oak = inputs.self.deploy.nodes.oak;
-          };
-          fern-check = inputs.deploy-rs.lib.${system}.deployChecks {
-            nodes.fern = inputs.self.deploy.nodes.fern;
-          };
+      # Only check the specific deployment node
+      checks.${system} = {
+        oak-check = inputs.deploy-rs.lib.${system}.deployChecks {
+          nodes.oak = inputs.self.deploy.nodes.oak;
+        };
+        fern-check = inputs.deploy-rs.lib.${system}.deployChecks {
+          nodes.fern = inputs.self.deploy.nodes.fern;
         };
       };
     };
