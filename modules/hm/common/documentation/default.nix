@@ -6,7 +6,7 @@ in
 {
   options.modules.common.documentation = {
     editor = lib.mkOption {
-      type = lib.types.listOf (lib.types.enum ["onlyoffice"]);
+      type = lib.types.listOf (lib.types.enum ["onlyoffice" "okular"]);
       default = [];
       description = "List of document editors to install";
     };
@@ -15,6 +15,7 @@ in
   config = {
     home.packages = (with pkgs; [
       (lib.optionals (lib.elem "onlyoffice" cfg.editor) onlyoffice-bin)
+      (lib.optionals (lib.elem "okular" cfg.editor) okular)
     ]);
   };
 }
