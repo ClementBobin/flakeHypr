@@ -115,12 +115,12 @@
           host=$1
           case "$host" in
             "oak")
-              ${pkgs.deploy-rs.deploy-rs}/bin/deploy --skip-checks .#oak ;;
+              ${pkgs.deploy-rs}/bin/deploy --skip-checks .#oak ;;
             "fern")
-              ${pkgs.deploy-rs.deploy-rs}/bin/deploy --skip-checks .#fern ;;
+              ${pkgs.deploy-rs}/bin/deploy --skip-checks .#fern ;;
             "all")
-              ${pkgs.deploy-rs.deploy-rs}/bin/deploy --skip-checks .#oak
-              ${pkgs.deploy-rs.deploy-rs}/bin/deploy --skip-checks .#fern
+              ${pkgs.deploy-rs}/bin/deploy --skip-checks .#oak
+              ${pkgs.deploy-rs}/bin/deploy --skip-checks .#fern
               ;;
             *) echo "Usage: rb [oak|fern|all]" ;;
           esac
