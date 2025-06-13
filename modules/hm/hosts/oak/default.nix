@@ -51,13 +51,13 @@
       global-tools = {
         act-github.enable = true;
         nix.enable = true;
-      };
-      node = {
-        enable = true;
         cli = {
           enable = true;
           elements = ["vercel" "graphite"];
         };
+      };
+      node = {
+        enable = true;
         prisma.enable = true;
       };
       python = {
