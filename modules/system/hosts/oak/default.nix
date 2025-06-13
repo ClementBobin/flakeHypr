@@ -5,9 +5,12 @@
   ];
 
   modules = {
-    nix-garbage = {
-      enable = true;
-      autoOptimiseStore = true;
+    nix = {
+      nix-garbage = {
+        enable = true;
+        autoOptimiseStore = true;
+      };
+      polkit.enable = true;
     };
     games = {
       enable = true;
@@ -15,18 +18,22 @@
       lutris.enable = true;
     };
     networks = {
+      print.enable = true;
       vpn.tailscale.enable = true;
     };
-    virtualisation.docker.enable = true;
+    virtualisation.containers.engine = ["docker"];
     backup.syncthing = {
       enable = true;
       dirSync = "/home/${vars.user}";
       subDir = "Documents";
     };
-    security.antivirus = {
-      enable = true;
-      engine = "clamav";
-      gui.enable = true;
+    security = {
+      antivirus = {
+        enable = true;
+        engine = "clamav";
+        gui.enable = true;
+      };
+      passwordManager.backend = ["bitwarden"];
     };
     dev = {
       php.enable = true;
@@ -34,6 +41,14 @@
         enable = true;
         withAndroid = true;
       };
+    };
+    hardware.powersave = {
+      enable = true;
+      architecture = "amd";
+      batteryHealth.enable = true;
+      managePowerProfiles = false;
+      disk = [ "nvme0n1" ];
+      asus.enable = true;
     };
   };
 }

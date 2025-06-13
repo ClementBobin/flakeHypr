@@ -17,16 +17,14 @@ let
 in
 {
   options.modules.common.communication.mail = {
-    enable = lib.mkEnableOption "Enable mail communication tools";
-
     services = lib.mkOption {
       type = lib.types.listOf (lib.types.enum ["thunderbird" "bluemail"]);
-      default = ["thunderbird"];
+      default = [];
       description = "List of mail services to enable";
     };
   };
 
-  config = lib.mkIf cfg.enable {
+  config = {
     home.packages = packagesToInstall;
   };
 }

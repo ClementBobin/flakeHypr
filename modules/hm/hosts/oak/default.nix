@@ -28,15 +28,16 @@
       gimp.enable = true;
       stremio.enable = true;
     };
-    driver = {
-      chrome.enable = true;
+    browser = {
+      emulators = ["chrome" "firefox"];
+      driver.enable = true;
     };
     documentation = {
+      editor = ["onlyoffice"];
       obsidian = {
         enable = true;
         backupMethod  = "git-push-temp";
       };
-      onlyoffice.enable = true;
     };
     dev = {
       editor = {
@@ -49,11 +50,10 @@
       global-tools = {
         act-github.enable = true;
         nix.enable = true;
+        cli.elements = ["vercel" "graphite"];
       };
       node = {
         enable = true;
-        graphite.enable = true;
-        vercel.enable = true;
         prisma.enable = true;
       };
       python = {
@@ -63,10 +63,7 @@
     };
     communication = {
       teams.enable = true;
-      mail = {
-        enable = true;
-        services = ["thunderbird"];
-      };
+      mail.services = ["thunderbird"];
     };
     network.tunnel = {
       enable = true;
@@ -76,7 +73,10 @@
         port = 3000;
       };
     };
-    utilities.scalar.enable = true;
+    utilities = {
+      kde-connect.enable = true;
+      scalar.enable = true;
+    };
     #extra = {
       #ignore-file-retriever = {
         #enable = true;

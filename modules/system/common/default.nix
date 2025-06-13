@@ -11,29 +11,20 @@
     ./games/gamescope.nix
     ./games/games.nix
 
-    ./hardware/gpu/amd.nix
     ./hardware/autologin.nix
     ./hardware/boot.nix
+    ./hardware/powersave.nix
 
+    ./networks/print/print.nix
     ./networks/vpn/tailscale.nix
 
+    ./nix/linux-cachyos.nix
+    ./nix/nix-garbage.nix
+    ./nix/polkit.nix
+
     ./security/antivirus.nix
+    ./security/password-manager.nix
 
     ./virtualisation/containers/containers.nix
-
-    ./linux-cachyos.nix
-
-    ./nix-garbage.nix
   ];
-
-  # TODO: move this somewhere?
-  # For dolphin udisks2 permission for click mounting disks
-  security.polkit.extraConfig = ''
-    polkit.addRule(function(action, subject) {
-      if (action.id.indexOf("org.freedesktop.udisks2.") == 0 &&
-          subject.isInGroup("users")) {
-          return polkit.Result.YES;
-      }
-    });
-  '';
 }

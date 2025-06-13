@@ -42,7 +42,7 @@ in
       {
         # hm import
         imports = [
-          ../../modules/hm/desktops
+          ../../modules/hm/desktops/hydenix.nix
         ];
 
         desktops.hydenix = {
@@ -69,4 +69,6 @@ in
     ];
     shell = pkgs.zsh;
   };
+
+  system.stateVersion = "25.05";
 }

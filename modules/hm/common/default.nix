@@ -3,6 +3,8 @@
 }:
 {
   imports = [
+    ./browser
+
     ./communication/mail
     ./communication/teams.nix
 
@@ -12,24 +14,20 @@
     ./dev/editor/android-studio.nix
     ./dev/global-tools/act-github.nix
     ./dev/global-tools/nix.nix
-    ./dev/node/graphite.nix
+    ./dev/global-tools/cli.nix
     ./dev/node/node.nix
     ./dev/node/pm2.nix
     ./dev/node/prisma.nix
-    ./dev/node/vercel.nix
     ./dev/dotnet.nix
     ./dev/python.nix
     ./dev/rust.nix
 
     ./documentation/obsidian.nix
-    ./documentation/okular.nix
-    ./documentation/onlyoffice.nix
-
-    ./driver/chrome.nix
+    ./documentation
 
     ./emulator
 
-    ./engine/engine.nix
+    ./engine
 
     #./extra/ignore-file-retriever.nix
 
@@ -40,7 +38,6 @@
     ./games/star-citizen.nix
     ./games/northstar.nix
 
-    ./multimedia/easyeffects.nix
     ./multimedia/gimp.nix
     ./multimedia/mpv.nix
     ./multimedia/obs.nix
@@ -58,7 +55,7 @@
     ./shell/tools.nix
 
     ./utilities/filezilla.nix
-    ./utilities/gitkraken.nix
+    ./utilities/kde-connect.nix
     ./utilities/scalar.nix
     ./utilities/stacer.nix
   ];

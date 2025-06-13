@@ -6,11 +6,9 @@ let
 in
 {
   options.modules.common.shell.disk-usage = {
-    enable = lib.mkEnableOption "Enable Disk Usage Analyzers";
-
     tools = lib.mkOption {
       type = lib.types.listOf (lib.types.enum validTools);
-      default = [ "squirreldisk" ];
+      default = [];
       description = "List of disk usage analyzers to install.";
     };
   };

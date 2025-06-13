@@ -59,7 +59,7 @@ in
       {
         # hm import
         imports = [
-          ../../modules/hm/desktops
+          ../../modules/hm/desktops/hydenix.nix
           ../../modules/hm/hosts/oak
         ];
 
@@ -88,12 +88,5 @@ in
       "scanner"
     ];
     shell = pkgs.zsh;
-  };
-
-  services = {
-    printing = {                            # CUPS
-      enable = true;
-      drivers = [ pkgs.cnijfilter2 ];
-    };
   };
 }
