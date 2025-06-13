@@ -1,4 +1,4 @@
-{ pkgs, lib, config, vars, ... }:
+{ pkgs, lib, config, ... }:
 
 let
   cfg = config.modules.common;
