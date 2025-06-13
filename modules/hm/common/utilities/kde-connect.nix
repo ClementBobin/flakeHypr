@@ -11,10 +11,10 @@
 with lib;
 
 let
-  cfg = config.modules.common.utilities.kdeconnect;
+  cfg = config.modules.common.utilities.kde-connect;
 in
 {
-  options.modules.common.utilities.kdeconnect = {
+  options.modules.common.utilities.kde-connect = {
     enable = mkEnableOption "KDE Connect";
   };
 

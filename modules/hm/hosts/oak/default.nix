@@ -79,7 +79,7 @@
     };
     utilities = {
       scalar.enable = true;
-      kdeconnect.enable = true;
+      kde-connect.enable = true;
     };
     #extra = {
       #ignore-file-retriever = {
