@@ -27,7 +27,7 @@
 
     ./emulator
 
-    ./engine/engine.nix
+    ./engine
 
     #./extra/ignore-file-retriever.nix
 
@@ -38,7 +38,6 @@
     ./games/star-citizen.nix
     ./games/northstar.nix
 
-    ./multimedia/easyeffects.nix
     ./multimedia/gimp.nix
     ./multimedia/mpv.nix
     ./multimedia/obs.nix
@@ -56,7 +55,7 @@
     ./shell/tools.nix
 
     ./utilities/filezilla.nix
-    ./utilities/gitkraken.nix
+    ./utilities/kde-connect.nix
     ./utilities/scalar.nix
     ./utilities/stacer.nix
   ];

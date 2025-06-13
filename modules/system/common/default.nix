@@ -11,20 +11,20 @@
     ./games/gamescope.nix
     ./games/games.nix
 
-    ./hardware/gpu/amd.nix
     ./hardware/autologin.nix
     ./hardware/boot.nix
+    ./hardware/powersave.nix
 
     ./networks/print/print.nix
     ./networks/vpn/tailscale.nix
 
+    ./nix/linux-cachyos.nix
+    ./nix/nix-garbage.nix
+
     ./security/antivirus.nix
+    ./security/password-manager.nix
 
     ./virtualisation/containers/containers.nix
-
-    ./linux-cachyos.nix
-
-    ./nix-garbage.nix
   ];
 
   # TODO: move this somewhere?
