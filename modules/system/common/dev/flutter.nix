@@ -50,8 +50,6 @@ in
       [
         pkgs.flutter
         cfg.jdkPackage
-        # TODO: move to its own module
-        pkgs.google-chrome
       ]
       ++ lib.optional cfg.withAndroid androidSdk;
 
@@ -59,7 +57,6 @@ in
     environment.variables = lib.mkMerge [
       { JAVA_HOME = "${cfg.jdkPackage}"; }
       { STUDIO_JDK = "${cfg.jdkPackage}"; }
-      { CHROME_EXECUTABLE = "${pkgs.google-chrome}/bin/google-chrome-stable"; }
       (lib.mkIf cfg.withAndroid {
         ANDROID_HOME = "${androidSdk}/libexec/android-sdk";
       })
