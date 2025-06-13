@@ -43,7 +43,7 @@ in {
         pkgs.keepassxc
       ]) ++
       (lib.optionals (lib.elem "bitwarden" cfg.passwordManager.backend) [
-        pkgs.bitwarden
+        pkgs.bitwarden-desktop
       ]);
   };
 }
