@@ -30,16 +30,6 @@ in
         libunwind
         libuuid
         zlib
-        # Add any other libraries you might need
-
-        # Node.js dependencies
-        nodejs_20
-        nodePackages.pnpm
-        # Common runtime dependencies
-        stdenv.cc.cc
-        openssl
-        zlib
-        pnpm
       ];
     };
   };
