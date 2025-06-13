@@ -26,8 +26,7 @@ in
       (lib.optionals (lib.elem "vivaldi" cfg.emulators) [vivaldi]) ++
       (lib.optionals (lib.elem "edge" cfg.emulators) [microsoft-edge]) ++
 
-      (lib.optionals (cfg.driver.enable && lib.elem "chromium" cfg.emulators) [chromedriver]) ++
-      (lib.optionals (cfg.driver.enable && lib.elem "chrome" cfg.emulators) [chromedriver]) ++
+      (lib.optionals (cfg.driver.enable && (lib.elem "chromium" cfg.emulators || lib.elem "chrome" cfg.emulators)) [chromedriver]) ++
       (lib.optionals (cfg.driver.enable && lib.elem "firefox" cfg.emulators) [geckodriver]) ++
       (lib.optionals (cfg.driver.enable && lib.elem "edge" cfg.emulators) [msedgedriver])
     );
