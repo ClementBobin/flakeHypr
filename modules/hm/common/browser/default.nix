@@ -5,8 +5,6 @@ let
 in
 {
   options.modules.common.browser = {
-    enable = lib.mkEnableOption "Enable browser module";
-
     emulators = lib.mkOption {
       type = lib.types.listOf (lib.types.enum ["chromium" "chrome" "firefox" "brave" "vivaldi" "edge"]);
       default = [];
@@ -19,7 +17,7 @@ in
     };
   };
 
-  config = lib.mkIf cfg.enable {
+  config = {
     home.packages = with pkgs; (
       (lib.optionals (lib.elem "chromium" cfg.emulators) [chromium]) ++
       (lib.optionals (lib.elem "chrome" cfg.emulators) [google-chrome]) ++
