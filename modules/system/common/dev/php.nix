@@ -6,16 +6,10 @@ in
 {
   options.modules.dev.php = {
     enable = lib.mkEnableOption "Enable PHP development environment";
-
-    installMethod = lib.mkOption {
-      type = lib.types.enum [ "hm" "sys" ];
-      default = "sys";
-      description = "Choose whether to install php via home-manager or directly in the environment.";
-    };
   };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = lib.mkIf (cfg.installMethod == "sys") (with pkgs; [
+    environment.systemPackages = (with pkgs; [
       php83Extensions.xdebug
       php83Extensions.sqlsrv
       php83
