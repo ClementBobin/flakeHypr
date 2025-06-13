@@ -93,7 +93,8 @@ in
 
           # Example monitor configuration
           # Replace names like HDMI-A-1, DP-1, etc. with the actual names of your monitors (use `hyprctl monitors` to list)
-          # monitor=<name>,<resolution>@<refresh>,<positionX>x<positionY>,<scale>
+          # monitor = <name>,<resolution@refresh>,<position>,<scale>,<features>,<enabled>
+          # Features can include: "primary", "no-vrr", "no-hdr", "no-gamma", "vrr", etc.
 
           # Main display
           # monitor=HDMI-A-1,auto,0x0,1
