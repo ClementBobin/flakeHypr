@@ -18,11 +18,16 @@ in {
   };
 
   config = {
-    services.pcscd.enable = cfg.yubikey.enable;
+    security.pam.u2f.enable = cfg.yubikey.enable;
 
-    services.udev.packages = lib.optionals cfg.yubikey.enable [
-      pkgs.yubikey-personalization
-    ];
+    services = {
+      pcscd.enable = cfg.yubikey.enable;
+
+      udev.packages = lib.optionals cfg.yubikey.enable [
+        pkgs.yubikey-personalization
+        pkgs.yubikey-manager
+      ];
+    };
 
     environment.systemPackages =
       (lib.optionals cfg.yubikey.enable [
