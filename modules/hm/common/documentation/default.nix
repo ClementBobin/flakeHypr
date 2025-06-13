@@ -5,8 +5,6 @@ let
 in
 {
   options.modules.common.documentation = {
-    enable = lib.mkEnableOption "Enable document editor";
-
     editor = lib.mkOption {
       type = lib.types.listOf (lib.types.enum ["onlyoffice"]);
       default = [];
@@ -14,7 +12,7 @@ in
     };
   };
 
-  config = lib.mkIf cfg.enable {
+  config = {
     home.packages = (with pkgs; [
       (lib.optionals (lib.elem "onlyoffice" cfg.editor) onlyoffice-bin)
     ]);
