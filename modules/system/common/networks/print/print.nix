@@ -23,9 +23,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    services.printing = {
-      enable = cfg.cups.enable;
-      drivers = cfg.drivers;
-    };
+    services.printing.enable = cfg.cups.enable;
+    services.printing.drivers = lib.mkIf cfg.cups.enable cfg.drivers;
   };
 }
