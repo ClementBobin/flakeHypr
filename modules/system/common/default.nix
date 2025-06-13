@@ -20,21 +20,11 @@
 
     ./nix/linux-cachyos.nix
     ./nix/nix-garbage.nix
+    ./nix/polkit.nix
 
     ./security/antivirus.nix
     ./security/password-manager.nix
 
     ./virtualisation/containers/containers.nix
   ];
-
-  # TODO: move this somewhere?
-  # For dolphin udisks2 permission for click mounting disks
-  security.polkit.extraConfig = ''
-    polkit.addRule(function(action, subject) {
-      if (action.id.indexOf("org.freedesktop.udisks2.") == 0 &&
-          subject.isInGroup("users")) {
-          return polkit.Result.YES;
-      }
-    });
-  '';
 }
