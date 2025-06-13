@@ -5,9 +5,12 @@
   ];
 
   modules = {
-    nix-garbage = {
-      enable = true;
-      autoOptimiseStore = true;
+    nix = {
+      nix-garbage = {
+        enable = true;
+        autoOptimiseStore = true;
+      };
+      polkit.enable = true;
     };
     games = {
       enable = true;

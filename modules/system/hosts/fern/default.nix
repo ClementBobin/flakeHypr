@@ -11,8 +11,10 @@
   ];
 
   modules = {
-    hardware.autologin.enable = false;
-    hardware.boot.enable = true;
+    hardware = {
+      autologin.enable = false;
+      boot.enable = true;
+    };
     games.steam.enable = true;
 
     # fern specific modules
