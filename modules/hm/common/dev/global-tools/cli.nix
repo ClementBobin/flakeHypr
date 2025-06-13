@@ -5,7 +5,6 @@ let
 in
 {
   options.modules.common.dev.global-tools.cli = {
-    enable = lib.mkEnableOption "Enable CLI";
 
     elements = lib.mkOption {
       type = lib.types.listOf (lib.types.enum ["vercel" "graphite"]);
@@ -14,7 +13,7 @@ in
     };
   };
 
-  config = lib.mkIf cfg.enable {
+  config = {
     home.packages = (with pkgs; [
       (lib.optionals (lib.elem "vercel" cfg.elements) nodePackages.vercel)
       (lib.optionals (lib.elem "graphite" cfg.elements) graphite-cli)
