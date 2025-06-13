@@ -1,10 +1,10 @@
 { lib, pkgs, inputs, config, ... }:
 
 let
-  cfg = config.modules.nix-garbage;
+  cfg = config.modules.nix.nix-garbage;
 in
 {
-  options.modules.nix-garbage = {
+  options.modules.nix.nix-garbage = {
     enable = lib.mkEnableOption "Enable automatic garbage collection for Nix";
 
     dates = lib.mkOption {
