@@ -12,12 +12,20 @@ in {
       default = true;
       description = "Enable CUPS (Common Unix Printing System)";
     };
+    drivers = mkOption {
+      type = types.listOf types.package;
+      default = [ pkgs.cnijfilter2 ];
+      description = ''
+        List of printer drivers to use. Defaults to [ pkgs.cnijfilter2 ], which
+        is an unfree package for Canon printers.
+      '';
+    };
   };
 
   config = mkIf cfg.enable {
     services.printing = {
       enable = cfg.cups.enable;
-      drivers = [ pkgs.cnijfilter2 ];
+      drivers = cfg.drivers;
     };
   };
 }
