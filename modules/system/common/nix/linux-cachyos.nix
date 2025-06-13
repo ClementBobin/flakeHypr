@@ -29,7 +29,6 @@ in
       ];
     };
 
-    # Conditionally enable services.scx
-    services.scx.enable = lib.mkIf cfg.enableSCX true;
+    services.scx.enable = cfg.enableSCX;
   };
 }
