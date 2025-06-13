@@ -50,9 +50,7 @@
       global-tools = {
         act-github.enable = true;
         nix.enable = true;
-        cli = {
-          elements = ["vercel" "graphite"];
-        };
+        cli.elements = ["vercel" "graphite"];
       };
       node = {
         enable = true;
@@ -65,9 +63,7 @@
     };
     communication = {
       teams.enable = true;
-      mail = {
-        services = ["thunderbird"];
-      };
+      mail.services = ["thunderbird"];
     };
     network.tunnel = {
       enable = true;
