@@ -113,17 +113,17 @@
 
         rb = pkgs.writeShellScriptBin "rb" ''
           set -euo pipefail
-          host=${1:-}
+          host=$1
           case "$host" in
-            "oak")
-              ${pkgs.deploy-rs}/bin/deploy --skip-checks .#oak ;;
-            "fern")
-              ${pkgs.deploy-rs}/bin/deploy --skip-checks .#fern ;;
-            "all")
-              ${pkgs.deploy-rs}/bin/deploy --skip-checks .#oak
-              ${pkgs.deploy-rs}/bin/deploy --skip-checks .#fern
-              ;;
-            *) echo "Usage: rb [oak|fern|all]" >&2; exit 1 ;;
+        "oak")
+          ${pkgs.deploy-rs}/bin/deploy --skip-checks .#oak ;;
+        "fern")
+          ${pkgs.deploy-rs}/bin/deploy --skip-checks .#fern ;;
+        "all")
+          ${pkgs.deploy-rs}/bin/deploy --skip-checks .#oak
+          ${pkgs.deploy-rs}/bin/deploy --skip-checks .#fern
+          ;;
+        *) echo "Usage: rb [oak|fern|all]" >&2; exit 1 ;;
           esac
         '';
       };
