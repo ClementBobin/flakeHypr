@@ -29,14 +29,11 @@
       stremio.enable = true;
     };
     browser = {
-      enable = true;
       emulators = ["chrome" "firefox"];
       driver.enable = true;
     };
     documentation = {
-      enable = true;
       editor = ["onlyoffice"];
-      
       obsidian = {
         enable = true;
         backupMethod  = "git-push-temp";
@@ -54,7 +51,6 @@
         act-github.enable = true;
         nix.enable = true;
         cli = {
-          enable = true;
           elements = ["vercel" "graphite"];
         };
       };
@@ -70,7 +66,6 @@
     communication = {
       teams.enable = true;
       mail = {
-        enable = true;
         services = ["thunderbird"];
       };
     };
@@ -82,7 +77,10 @@
         port = 3000;
       };
     };
-    utilities.scalar.enable = true;
+    utilities = {
+      scalar.enable = true;
+      kdeconnect.enable = true;
+    };
     #extra = {
       #ignore-file-retriever = {
         #enable = true;
