@@ -1,4 +1,4 @@
-{ lib, inputs, config, ... }:
+{ lib, config, ... }:
 
 let
   cfg = config.modules.nix.polkit;
