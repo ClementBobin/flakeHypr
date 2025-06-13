@@ -8,7 +8,7 @@ in
 
     elements = lib.mkOption {
       type = lib.types.listOf (lib.types.enum ["vercel" "graphite"]);
-      default = ["vercel"];
+      default = [];
       description = "List of CLI tools to install";
     };
   };
