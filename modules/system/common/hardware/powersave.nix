@@ -104,12 +104,15 @@ in {
         # Runtime power management
         RUNTIME_PM_ON_BAT = "auto";
 
-        # Battery charge thresholds (for battery health)
+        # Explicitly set charge thresholds for all batteries
+        START_CHARGE_THRESH_BAT0 = cfg.batteryHealth.chargeThresholds.start;
+        STOP_CHARGE_THRESH_BAT0 = cfg.batteryHealth.chargeThresholds.stop;
         START_CHARGE_THRESH_BAT1 = cfg.batteryHealth.chargeThresholds.start;
         STOP_CHARGE_THRESH_BAT1 = cfg.batteryHealth.chargeThresholds.stop;
 
         # Ensure TLP applies these thresholds
         RESTORE_THRESHOLDS_ON_BAT = 1;
+        RESTORE_THRESHOLDS_ON_AC = 1;
       };
     };
 
