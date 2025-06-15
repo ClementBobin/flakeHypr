@@ -9,6 +9,8 @@ with lib;
 
 let
   cfg = config.desktops.hydenix;
+
+  config = import ./configHydenix.nix { inherit lib; };
 in
 {
 
@@ -85,6 +87,15 @@ in
     };
 
     home.file = {
+      ".config/hypr/keybindings.conf" = lib.mkForce {
+        text = ''
+          ${config.hyprlandKeybindsConvert}
+        '';
+        force = true;
+      };
+
+
+
       ".config/hypr/userprefs.conf" = lib.mkForce {
         text = ''
           input {
@@ -113,6 +124,14 @@ in
 
           # Disable an unused monitor (example)
           # monitor=DP-4,disable
+
+          # Alt + Enter to toggle fullscreen
+          bind = ALT, Return, fullscreen, 0
+          # Alt + Tab to cycle between fullscreen windows
+          bind = ALT, Tab, cyclenext
+          bind = ALT, Tab, bringactivetotop
+
+          exec-once = sleep 1 && keepassxc
         '';
         force = true;
         mutable = true;
