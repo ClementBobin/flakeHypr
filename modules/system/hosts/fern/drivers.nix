@@ -7,7 +7,7 @@
 }:
 
 let
-  cfg = config.modules.fern.drivers;
+  cfg = config.modules.system.fern.drivers;
 in
 {
 
@@ -16,7 +16,7 @@ in
     inputs.hydenix.inputs.nixos-hardware.nixosModules.common-cpu-intel
   ];
 
-  options.modules.fern.drivers = {
+  options.modules.system.fern.drivers = {
     enable = lib.mkOption {
       type = lib.types.bool;
       default = false;

@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 let
-  cfg = config.modules.common.documentation.obsidian;
+  cfg = config.modules.hm.documentation.obsidian;
 
   #──────── Canonical default ────────#
   defaultObsiPath =
@@ -119,7 +119,7 @@ in
   /*──────────────────────────
   │ Module options           │
   └──────────────────────────*/
-  options.modules.common.documentation.obsidian = {
+  options.modules.hm.documentation.obsidian = {
     enable = lib.mkEnableOption "Enable the Obsidian module";
 
     backupMethod = lib.mkOption {

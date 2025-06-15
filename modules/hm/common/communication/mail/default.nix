@@ -1,22 +1,21 @@
 { pkgs, lib, config, ... }:
 
 let
-  cfg = config.modules.common.communication.mail;
+  cfg = config.modules.hm.communication.mail;
 
   serviceList = cfg.services;
 
-  # Map service names to their corresponding packages
+  # Map service names to their corresponding packages or list of packages
   serviceToPackage = {
-    thunderbird = pkgs.thunderbird-latest;
-    bluemail    = (import ./bluemail.nix { inherit pkgs lib config; }).bluemailWithGPU;
+    thunderbird = [ pkgs.thunderbird-latest ];
+    bluemail    = [ (import ./bluemail.nix { inherit pkgs lib config; }).bluemailWithGPU ];
   };
 
-  # Get packages for enabled services, filtering out nulls
-  packagesToInstall = lib.filter (pkg: pkg != null)
-    (map (service: serviceToPackage.${service}) serviceList);
+  # Flatten the list of packages from all enabled services
+  packagesToInstall = lib.concatMap (service: serviceToPackage.${service}) serviceList;
 in
 {
-  options.modules.common.communication.mail = {
+  options.modules.hm.communication.mail = {
     services = lib.mkOption {
       type = lib.types.listOf (lib.types.enum ["thunderbird" "bluemail"]);
       default = [];

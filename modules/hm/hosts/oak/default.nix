@@ -8,7 +8,7 @@
     ../../common
   ];
 
-  config.modules.common = {
+  config.modules.hm = {
     shell = {
       btop.enable = true;
       starship.enable = true;
@@ -22,18 +22,18 @@
         enable = true;
         cpu_text = "Ryzen 7 7435HS";
       };
-      minecraft.enable = true;
+      enabledGames = ["minecraft"];
     };
     multimedia = {
       gimp.enable = true;
       stremio.enable = true;
     };
     browser = {
-      emulators = ["chrome" "firefox"];
+      clients = ["chrome" "firefox"];
       driver.enable = true;
     };
     documentation = {
-      editor = ["onlyoffice"];
+      editors = ["onlyoffice"];
       obsidian = {
         enable = true;
         backupMethod  = "git-push-temp";
@@ -50,7 +50,7 @@
       global-tools = {
         act-github.enable = true;
         nix.enable = true;
-        cli.elements = ["vercel" "graphite"];
+        cli = ["vercel" "graphite"];
       };
       node = {
         enable = true;
@@ -66,17 +66,10 @@
       mail.services = ["thunderbird"];
     };
     network.tunnel = {
-      enable = true;
-      service = ["localtunnel" "ngrok"];
+      services = ["localtunnel"];
       localtunnel.port = 8080;
-      ngrok = {
-        port = 3000;
-      };
     };
-    utilities = {
-      kde-connect.enable = true;
-      scalar.enable = true;
-    };
+    utilities.scalar.enable = true;
     #extra = {
       #ignore-file-retriever = {
         #enable = true;

@@ -3,7 +3,7 @@
 with lib;
 
 let
-  cfg = config.modules.common.utilities.scalar;
+  cfg = config.modules.hm.utilities.scalar;
 
   scalar-deb = pkgs.fetchurl {
     url = "https://download.scalar.com/linux/deb/x64";
@@ -62,7 +62,7 @@ let
   };
 
 in {
-  options.modules.common.utilities.scalar = {
+  options.modules.hm.utilities.scalar = {
     enable = mkEnableOption "Scalar desktop application";
   };
 

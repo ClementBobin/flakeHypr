@@ -1,10 +1,10 @@
 { pkgs, lib, config, ... }:
 
 let
-  cfg = config.modules.dev.php;
+  cfg = config.modules.system.dev.php;
 in
 {
-  options.modules.dev.php = {
+  options.modules.system.dev.php = {
     enable = lib.mkEnableOption "Enable PHP development environment";
   };
 

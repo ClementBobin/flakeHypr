@@ -5,10 +5,10 @@
 }:
 
 let
-  cfg = config.modules.hardware.autologin;
+  cfg = config.modules.system.hardware.autologin;
 in
 {
-  options.modules.hardware.autologin = {
+  options.modules.system.hardware.autologin = {
     enable = lib.mkEnableOption "Enable autologin for SDDM";
 
     user = lib.mkOption {

@@ -1,10 +1,10 @@
 { pkgs, lib, config, ... }:
 
 let
-  cfg = config.modules.common.dev.node.pm2;
+  cfg = config.modules.hm.dev.node.pm2;
 in
 {
-  options.modules.common.dev.node.pm2 = {
+  options.modules.hm.dev.node.pm2 = {
     enable = lib.mkEnableOption "Enable PM2 process manager for Node.js applications";
   };
 

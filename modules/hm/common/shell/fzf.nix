@@ -1,10 +1,10 @@
 { pkgs, lib, config, ... }:
 
 let
-  cfg = config.modules.common.shell.fzf;
+  cfg = config.modules.hm.shell.fzf;
 in
 {
-  options.modules.common.shell.fzf = {
+  options.modules.hm.shell.fzf = {
     enable = lib.mkEnableOption "Enable FZF (fuzzy finder)";
   };
 

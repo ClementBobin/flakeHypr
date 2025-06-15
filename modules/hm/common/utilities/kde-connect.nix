@@ -3,10 +3,10 @@
 with lib;
 
 let
-  cfg = config.modules.common.utilities.kde-connect;
+  cfg = config.modules.hm.utilities.kde-connect;
 in
 {
-  options.modules.common.utilities.kde-connect = {
+  options.modules.hm.utilities.kde-connect = {
     enable = mkEnableOption "KDE Connect";
     indicator = mkOption {
       type = types.bool;

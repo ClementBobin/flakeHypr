@@ -1,19 +1,32 @@
 { pkgs, lib, config, ... }:
 
 let
-  cfg = config.modules.common.shell.disk-usage;
-  validTools = [ "ncdu" "diskonaut" "gdu" "dust" "parallel-disk-usage" "squirreldisk" ];
-in
-{
-  options.modules.common.shell.disk-usage = {
+  cfg = config.modules.hm.shell.disk-usage;
+
+  # Map disk usage tools to their packages
+  toolToPackage = with pkgs; {
+    ncdu = ncdu;
+    diskonaut = diskonaut;
+    gdu = gdu;
+    dust = dust;
+    parallel-disk-usage = parallel-disk-usage;
+    squirreldisk = squirreldisk;
+  };
+
+  # Get packages for enabled tools
+  toolPackages = lib.filter (pkg: pkg != null)
+    (map (tool: toolToPackage.${tool} or null) cfg.tools);
+
+in {
+  options.modules.hm.shell.disk-usage = {
     tools = lib.mkOption {
-      type = lib.types.listOf (lib.types.enum validTools);
+      type = lib.types.listOf (lib.types.enum (lib.attrNames toolToPackage));
       default = [];
-      description = "List of disk usage analyzers to install.";
+      description = "List of disk usage analyzers to install";
     };
   };
 
-  config = lib.mkIf cfg.enable {
-    home.packages = builtins.map (tool: pkgs.${tool}) cfg.tools;
+  config = {
+    home.packages = toolPackages;
   };
 }

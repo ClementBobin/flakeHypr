@@ -1,10 +1,10 @@
 { pkgs, lib, config, ... }:
 
 let
-  cfg = config.modules.common.shell.navi;
+  cfg = config.modules.hm.shell.navi;
 in
 {
-  options.modules.common.shell.navi = {
+  options.modules.hm.shell.navi = {
     enable = lib.mkEnableOption "Enable Navi (CLI cheat sheet tool)";
   };
 

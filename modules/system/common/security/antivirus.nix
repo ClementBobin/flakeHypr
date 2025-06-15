@@ -1,28 +1,35 @@
 { config, lib, pkgs, ... }:
 
 let
-  cfg = config.modules.security.antivirus;
+  cfg = config.modules.system.security.antivirus;
+
+  # Map engines to their packages
+  engineToPackages = {
+    clamav = [ pkgs.clamav ] ++ lib.optionals cfg.gui.enable [ pkgs.clamtk ];
+    sophos = [ pkgs.sophos-av ];
+    none = [];
+  };
+
+  enabledEngines = lib.filter (e: e != "none") cfg.engines;
+
 in {
-  #### 🛠 Options
-  options.modules.security.antivirus = {
-    enable = lib.mkEnableOption "Enable antivirus system-wide";
-
+  options.modules.system.security.antivirus = {
     gui.enable = lib.mkEnableOption "Enable GUI tools for the antivirus";
-
-    engine = lib.mkOption {
-      type = lib.types.enum [ "clamav" "none" ];
-      default = "clamav";
-      description = "Select the antivirus engine to install.";
+    engines = lib.mkOption {
+      type = lib.types.listOf (lib.types.enum (lib.attrNames engineToPackages));
+      default = ["none"];
+      description = "Select antivirus engines to install";
     };
   };
 
-  #### ⚙ Configuration
-  config = lib.mkIf cfg.enable {
-    environment.systemPackages = lib.optionals (cfg.engine == "clamav") [pkgs.clamav] ++ lib.optionals (cfg.engine == "clamav" && cfg.gui.enable) [pkgs.clamtk];
+  config = {
+    environment.systemPackages = lib.concatMap
+      (engine: engineToPackages.${engine})
+      enabledEngines;
 
-    services = lib.mkIf (cfg.engine == "clamav") {
-      clamav.daemon.enable   = true;
-      clamav.updater.enable  = true;
+    services.clamav = lib.mkIf (lib.elem "clamav" enabledEngines) {
+      daemon.enable = true;
+      updater.enable = true;
     };
   };
 }

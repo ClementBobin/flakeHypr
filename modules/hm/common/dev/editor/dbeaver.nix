@@ -1,10 +1,10 @@
 { pkgs, lib, config, ... }:
 
 let
-  cfg = config.modules.common.dev.editor.dbeaver;
+  cfg = config.modules.hm.dev.editor.dbeaver;
 in
 {
-  options.modules.common.dev.editor.dbeaver = {
+  options.modules.hm.dev.editor.dbeaver = {
     enable = lib.mkEnableOption "Enable DBeaver database management tool";
   };
 

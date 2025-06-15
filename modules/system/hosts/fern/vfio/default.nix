@@ -7,7 +7,7 @@
 
 # TODO: make this module more generic, extendable, move to common
 let
-  cfg = config.modules.fern.vfio;
+  cfg = config.modules.system.fern.vfio;
 
   prime-run = pkgs.writeShellScriptBin "prime-run" ''
     export __NV_PRIME_RENDER_OFFLOAD=1
@@ -23,7 +23,7 @@ let
   '';
 in
 {
-  options.modules.fern.vfio = {
+  options.modules.system.fern.vfio = {
     enable = lib.mkOption {
       type = lib.types.bool;
       default = false;

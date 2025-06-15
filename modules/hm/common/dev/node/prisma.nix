@@ -1,10 +1,10 @@
 { pkgs, lib, config, ... }:
 
 let
-  cfg = config.modules.common.dev.node.prisma;
+  cfg = config.modules.hm.dev.node.prisma;
 in
 {
-  options.modules.common.dev.node.prisma = {
+  options.modules.hm.dev.node.prisma = {
     enable = lib.mkEnableOption "Enable Prisma ORM for Node.js applications";
   };
 

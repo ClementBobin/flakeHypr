@@ -1,10 +1,10 @@
 { pkgs, lib, config, ... }:
 
 let
-  cfg = config.modules.common.dev.editor.android-studio;
+  cfg = config.modules.hm.dev.editor.android-studio;
 in
 {
-  options.modules.common.dev.editor.android-studio = {
+  options.modules.hm.dev.editor.android-studio = {
     enable = lib.mkEnableOption "Enable Android Studio development environment";
   };
 

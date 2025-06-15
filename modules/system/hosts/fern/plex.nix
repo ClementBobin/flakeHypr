@@ -10,10 +10,10 @@
 # TODO: qbitorrent web instance, requires passwords
 
 let
-  cfg = config.modules.fern.plex;
+  cfg = config.modules.system.fern.plex;
 in
 {
-  options.modules.fern.plex = {
+  options.modules.system.fern.plex = {
     enable = lib.mkEnableOption "plex";
   };
 

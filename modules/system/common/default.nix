@@ -16,7 +16,7 @@
     ./hardware/powersave.nix
 
     ./networks/print/print.nix
-    ./networks/vpn/tailscale.nix
+    ./networks/vpn.nix
 
     ./nix/linux-cachyos.nix
     ./nix/nix-garbage.nix
@@ -25,6 +25,6 @@
     ./security/antivirus.nix
     ./security/password-manager.nix
 
-    ./virtualisation/containers/containers.nix
+    ./virtualisation/containers.nix
   ];
 }

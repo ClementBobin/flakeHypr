@@ -1,10 +1,10 @@
 { pkgs, lib, config, ... }:
 
 let
-  cfg = config.modules.common.shell.tools;
+  cfg = config.modules.hm.shell.tools;
 in
 {
-  options.modules.common.shell.tools = {
+  options.modules.hm.shell.tools = {
     enable = lib.mkEnableOption "Enable common shell tools";
   };
 

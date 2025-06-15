@@ -6,11 +6,11 @@
 }:
 
 let
-  cfg = config.modules.hardware.boot;
+  cfg = config.modules.system.hardware.boot;
 in
 {
 
-  options.modules.hardware.boot = {
+  options.modules.system.hardware.boot = {
     enable = lib.mkEnableOption "Enable boot configuration for Hydenix systems";
   };
 

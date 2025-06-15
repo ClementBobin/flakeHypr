@@ -1,14 +1,14 @@
 { pkgs, lib, config, ... }:
 
 let
-  cfg = config.modules.common.shell.ranger;
+  cfg = config.modules.hm.shell.ranger;
 in
 {
-  options.modules.common.shell.ranger = {
+  options.modules.hm.shell.ranger = {
     enable = lib.mkEnableOption "Enable Ranger (file manager)";
   };
 
-  config = lib.mkIf config.modules.common.shell.ranger.enable {
+  config = lib.mkIf cfg.enable {
     home.packages = (with pkgs; [
       ranger
     ]);

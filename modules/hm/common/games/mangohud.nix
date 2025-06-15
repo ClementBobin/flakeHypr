@@ -1,10 +1,10 @@
 { pkgs, lib, config, ... }:
 
 let
-  cfg = config.modules.common.games.mangohud;
+  cfg = config.modules.hm.games.mangohud;
 in
 {
-  options.modules.common.games.mangohud = {
+  options.modules.hm.games.mangohud = {
     enable = lib.mkEnableOption "Enable MangoHud, a Vulkan and OpenGL overlay layer for monitoring performance";
     cpu_text = lib.mkOption {
       type = lib.types.str;

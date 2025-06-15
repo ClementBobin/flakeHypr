@@ -6,10 +6,10 @@
   ...
 }:
 let
-  cfg = config.modules.common.shell.starship;
+  cfg = config.modules.hm.shell.starship;
 in
 {
-  options.modules.common.shell.starship = {
+  options.modules.hm.shell.starship = {
     enable = lib.mkEnableOption "Enable Starship (cross-shell prompt)";
   };
 

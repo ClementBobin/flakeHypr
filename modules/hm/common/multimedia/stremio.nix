@@ -1,10 +1,10 @@
 { pkgs, lib, config, ... }:
 
 let
-  cfg = config.modules.common.multimedia.stremio;
+  cfg = config.modules.hm.multimedia.stremio;
 in
 {
-  options.modules.common.multimedia.stremio = {
+  options.modules.hm.multimedia.stremio = {
     enable = lib.mkEnableOption "Enable Stremio media center";
   };
 

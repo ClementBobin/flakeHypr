@@ -8,7 +8,7 @@
 - 🪵 Server: cedar
 - VMs: [hostname]-vm (fern-vm, oak-vm, cedar-vm)
 
-- [ ] hydenix: some yubikey touch detection for hyprlock and waybar <https://github.com/maximbaz/yubikey-touch-detector>
+- [x] hydenix: some yubikey touch detection for hyprlock and waybar <https://github.com/maximbaz/yubikey-touch-detector>
 - [?] bluemail
 - [x] scalar
 - [x] rust
@@ -20,4 +20,3 @@
 - [ ] Update flake
 - [ ] Test workflows
 - [x] Prisma module
-- [ ] fix printing

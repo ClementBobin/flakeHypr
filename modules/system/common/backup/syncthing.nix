@@ -7,10 +7,10 @@
 }:
 
 let
-  cfg = config.modules.backup.syncthing;
+  cfg = config.modules.system.backup.syncthing;
 in
 {
-  options.modules.backup.syncthing = {
+  options.modules.system.backup.syncthing = {
     enable = lib.mkEnableOption "Enable Syncthing for file synchronization";
 
     port = lib.mkOption {

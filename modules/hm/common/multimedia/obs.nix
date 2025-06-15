@@ -1,10 +1,10 @@
 { pkgs, config, lib, ... }:
 
 let
-  cfg = config.modules.common.multimedia.obs;
+  cfg = config.modules.hm.multimedia.obs;
 in
 {
-  options.modules.common.multimedia.obs = {
+  options.modules.hm.multimedia.obs = {
     enable = lib.mkEnableOption "Enable OBS Studio for video recording and streaming";
   };
 

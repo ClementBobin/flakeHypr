@@ -1,10 +1,10 @@
 { pkgs, lib, config, ... }:
 
 let
-  cfg = config.modules.common.shell.btop;
+  cfg = config.modules.hm.shell.btop;
 in
 {
-  options.modules.common.shell.btop = {
+  options.modules.hm.shell.btop = {
     enable = lib.mkEnableOption "Enable btop system monitor";
   };
 

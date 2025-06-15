@@ -1,10 +1,10 @@
 { pkgs, lib, config, ... }:
 
 let
-  cfg = config.modules.common.dev.global-tools.nix;
+  cfg = config.modules.hm.dev.global-tools.nix;
 in
 {
-  options.modules.common.dev.global-tools.nix = {
+  options.modules.hm.dev.global-tools.nix = {
     enable = lib.mkEnableOption "Enable Nix development environment";
   };
 
