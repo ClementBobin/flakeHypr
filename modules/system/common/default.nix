@@ -16,7 +16,7 @@
     ./hardware/powersave.nix
 
     ./networks/print/print.nix
-    ./networks/vpn/tailscale.nix
+    ./networks/vpn.nix
 
     ./nix/linux-cachyos.nix
     ./nix/nix-garbage.nix
