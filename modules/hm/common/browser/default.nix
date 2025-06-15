@@ -36,7 +36,7 @@ let
 in
 {
   options.modules.hm.browser = {
-    emulators = lib.mkOption {
+    clients = lib.mkOption {
       type = lib.types.listOf (lib.types.enum ["chromium" "chrome" "firefox" "brave" "vivaldi" "edge"]);
       default = [];
     };

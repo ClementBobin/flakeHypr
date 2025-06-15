@@ -22,14 +22,14 @@
         enable = true;
         cpu_text = "Ryzen 7 7435HS";
       };
-      enabledGames =  ["minecraft"];
+      enabledGames = ["minecraft"];
     };
     multimedia = {
       gimp.enable = true;
       stremio.enable = true;
     };
     browser = {
-      emulators = ["chrome" "firefox"];
+      clients = ["chrome" "firefox"];
       driver.enable = true;
     };
     documentation = {
@@ -50,7 +50,7 @@
       global-tools = {
         act-github.enable = true;
         nix.enable = true;
-        cli.elements = ["vercel" "graphite"];
+        cli = ["vercel" "graphite"];
       };
       node = {
         enable = true;
