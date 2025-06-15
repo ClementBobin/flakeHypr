@@ -1,10 +1,10 @@
 { pkgs, lib, config, ... }:
 
 let
-  cfg = config.modules.common.multimedia.parsec;
+  cfg = config.modules.hm.multimedia.parsec;
 in
 {
-  options.modules.common.multimedia.parsec = {
+  options.modules.hm.multimedia.parsec = {
     enable = lib.mkEnableOption "Enable Parsec for remote desktop access";
   };
 

@@ -13,7 +13,6 @@ let
   # Wine packages based on version
   winePackages = with pkgs; {
     stable = wine;
-    staging = wineStaging;
     wayland = wineWayland;
     fonts = wine;
   };
@@ -49,8 +48,8 @@ in {
       };
 
       version = lib.mkOption {
-        type = lib.types.enum ["stable" "staging" "wayland" "fonts"];
-        default = "staging";
+        type = lib.types.enum ["stable" "wayland" "fonts"];
+        default = "stable";
         description = "Wine version to install";
       };
 

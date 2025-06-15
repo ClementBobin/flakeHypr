@@ -4,7 +4,7 @@ let
   cfg = config.modules.hm.network.tunnel;
 
   # Map services to their packages
-  serviceToPackage = with pkgs; {
+  servicesToPackage = with pkgs; {
     localtunnel = [ nodePackages.localtunnel ];
     cloudflare = [ cloudflared ];
     ngrok = [ ngrok ];
@@ -26,27 +26,27 @@ let
   };
 
   # Get packages for enabled services
-  servicePackages = lib.concatMap (service: serviceToPackage.${service} or []) cfg.service;
+  servicesPackages = lib.concatMap (service: servicesToPackage.${service} or []) cfg.services;
 
   # Get aliases for enabled services
   enabledAliases = lib.foldl (acc: service:
     acc // (tunnelAliases.${service} or {})
-  ) {} cfg.service;
+  ) {} cfg.services;
 
   # Cloudflare token configuration
-  cloudflareTokenConfig = lib.mkIf (builtins.elem "cloudflare" cfg.service && cfg.cloudflare.tokenPath != null) {
+  cloudflareTokenConfig = lib.mkIf (builtins.elem "cloudflare" cfg.services && cfg.cloudflare.tokenPath != null) {
     home.sessionVariables.CLOUDFLARE_TOKEN_FILE = cfg.cloudflare.tokenPath;
     home.file.".cloudflared/token".source = cfg.cloudflare.tokenPath;
   };
 
   # Ngrok config file
-  ngrokConfig = lib.mkIf (builtins.elem "ngrok" cfg.service && cfg.ngrok.configPath != null) {
+  ngrokConfig = lib.mkIf (builtins.elem "ngrok" cfg.services && cfg.ngrok.configPath != null) {
     home.file.".config/ngrok/ngrok.yml".source = cfg.ngrok.configPath;
   };
 
 in {
   options.modules.hm.network.tunnel = {
-    service = lib.mkOption {
+    services = lib.mkOption {
       type = lib.types.listOf (lib.types.enum ["localtunnel" "cloudflare" "ngrok"]);
       default = ["localtunnel"];
       description = "List of tunneling services to enable";
@@ -89,7 +89,7 @@ in {
 
   config = lib.mkMerge [
     {
-      home.packages = servicePackages;
+      home.packages = servicesPackages;
       home.shellAliases = enabledAliases;
     }
 

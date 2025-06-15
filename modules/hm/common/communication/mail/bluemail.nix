@@ -1,7 +1,5 @@
 { pkgs, config, lib, ... }:
 let
-  cfg = config.modules.common.communication.mail.bluemail;
-
   bluemail = pkgs.bluemail;
 
   bluemailWithGPU = pkgs.symlinkJoin {

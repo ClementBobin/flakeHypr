@@ -1,10 +1,10 @@
 { pkgs, lib, config, ... }:
 
 let
-  cfg = config.modules.common.communication.teams;
+  cfg = config.modules.hm.communication.teams;
 in
 {
-  options.modules.common.communication.teams = {
+  options.modules.hm.communication.teams = {
     enable = lib.mkEnableOption "Enable Microsoft Teams for Linux";
   };
 

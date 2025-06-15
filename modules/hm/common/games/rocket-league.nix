@@ -1,10 +1,10 @@
 { config, lib, pkgs, inputs, ... }:
 
 let
-  cfg = config.modules.common.games.rocket-league;
+  cfg = config.modules.hm.games.rocket-league;
 in
 {
-  options.modules.common.games.rocket-league = {
+  options.modules.hm.games.rocket-league = {
     enable = lib.mkEnableOption "Enable Rocket League game installation via nix-gaming";
   };
 

@@ -1,10 +1,10 @@
 { config, lib, pkgs, inputs, ... }:
 
 let
-  cfg = config.modules.common.games.roblox;
+  cfg = config.modules.hm.games.roblox;
 in
 {
-  options.modules.common.games.roblox = {
+  options.modules.hm.games.roblox = {
     enable = lib.mkEnableOption "Enable Roblox Player";
   };
 

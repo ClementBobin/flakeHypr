@@ -8,7 +8,7 @@
     ../../common
   ];
 
-  config.modules.common = {
+  config.modules.hm = {
     shell = {
       btop.enable = true;
       starship.enable = true;
@@ -33,7 +33,7 @@
       driver.enable = true;
     };
     documentation = {
-      editor = ["onlyoffice"];
+      editors = ["onlyoffice"];
       obsidian = {
         enable = true;
         backupMethod  = "git-push-temp";
@@ -66,17 +66,10 @@
       mail.services = ["thunderbird"];
     };
     network.tunnel = {
-      enable = true;
-      service = ["localtunnel" "ngrok"];
+      services = ["localtunnel"];
       localtunnel.port = 8080;
-      ngrok = {
-        port = 3000;
-      };
     };
-    utilities = {
-      kde-connect.enable = true;
-      scalar.enable = true;
-    };
+    utilities.scalar.enable = true;
     #extra = {
       #ignore-file-retriever = {
         #enable = true;

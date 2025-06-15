@@ -1,10 +1,10 @@
 { config, lib, pkgs, ... }:
 
 let
-  cfg = config.modules.common.games.minecraft;
+  cfg = config.modules.hm.games.minecraft;
 in
 {
-  options.modules.common.games.minecraft = {
+  options.modules.hm.games.minecraft = {
     enable = lib.mkEnableOption "Enable Minecraft Launcher";
   };
 

@@ -1,10 +1,10 @@
 { pkgs, lib, config, ... }:
 
 let
-  cfg = config.modules.common.utilities.stacer;
+  cfg = config.modules.hm.utilities.stacer;
 in
 {
-  options.modules.common.utilities.stacer = {
+  options.modules.hm.utilities.stacer = {
     enable = lib.mkEnableOption "Enable Stacer system optimizer and monitoring tool";
   };
 

@@ -1,10 +1,10 @@
 { config, lib, pkgs, inputs, ... }:
 
 let
-  cfg = config.modules.common.games.northstar;
+  cfg = config.modules.hm.games.northstar;
 in
 {
-  options.modules.common.games.northstar = {
+  options.modules.hm.games.northstar = {
     enable = lib.mkEnableOption "Enable Northstar (Titanfall 2 mod) with Proton and Viper";
   };
 

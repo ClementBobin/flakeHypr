@@ -10,7 +10,7 @@ with lib;
 let
   cfg = config.desktops.hydenix;
 
-  config = import ./configHydenix.nix { inherit lib; };
+  configHydenix = import ./configHydenix.nix { inherit lib; };
 in
 {
 
@@ -89,7 +89,7 @@ in
     home.file = {
       ".config/hypr/keybindings.conf" = lib.mkForce {
         text = ''
-          ${config.hyprlandKeybindsConvert}
+          ${configHydenix.hyprlandKeybindsConvert}
         '';
         force = true;
       };

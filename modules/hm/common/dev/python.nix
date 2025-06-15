@@ -2,7 +2,7 @@
 
 let
   # Shorthand for accessing module config
-  cfg = config.modules.common.dev.python;
+  cfg = config.modules.hm.dev.python;
 
   # add home directory to devShell.shellPaths if not already present
   homePath = cfg.devShell.defaultPath; # or: builtins.toString config.home.homeDirectory
@@ -63,7 +63,7 @@ let
   '';
 
 in {
-  options.modules.common.dev.python = {
+  options.modules.hm.dev.python = {
     # Main toggle
     enable = lib.mkEnableOption "Enable Python development environment";
 

@@ -1,10 +1,10 @@
 { pkgs, lib, config, ... }:
 
 let
-  cfg = config.modules.common.multimedia.gimp;
+  cfg = config.modules.hm.multimedia.gimp;
 in
 {
-  options.modules.common.multimedia.gimp = {
+  options.modules.hm.multimedia.gimp = {
     enable = lib.mkEnableOption "Enable GIMP image editor";
   };
 

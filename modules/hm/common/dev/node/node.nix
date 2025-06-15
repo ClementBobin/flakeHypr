@@ -1,7 +1,7 @@
 { pkgs, lib, config, ... }:
 
 let
-  cfg = config.modules.common.dev.node;
+  cfg = config.modules.hm.dev.node;
 
   expandPath = path: if lib.hasPrefix "~/" path
     then "${config.home.homeDirectory}/${lib.removePrefix "~/" path}"
@@ -27,7 +27,7 @@ let
   allNodePackages = lib.flatten (map nodeWithPackageManager cfg.versions) ++ (map (pkgName: pkgs.${pkgName}) cfg.extraPackages);
 in
 {
-  options.modules.common.dev.node = {
+  options.modules.hm.dev.node = {
     enable = lib.mkEnableOption "Enable Node.js development environment";
     packageManager = lib.mkOption {
       type = lib.types.enum [ "pnpm" "yarn" "npm" ];

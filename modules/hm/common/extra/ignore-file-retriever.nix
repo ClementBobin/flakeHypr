@@ -1,7 +1,7 @@
 { pkgs, lib, config, ... }:
 
 let
-  cfg = config.modules.common.extra.ignore-file-retriever;
+  cfg = config.modules.hm.extra.ignore-file-retriever;
 
   expandPath = path: if lib.hasPrefix "~/" path then
     lib.removeSuffix "/" (lib.replacePrefix "~/" "${config.home.homeDirectory}/" path)
@@ -86,7 +86,7 @@ let
   '';
 in
 {
-  options.modules.common.extra.ignore-file-retriever = {
+  options.modules.hm.extra.ignore-file-retriever = {
     enable = lib.mkEnableOption "Enable ignore file retriever script to create .stignore from .gitignore patterns";
 
     templatePath = lib.mkOption {

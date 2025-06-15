@@ -1,10 +1,10 @@
 { config, lib, pkgs, inputs, ... }:
 
 let
-  cfg = config.modules.common.games.star-citizen;
+  cfg = config.modules.hm.games.star-citizen;
 in
 {
-  options.modules.common.games.star-citizen = {
+  options.modules.hm.games.star-citizen = {
     enable = lib.mkEnableOption "Enable Star Citizen Launcher";
   };
 
