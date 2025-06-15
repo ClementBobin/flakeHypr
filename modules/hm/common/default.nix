@@ -31,6 +31,7 @@
 
     #./extra/ignore-file-retriever.nix
 
+    ./games/joystick.nix
     ./games/mangohud.nix
     ./games/minecraft.nix
     ./games/roblox.nix
