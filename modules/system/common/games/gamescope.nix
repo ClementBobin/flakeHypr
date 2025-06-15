@@ -8,10 +8,10 @@
 with lib;
 
 let
-  cfg = config.modules.games.gamescope;
+  cfg = config.modules.system.games.gamescope;
 in
 {
-  options.modules.games.gamescope = {
+  options.modules.system.games.gamescope = {
     enable = mkEnableOption "Enable Gamescope compositor for gaming";
   };
 

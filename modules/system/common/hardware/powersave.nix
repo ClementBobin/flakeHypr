@@ -1,9 +1,9 @@
 { config, lib, pkgs, vars, ... }:
 
 let
-  cfg = config.modules.hardware.powersave;
+  cfg = config.modules.system.hardware.powersave;
 in {
-  options.modules.hardware.powersave = {
+  options.modules.system.hardware.powersave = {
     enable = lib.mkEnableOption "Enable power saving configuration";
 
     architecture = lib.mkOption {

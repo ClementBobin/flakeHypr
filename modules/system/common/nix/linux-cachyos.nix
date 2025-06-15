@@ -7,11 +7,11 @@
 }:
 
 let
-  cfg = config.modules.nix.linux-cachyos;
+  cfg = config.modules.system.nix.linux-cachyos;
 in
 {
   imports = [ inputs.chaotic.nixosModules.default ];
-  options.modules.nix.linux-cachyos = {
+  options.modules.system.nix.linux-cachyos = {
     enable = lib.mkEnableOption "Enable Chaotic-AUR (CachyOS) support";
     enableSCX = lib.mkEnableOption "Enable SCX service when using Chaotic-AUR (CachyOS)";
   };

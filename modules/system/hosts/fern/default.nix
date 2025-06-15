@@ -7,10 +7,9 @@
     ./sunshine.nix
     ./vfio
     ./wol.nix
-    ./openrgb.nix
   ];
 
-  modules = {
+  modules.system = {
     hardware = {
       autologin.enable = false;
       boot.enable = true;
@@ -27,7 +26,6 @@
       plex.enable = true;
       sunshine.enable = true;
       vfio.enable = true;
-      openrgb.enable = true;
     };
   };
 }

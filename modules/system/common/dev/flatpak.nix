@@ -6,10 +6,10 @@
 }:
 
 let
-  cfg = config.modules.dev.flatpak;
+  cfg = config.modules.system.dev.flatpak;
 in
 {
-  options.modules.dev.flatpak = {
+  options.modules.system.dev.flatpak = {
     enable = lib.mkEnableOption "Enable Flatpak development environment";
 
     flathubRepoUrls = lib.mkOption {

@@ -5,10 +5,10 @@
   ...
 }:
 let
-  cfg = config.modules.networks.vpn.tailscale;
+  cfg = config.modules.system.networks.vpn.tailscale;
 in
 {
-  options.modules.networks.vpn.tailscale = {
+  options.modules.system.networks.vpn.tailscale = {
     enable = lib.mkEnableOption "Enable Tailscale VPN support";
   };
 

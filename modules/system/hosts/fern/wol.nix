@@ -5,10 +5,10 @@
   ...
 }:
 let
-  cfg = config.modules.fern.wol;
+  cfg = config.modules.system.fern.wol;
 in
 {
-  options.modules.fern.wol = {
+  options.modules.system.fern.wol = {
     enable = lib.mkEnableOption "Wake-on-LAN support";
     interface = lib.mkOption {
       type = lib.types.str;
