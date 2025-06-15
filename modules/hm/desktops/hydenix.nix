@@ -87,20 +87,13 @@ in
     };
 
     home.file = {
-      ".config/hypr/keybindings.conf" = lib.mkForce {
-        text = ''
-          ${configHydenix.hyprlandKeybindsConvert}
-        '';
-        force = true;
-      };
-
-
-
       ".config/hypr/userprefs.conf" = lib.mkForce {
         text = ''
           input {
             kb_layout = fr
           }
+
+          ${configHydenix.hyprlandKeybindsConvert}
 
           # Example monitor configuration
           # Replace names like HDMI-A-1, DP-1, etc. with the actual names of your monitors (use `hyprctl monitors` to list)
