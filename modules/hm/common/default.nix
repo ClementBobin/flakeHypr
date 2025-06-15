@@ -33,11 +33,12 @@
 
     ./games/joystick.nix
     ./games/mangohud.nix
-    ./games/minecraft.nix
-    ./games/roblox.nix
-    ./games/rocket-league.nix
-    ./games/star-citizen.nix
-    ./games/northstar.nix
+    ./games/games.nix
+    #./games/minecraft.nix
+    #./games/roblox.nix
+    #./games/rocket-league.nix
+    #./games/star-citizen.nix
+    #./games/northstar.nix
 
     ./multimedia/gimp.nix
     ./multimedia/mpv.nix

@@ -22,7 +22,7 @@
         enable = true;
         cpu_text = "Ryzen 7 7435HS";
       };
-      minecraft.enable = true;
+      enabledGames =  ["minecraft"];
     };
     multimedia = {
       gimp.enable = true;
