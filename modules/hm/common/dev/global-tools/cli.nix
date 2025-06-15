@@ -1,11 +1,21 @@
 { pkgs, lib, config, ... }:
 
 let
-  cfg = config.modules.common.dev.global-tools.cli;
+  cfg = config.modules.hm.dev.global-tools.cli;
+
+  # Map CLI tools to their packages
+  cliToPackage = with pkgs; {
+    vercel = nodePackages.vercel;
+    graphite = graphite-cli;
+  };
+
+  # Get packages for enabled CLI tools
+  cliPackages = lib.filter (pkg: pkg != null)
+    (map (tool: cliToPackage.${tool} or null) cfg.elements);
+
 in
 {
-  options.modules.common.dev.global-tools.cli = {
-
+  options.modules.hm.dev.global-tools.cli = {
     elements = lib.mkOption {
       type = lib.types.listOf (lib.types.enum ["vercel" "graphite"]);
       default = [];
@@ -14,9 +24,6 @@ in
   };
 
   config = {
-    home.packages = (with pkgs;
-      lib.optional (lib.elem "vercel" cfg.elements) nodePackages.vercel ++
-      lib.optional (lib.elem "graphite" cfg.elements) graphite-cli
-    );
+    home.packages = cliPackages;
   };
 }

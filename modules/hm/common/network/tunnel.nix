@@ -1,8 +1,16 @@
 { pkgs, lib, config, ... }:
 
 let
-  cfg = config.modules.common.network.tunnel;
-  
+  cfg = config.modules.hm.network.tunnel;
+
+  # Map services to their packages
+  serviceToPackage = with pkgs; {
+    localtunnel = [ nodePackages.localtunnel ];
+    cloudflare = [ cloudflared ];
+    ngrok = [ ngrok ];
+  };
+
+  # Tunnel command aliases
   tunnelAliases = {
     localtunnel = {
       ltn = "npx localtunnel --port ${toString cfg.localtunnel.port}";
@@ -17,14 +25,27 @@ let
     };
   };
 
+  # Get packages for enabled services
+  servicePackages = lib.concatMap (service: serviceToPackage.${service} or []) cfg.service;
+
+  # Get aliases for enabled services
   enabledAliases = lib.foldl (acc: service:
     acc // (tunnelAliases.${service} or {})
   ) {} cfg.service;
-in
-{
-  options.modules.common.network.tunnel = {
-    enable = lib.mkEnableOption "Enable network tunneling for development";
 
+  # Cloudflare token configuration
+  cloudflareTokenConfig = lib.mkIf (builtins.elem "cloudflare" cfg.service && cfg.cloudflare.tokenPath != null) {
+    home.sessionVariables.CLOUDFLARE_TOKEN_FILE = cfg.cloudflare.tokenPath;
+    home.file.".cloudflared/token".source = cfg.cloudflare.tokenPath;
+  };
+
+  # Ngrok config file
+  ngrokConfig = lib.mkIf (builtins.elem "ngrok" cfg.service && cfg.ngrok.configPath != null) {
+    home.file.".config/ngrok/ngrok.yml".source = cfg.ngrok.configPath;
+  };
+
+in {
+  options.modules.hm.network.tunnel = {
     service = lib.mkOption {
       type = lib.types.listOf (lib.types.enum ["localtunnel" "cloudflare" "ngrok"]);
       default = ["localtunnel"];
@@ -66,26 +87,13 @@ in
     };
   };
 
-  config = lib.mkIf cfg.enable {
-    home.packages = with pkgs; (
-      (lib.optionals (builtins.elem "localtunnel" cfg.service) [ nodePackages.localtunnel ]) ++
-      (lib.optionals (builtins.elem "cloudflare" cfg.service) [ cloudflared ]) ++
-      (lib.optionals (builtins.elem "ngrok" cfg.service) [ ngrok ])
-    );
+  config = lib.mkMerge [
+    {
+      home.packages = servicePackages;
+      home.shellAliases = enabledAliases;
+    }
 
-    home.shellAliases = enabledAliases;
-
-    home.sessionVariables = lib.mkIf (builtins.elem "cloudflare" cfg.service && cfg.cloudflare.tokenPath != null) {
-      CLOUDFLARE_TOKEN_FILE = cfg.cloudflare.tokenPath;
-    };
-
-    home.file = lib.mkMerge [
-      (lib.mkIf (builtins.elem "cloudflare" cfg.service && cfg.cloudflare.tokenPath != null) {
-        ".cloudflared/token".source = cfg.cloudflare.tokenPath;
-      })
-      (lib.mkIf (builtins.elem "ngrok" cfg.service && cfg.ngrok.configPath != null) {
-        ".config/ngrok/ngrok.yml".source = cfg.ngrok.configPath;
-      })
-    ];
-  };
+    cloudflareTokenConfig
+    ngrokConfig
+  ];
 }

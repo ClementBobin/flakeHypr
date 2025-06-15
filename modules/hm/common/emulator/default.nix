@@ -1,12 +1,39 @@
 { pkgs, lib, config, ... }:
 
 let
-  cfg = config.modules.common.emulator;
-in
-{
-  options.modules.common.emulator = {
-    enable = lib.mkEnableOption "Enable emulators for running Windows applications and games on Linux";
+  cfg = config.modules.hm.emulator;
 
+  # Map emulators to their packages
+  emulatorToPackage = with pkgs; {
+    playonlinux = [ playonlinux ];
+    bottles = [ bottles ];
+    dosbox = [ dosbox ];
+  };
+
+  # Wine packages based on version
+  winePackages = with pkgs; {
+    stable = wine;
+    staging = wineStaging;
+    wayland = wineWayland;
+    fonts = wine;
+  };
+
+  # Proton packages
+  protonPackages = with pkgs; [
+    protonup-qt
+    protontricks
+  ];
+
+  # Get packages for enabled emulators
+  baseEmulatorPackages = lib.concatMap (emulator: emulatorToPackage.${emulator} or []) cfg.emulators;
+
+  # Additional packages based on configuration
+  additionalPackages = with pkgs; []
+    ++ lib.optionals cfg.wine.enable [ (winePackages.${cfg.wine.version} or pkgs.wine) winetricks ]
+    ++ lib.optionals cfg.proton.enable protonPackages;
+
+in {
+  options.modules.hm.emulator = {
     emulators = lib.mkOption {
       type = lib.types.listOf (lib.types.enum ["playonlinux" "proton" "wine" "bottles" "dosbox"]);
       default = ["wine"];
@@ -20,7 +47,7 @@ in
         defaultText = "true if 'wine' is in emulators list";
         description = "Enable Wine Windows compatibility layer";
       };
-      
+
       version = lib.mkOption {
         type = lib.types.enum ["stable" "staging" "wayland" "fonts"];
         default = "staging";
@@ -44,38 +71,8 @@ in
     };
   };
 
-  config = lib.mkIf cfg.enable {
-    home.packages = with pkgs; (
-      # Wine ecosystem
-      (lib.optionals (cfg.wine.enable) [
-        ({
-          stable = wine;
-          staging = wineStaging;
-          wayland = wineWayland;
-        }.${cfg.wine.version} or wine)
-        winetricks
-      ]) ++
-      
-      # PlayOnLinux
-      (lib.optionals (lib.elem "playonlinux" cfg.emulators) [
-        playonlinux
-      ]) ++
-      
-      # Proton
-      (lib.optionals (cfg.proton.enable) [
-        protonup-qt
-        protontricks
-      ]) ++
-      
-      (lib.optionals (lib.elem "bottles" cfg.emulators) [
-        bottles
-      ]) ++
-      
-      # DOS emulation
-      (lib.optionals (lib.elem "dosbox" cfg.emulators) [
-        dosbox
-      ])
-    );
+  config = {
+    home.packages = lib.unique (baseEmulatorPackages ++ additionalPackages);
 
     # Environment variables for Wine/Proton
     home.sessionVariables = lib.mkIf (cfg.wine.enable || cfg.proton.enable) {

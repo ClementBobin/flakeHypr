@@ -25,6 +25,6 @@
     ./security/antivirus.nix
     ./security/password-manager.nix
 
-    ./virtualisation/containers/containers.nix
+    ./virtualisation/containers.nix
   ];
 }
