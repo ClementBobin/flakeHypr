@@ -24,12 +24,12 @@ let
   };
 
   # Get packages for enabled browsers
-  browserPackages = lib.concatMap (browser: browserToPackage.${browser} or []) cfg.emulators;
+  browserPackages = lib.concatMap (browser: browserToPackage.${browser} or []) cfg.clients;
 
   # Get drivers for enabled browsers (if driver.enable is true)
   drivers = lib.optionals cfg.driver.enable (
     lib.unique (lib.filter (drv: drv != null) (
-      map (browser: browserToDriver.${browser} or null) cfg.emulators
+      map (browser: browserToDriver.${browser} or null) cfg.clients
     ))
   );
 
