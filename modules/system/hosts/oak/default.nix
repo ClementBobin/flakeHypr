@@ -12,7 +12,7 @@
       };
       polkit.enable = true;
     };
-    games.clients = ["steam" "lutris"];
+    games.clients = ["steam"];
     networks.vpn = ["tailscale"];
     virtualisation.containers.engines = ["docker"];
     backup.syncthing = {
