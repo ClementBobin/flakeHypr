@@ -56,7 +56,7 @@ in
     # Environment variables
     environment.variables = lib.mkMerge [
       { JAVA_HOME = "${cfg.jdkPackage}"; }
-      { STUDIO_JDK = "${cfg.jdkPackage}"; }
+      #{ STUDIO_JDK = "${cfg.jdkPackage}"; }
       (lib.mkIf cfg.withAndroid {
         ANDROID_HOME = "${androidSdk}/libexec/android-sdk";
       })
@@ -69,13 +69,5 @@ in
         "adbusers"
       ];
     };
-
-    # Shell profile additions
-    environment.shellInit = ''
-      export PATH="$JAVA_HOME/bin:${pkgs.flutter}/bin:${pkgs.flutter}/bin/cache/dart-sdk/bin:$PATH"
-      ${lib.optionalString cfg.withAndroid ''
-      export PATH="$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/emulator:$ANDROID_HOME/platform-tools:$PATH"
-      ''}
-    '';
   };
 }
