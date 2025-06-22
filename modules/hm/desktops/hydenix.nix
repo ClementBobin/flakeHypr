@@ -124,7 +124,7 @@ in
           bind = ALT, Tab, cyclenext
           bind = ALT, Tab, bringactivetotop
 
-          exec-once = sleep 1 && keepassxc
+          exec-once = sleep 1 && bitwarden
         '';
         force = true;
         mutable = true;
