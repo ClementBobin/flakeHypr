@@ -6,6 +6,7 @@
     ./browser
 
     ./communication/mail
+    ./communication/discord.nix
     ./communication/teams.nix
 
     ./dev/editor/dbeaver.nix

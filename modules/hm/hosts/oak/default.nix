@@ -11,7 +11,6 @@
   config.modules.hm = {
     shell = {
       btop.enable = true;
-      starship.enable = true;
       fzf.enable = true;
       ranger.enable = true;
       tools.enable = true;
@@ -29,7 +28,7 @@
       stremio.enable = true;
     };
     browser = {
-      clients = ["chrome" "firefox"];
+      clients = ["firefox"];
       driver.enable = true;
     };
     documentation = {
@@ -50,20 +49,17 @@
       global-tools = {
         act-github.enable = true;
         nix.enable = true;
-        cli = ["vercel" "graphite"];
       };
       node = {
         enable = true;
         prisma.enable = true;
       };
-      python = {
-        enable = true;
-        devShell.enable = true;
-      };
+      python.enable = true;
     };
     communication = {
       teams.enable = true;
       mail.services = ["thunderbird"];
+      discord.rpc.enable = true;
     };
     network.tunnel = {
       services = ["localtunnel"];
