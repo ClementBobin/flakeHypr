@@ -9,7 +9,9 @@ let
     sophos = [ pkgs.sophos-av ];
   };
 
-  enabledEngines = lib.filter (e: e != "none") cfg.engines;
+  enabledEngines = lib.concatMap
+      (engine: engineToPackages.${engine})
+      cfg.engines;
 
 in {
   options.modules.system.security.antivirus = {
@@ -22,9 +24,7 @@ in {
   };
 
   config = {
-    environment.systemPackages = lib.concatMap
-      (engine: engineToPackages.${engine})
-      enabledEngines;
+    environment.systemPackages = lib.unique enabledEngines;
 
     services.clamav = lib.mkIf (lib.elem "clamav" enabledEngines) {
       daemon.enable = true;
