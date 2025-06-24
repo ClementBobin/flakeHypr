@@ -49,8 +49,10 @@ in {
     })
 
     {
-      environment.systemPackages = passwordManagerPackages
-        ++ lib.optionals cfg.yubikey.enable yubikeyPackages;
+      environment.systemPackages = lib.unique (
+        passwordManagerPackages
+        ++ lib.optionals cfg.yubikey.enable yubikeyPackages
+      );
     }
   ];
 }
