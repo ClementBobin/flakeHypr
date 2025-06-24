@@ -31,7 +31,7 @@ let
   gameNames = builtins.attrNames availableGames;
 
   # Get packages for enabled games
-  gamePackages = lib.concatMap (game: availableGames.${game}.packages) cfg.enabledGames;
+  gamePackages = lib.unique (lib.concatMap (game: availableGames.${game}.packages) cfg.enabledGames);
 
 in {
   options.modules.hm.games = {
