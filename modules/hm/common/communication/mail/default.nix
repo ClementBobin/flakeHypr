@@ -12,7 +12,7 @@ let
   };
 
   # Flatten the list of packages from all enabled services
-  packagesToInstall = lib.concatMap (service: serviceToPackage.${service}) serviceList;
+  packagesToInstall = lib.unique (lib.concatMap (s: serviceToPackage.${s}) serviceList);
 in
 {
   options.modules.hm.communication.mail = {
