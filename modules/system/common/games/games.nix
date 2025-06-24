@@ -21,7 +21,7 @@ in {
       default = [];
       description = ''
         List of gaming clients to enable. Supported options are "steam", "lutris",
-        and "heroic". This allows you to specify which gaming clients should be
+        "heroic", and "nexus". This allows you to specify which gaming clients should be
         configured in your NixOS setup.
       '';
     };
