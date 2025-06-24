@@ -46,12 +46,12 @@ in
 
     rpc.enable = lib.mkOption {
       type = lib.types.bool;
-      default = true;
+      default = false;
       description = "Whether to enable Discord Rich Presence support";
     };
   };
 
-  config = lib.mkIf (cfg.clients != [] || cfg.overlays != []) {
+  config = lib.mkIf (cfg.clients != [] || cfg.overlays != [] || cfg.rpc.enable) {
     home.packages = clientPackages ++ overlayPackages ++ rpcPackage;
   };
 }
