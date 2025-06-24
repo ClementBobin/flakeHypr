@@ -6,7 +6,7 @@ let
   #──────── Canonical default ────────#
   defaultObsiPath =
     let dflt = builtins.getEnv "XDG_DOCUMENTS_DIR";
-    in if dflt == "" then "$HOME/Documents" else dflt;
+    in if dflt == "" then "${config.home.homeDirectory}/Documents" else dflt;
 
   /*──────────────────────────
   │ Assets (theme & colors)  │
