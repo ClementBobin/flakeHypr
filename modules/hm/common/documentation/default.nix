@@ -10,8 +10,8 @@ let
   };
 
   # Get packages for enabled editors
-  editorsPackages = lib.filter (pkg: pkg != null)
-    (map (editor: editorsToPackage.${editor} or null) cfg.editors);
+  editorsPackages = lib.unique (lib.filter (pkg: pkg != null)
+    (map (e: editorsToPackage.${e} or null) cfg.editors));
 
 in
 {
