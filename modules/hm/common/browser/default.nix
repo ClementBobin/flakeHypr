@@ -37,7 +37,7 @@ in
 {
   options.modules.hm.browser = {
     clients = lib.mkOption {
-      type = lib.types.listOf (lib.types.enum ["chromium" "chrome" "firefox" "brave" "vivaldi" "edge"]);
+      type = lib.types.listOf (lib.types.enum (lib.attrNames browserToDriver));
       default = [];
     };
 

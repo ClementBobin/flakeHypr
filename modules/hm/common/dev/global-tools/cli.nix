@@ -17,13 +17,13 @@ in
 {
   options.modules.hm.dev.global-tools = {
     cli = lib.mkOption {
-      type = lib.types.listOf (lib.types.enum ["vercel" "graphite"]);
+      type = lib.types.listOf (lib.types.enum (lib.attrNames cliToPackage));
       default = [];
       description = "List of CLI tools to install";
     };
   };
 
   config = {
-    home.packages = cliPackages;
+    home.packages = lib.unique cliPackages;
   };
 }

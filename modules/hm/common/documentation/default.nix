@@ -17,7 +17,7 @@ in
 {
   options.modules.hm.documentation = {
     editors = lib.mkOption {
-      type = lib.types.listOf (lib.types.enum ["onlyoffice" "okular"]);
+      type = lib.types.listOf (lib.types.enum (lib.attrNames editorsToPackage));
       default = [];
       description = "List of document editors to install";
     };

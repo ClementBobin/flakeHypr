@@ -17,7 +17,7 @@ in
 {
   options.modules.hm.communication.mail = {
     services = lib.mkOption {
-      type = lib.types.listOf (lib.types.enum ["thunderbird" "bluemail"]);
+      type = lib.types.listOf (lib.types.enum (lib.attrNames serviceToPackage));
       default = [];
       description = "List of mail services to enable";
     };
