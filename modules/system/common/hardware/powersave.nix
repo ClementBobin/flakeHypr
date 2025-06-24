@@ -105,14 +105,22 @@ in {
         RUNTIME_PM_ON_BAT = "auto";
 
         # Explicitly set charge thresholds for all batteries
-        START_CHARGE_THRESH_BAT0 = cfg.batteryHealth.chargeThresholds.start;
-        STOP_CHARGE_THRESH_BAT0 = cfg.batteryHealth.chargeThresholds.stop;
-        START_CHARGE_THRESH_BAT1 = cfg.batteryHealth.chargeThresholds.start;
-        STOP_CHARGE_THRESH_BAT1 = cfg.batteryHealth.chargeThresholds.stop;
+        # Set charge thresholds for primary battery (BAT0)
+        START_CHARGE_THRESH_BAT0 = lib.optionalString cfg.batteryHealth.enable
+          cfg.batteryHealth.chargeThresholds.start;
+        STOP_CHARGE_THRESH_BAT0 = lib.optionalString cfg.batteryHealth.enable
+          cfg.batteryHealth.chargeThresholds.stop;
 
-        # Ensure TLP applies these thresholds
-        RESTORE_THRESHOLDS_ON_BAT = 1;
-        RESTORE_THRESHOLDS_ON_AC = 1;
+        # Set charge thresholds for secondary battery (BAT1) if present
+        START_CHARGE_THRESH_BAT1 = lib.optionalString cfg.batteryHealth.enable
+          cfg.batteryHealth.chargeThresholds.start;
+        STOP_CHARGE_THRESH_BAT1 = lib.optionalString cfg.batteryHealth.enable
+          cfg.batteryHealth.chargeThresholds.stop;
+
+        # Threshold persistence settings
+        # Ensures thresholds are maintained across power state changes
+        RESTORE_THRESHOLDS_ON_BAT = lib.optionalString cfg.batteryHealth.enable 1;  # Restore when on battery
+        RESTORE_THRESHOLDS_ON_AC = lib.optionalString cfg.batteryHealth.enable 1;  # Restore when on AC power
       };
     };
 
