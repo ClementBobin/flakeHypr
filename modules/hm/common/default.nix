@@ -30,7 +30,7 @@
 
     ./engine
 
-    #./extra/ignore-file-retriever.nix
+    ./extra/ignore-file-retriever.nix
 
     ./games/joystick.nix
     ./games/mangohud.nix
