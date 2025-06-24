@@ -7,7 +7,6 @@ let
   pkgs = import inputs.hydenix.inputs.hydenix-nixpkgs {
     inherit (inputs.hydenix.lib) system;
     config = {
-      android_sdk.accept_license = true;
       allowUnfree = true;
     };
     overlays = [
@@ -16,7 +15,6 @@ let
         userPkgs = import inputs.nixpkgs {
           inherit (inputs.hydenix.lib) system;
           config.allowUnfree = true;
-          android_sdk.accept_license = true;
         };
       })
     ];

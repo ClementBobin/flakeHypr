@@ -15,8 +15,10 @@ let
       (final: prev: {
         userPkgs = import inputs.nixpkgs {
           inherit (inputs.hydenix.lib) system;
-          config.allowUnfree = true;
-          android_sdk.accept_license = true;
+          config = {
+            android_sdk.accept_license = true;
+            allowUnfree = true;
+          };
         };
       })
     ];
