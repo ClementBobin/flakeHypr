@@ -32,9 +32,9 @@
 
     ./extra/ignore-file-retriever.nix
 
+    ./games/games.nix
     ./games/joystick.nix
     ./games/mangohud.nix
-    ./games/games.nix
 
     ./multimedia/gimp.nix
     ./multimedia/mpv.nix
