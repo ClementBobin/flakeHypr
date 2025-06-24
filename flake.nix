@@ -144,7 +144,7 @@
           ${pkgs.deploy-rs}/bin/deploy --skip-checks .#fern
           ${pkgs.deploy-rs}/bin/deploy --skip-checks .#pine
           ;;
-        *) echo "Usage: rb [oak|fern|all]" >&2; exit 1 ;;
+        *) echo "Usage: rb [oak|fern|pine|all]" >&2; exit 1 ;;
           esac
         '';
       };
