@@ -8,6 +8,7 @@ let
     steam = [ steam ];
     lutris = [ lutris ];
     heroic = [ heroic ];
+    nexus = [ nexusmods-app-unfree ];
   };
 
   # Get packages for enabled clients
