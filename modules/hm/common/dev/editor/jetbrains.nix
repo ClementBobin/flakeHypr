@@ -15,11 +15,12 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    home.packages = lib.optionals (cfg.ides != []) (lib.concatMap (ide:
-      let
-        idePackage = builtins.getAttr ide pkgs.jetbrains;
-      in
-        [ idePackage ]
-    ) cfg.ides);
+    home.packages = lib.optionals (cfg.ides != [])
+      (lib.concatMap (ide:
+        let
+          idePackage = builtins.getAttr ide pkgs.jetbrains;
+        in
+          [ idePackage ]
+      ) (lib.unique cfg.ides));
   };
 }
