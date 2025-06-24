@@ -133,6 +133,5 @@ in
         iptables -A INPUT -p udp -s ${net} -j ACCEPT
       '') cfg.allowedNetworks;
     };
-
   };
 }

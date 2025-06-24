@@ -2,11 +2,9 @@
 {
   imports = [
     ../../common
-    ./drivers.nix
     ./plex.nix
     ./sunshine.nix
     ./vfio
-    ./wol.nix
   ];
 
   modules.system = {
@@ -16,13 +14,15 @@
     };
     games.steam.enable = true;
 
-    # fern specific modules
-    fern = {
+    networks = {
       wol = {
         enable = true;
         interface = "enp7s0";
       };
-      drivers.enable = true;
+    };
+
+    # fern specific modules
+    fern = {
       plex.enable = true;
       sunshine.enable = true;
       vfio.enable = true;

@@ -17,6 +17,7 @@
 
     ./networks/print/print.nix
     ./networks/vpn.nix
+    ./networks/wol.nix
 
     ./nix/linux-cachyos.nix
     ./nix/nix-garbage.nix
