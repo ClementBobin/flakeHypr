@@ -7,7 +7,6 @@ let
   engineToPackages = {
     clamav = [ pkgs.clamav ] ++ lib.optionals cfg.gui.enable [ pkgs.clamtk ];
     sophos = [ pkgs.sophos-av ];
-    none = [];
   };
 
   enabledEngines = lib.filter (e: e != "none") cfg.engines;
@@ -17,7 +16,7 @@ in {
     gui.enable = lib.mkEnableOption "Enable GUI tools for the antivirus";
     engines = lib.mkOption {
       type = lib.types.listOf (lib.types.enum (lib.attrNames engineToPackages));
-      default = ["none"];
+      default = [];
       description = "Select antivirus engines to install";
     };
   };
