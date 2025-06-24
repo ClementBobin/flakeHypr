@@ -36,9 +36,15 @@ let
   # Cloudflare token configuration
   cloudflareTokenConfig = lib.mkIf (builtins.elem "cloudflare" cfg.services && cfg.cloudflare.tokenPath != null) {
     home.sessionVariables.CLOUDFLARE_TOKEN_FILE = cfg.cloudflare.tokenPath;
-    home.file.".cloudflared/token".source = cfg.cloudflare.tokenPath;
+    home.file.".cloudflared/token" = {
+      source = cfg.cloudflare.tokenPath;
+      target.recursive = true;
+    };
   };
-
+    home.file.".config/ngrok/ngrok.yml" = {
+      source = cfg.ngrok.configPath;
+      target.recursive = true;
+    };
   # Ngrok config file
   ngrokConfig = lib.mkIf (builtins.elem "ngrok" cfg.services && cfg.ngrok.configPath != null) {
     home.file.".config/ngrok/ngrok.yml".source = cfg.ngrok.configPath;
@@ -89,7 +95,7 @@ in {
 
   config = lib.mkMerge [
     {
-      home.packages = servicesPackages;
+      home.packages = lib.unique servicesPackages;
       home.shellAliases = enabledAliases;
     }
 
