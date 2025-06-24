@@ -5,7 +5,9 @@ let
 
   rustDefaultPackages = with pkgs; [rustc cargo rust-analyzer clippy rustfmt];
 
-  rustPackages = rustDefaultPackages ++ (map (pkgName: pkgs.${pkgName}) cfg.extraPackages);
+  rustPackages = rustDefaultPackages
+  ++ (map (pkgName: pkgs.${pkgName} or (abort "Unknown Rust pkg: ${pkgName}"))
+        cfg.extraPackages);
 
 in
 {
