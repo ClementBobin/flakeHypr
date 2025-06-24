@@ -11,11 +11,6 @@
 
     # Hydenix and its nixpkgs - kept separate to avoid conflicts
     hydenix = {
-      # Available inputs:
-      # Main: github:richen604/hydenix
-      # Dev: github:richen604/hydenix/dev
-      # Commit: github:richen604/hydenix/<commit-hash>
-      # Version: github:richen604/hydenix/v1.0.0
       url = "github:richen604/hydenix";
     };
 
@@ -29,12 +24,14 @@
       url = "github:serokell/deploy-rs";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    nix-darwin = {
+      url = "github:nix-darwin/nix-darwin/master";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs =
-    {
-      ...
-    }@inputs:
+  outputs = { self, nix-darwin, ... }@inputs:
     let
       vars = {
         user = "mirage";
@@ -51,6 +48,20 @@
           };
           modules = [
             ./hosts/${hostname}
+          ];
+        };
+
+      # Create macOS configuration
+      mkDarwinHost =
+        hostname:
+        nix-darwin.lib.darwinSystem {
+          system = "aarch64-darwin"; # or "x86_64-darwin" for Intel Macs
+          specialArgs = {
+            inherit inputs vars;
+            hostname = hostname;
+          };
+          modules = [
+            ./hosts/darwin/${hostname}
           ];
         };
 
@@ -77,7 +88,6 @@
       mkDeployNode = hostname: {
         hostname = hostname;
         profiles.system = {
-          # Change from root to your user
           user = "${vars.user}";
           path = inputs.deploy-rs.lib.${system}.activate.nixos inputs.self.nixosConfigurations.${hostname};
           sshUser = "${vars.user}";
@@ -99,6 +109,11 @@
         "fern.local" = mkHost "fern";
         "oak.local" = mkHost "oak";
         "pine.local" = mkHost "pine";
+      };
+
+      darwinConfigurations = {
+        # Replace "macbook" with your actual hostname (run 'scutil --get LocalHostName' to find it)
+        macbook = mkDarwinHost "macbook";
       };
 
       deploy.nodes = {
@@ -134,7 +149,6 @@
         '';
       };
 
-      # Only check the specific deployment node
       checks.${system} = {
         oak-check = inputs.deploy-rs.lib.${system}.deployChecks {
           nodes.oak = inputs.self.deploy.nodes.oak;
