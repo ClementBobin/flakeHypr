@@ -35,7 +35,7 @@ in {
   options.modules.hm.emulator = {
     emulators = lib.mkOption {
       type = lib.types.listOf (lib.types.enum ["playonlinux" "proton" "wine" "bottles" "dosbox"]);
-      default = ["wine"];
+      default = [];
       description = "List of emulators to enable";
     };
 
