@@ -45,7 +45,10 @@
         vs-code.enable = true;
         android-studio.enable = true;
       };
-      dotnet.enable = true;
+      dotnet = {
+        enable = true;
+        extraPackages = [ "dotnet-ef" ];
+      };
       global-tools = {
         act-github.enable = true;
         nix.enable = true;
@@ -66,12 +69,5 @@
       localtunnel.port = 8080;
     };
     utilities.scalar.enable = true;
-    #extra = {
-      #ignore-file-retriever = {
-        #enable = true;
-        #watchMode = true;
-        #watchPaths = [ "~/Documents" ];
-      #};
-    #};
   };
 }
