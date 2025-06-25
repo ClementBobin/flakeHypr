@@ -41,13 +41,12 @@ let
       target.recursive = true;
     };
   };
+
+  ngrokConfig = lib.mkIf (builtins.elem "ngrok" cfg.services && cfg.ngrok.configPath != null) {
     home.file.".config/ngrok/ngrok.yml" = {
       source = cfg.ngrok.configPath;
       target.recursive = true;
     };
-  # Ngrok config file
-  ngrokConfig = lib.mkIf (builtins.elem "ngrok" cfg.services && cfg.ngrok.configPath != null) {
-    home.file.".config/ngrok/ngrok.yml".source = cfg.ngrok.configPath;
   };
 
 in {
