@@ -12,7 +12,10 @@
       };
       polkit.enable = true;
     };
-    games.clients = ["steam" "nexus"];
+    games = {
+      clients = ["steam" "nexus"];
+      gamemode.enable = true;
+    };
     networks.vpn = ["tailscale"];
     virtualisation.containers.engines = ["docker"];
     backup.syncthing = {
