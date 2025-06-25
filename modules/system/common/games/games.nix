@@ -1,23 +1,36 @@
 { pkgs, config, lib, ... }:
 
 let
-  cfg = config.modules.games;
-in
-{
-  options.modules.games = {
-    enable = lib.mkEnableOption "Enable all gaming-related configuration";
+  cfg = config.modules.system.games;
 
-    steam = {
-      compatToolsPath = lib.mkOption {
-        type = lib.types.path;
-        default = "${builtins.getEnv "HOME"}/.steam/root/compatibilitytools.d";
-        description = "Path for Steam compatibility tools";
-      };
-      enable = lib.mkEnableOption "Enable Steam support";
+  # Map gaming clients to their packages
+  clientToPackage = with pkgs; {
+    steam = [ steam ];
+    lutris = [ lutris ];
+    heroic = [ heroic ];
+    nexus = [ nexusmods-app-unfree ];
+  };
+
+  # Get packages for enabled clients
+  clientPackages = lib.concatMap (client: clientToPackage.${client} or []) cfg.clients;
+
+in {
+  options.modules.system.games = {
+    clients = lib.mkOption {
+      type = lib.types.listOf (lib.types.enum (lib.attrNames clientToPackage));
+      default = [];
+      description = ''
+        List of gaming clients to enable. Supported options are "steam", "lutris",
+        "heroic", and "nexus". This allows you to specify which gaming clients should be
+        configured in your NixOS setup.
+      '';
     };
 
-    lutris.enable = lib.mkEnableOption "Enable Lutris support";
-    heroic.enable = lib.mkEnableOption "Enable Heroic support";
+    steam.compatToolsPath = lib.mkOption {
+      type = lib.types.path;
+      default = "${builtins.getEnv "HOME"}/.steam/root/compatibilitytools.d";
+      description = "Path for Steam compatibility tools";
+    };
 
     gamemode = {
       enable = lib.mkEnableOption "Enable GameMode support";
@@ -51,30 +64,28 @@ in
     };
   };
 
-  config = lib.mkIf cfg.enable {
-    environment.systemPackages = with pkgs;
-      lib.optional cfg.steam.enable steam
-      ++ lib.optional cfg.lutris.enable lutris
-      ++ lib.optional cfg.heroic.enable heroic;
+  config = lib.mkMerge [
+    {
+      environment.systemPackages = lib.unique clientPackages;
+      environment.sessionVariables = lib.mkIf (lib.elem "steam" cfg.clients) {
+        STEAM_EXTRA_COMPAT_TOOLS_PATHS = cfg.steam.compatToolsPath;
+      };
+    }
 
-    environment.sessionVariables = lib.mkIf cfg.steam.enable {
-      STEAM_EXTRA_COMPAT_TOOLS_PATHS = cfg.steam.compatToolsPath;
-    };
-
-    programs = lib.mkMerge [
-      (lib.mkIf cfg.gamemode.enable {
-        gamemode = {
-          enable = true;
-          enableRenice = cfg.gamemode.enableRenice;
-          settings = {
-            general = cfg.gamemode.generalSettings;
-            gpu = cfg.gamemode.gpuSettings;
-            custom = cfg.gamemode.notificationCommands;
-          };
+    (lib.mkIf cfg.gamemode.enable {
+      programs.gamemode = {
+        enable = true;
+        enableRenice = cfg.gamemode.enableRenice;
+        settings = {
+          general = cfg.gamemode.generalSettings;
+          gpu = cfg.gamemode.gpuSettings;
+          custom = cfg.gamemode.notificationCommands;
         };
-      })
+      };
+    })
 
-      (lib.mkIf cfg.steam.enable {
+    (lib.mkIf (lib.elem "steam" cfg.clients) {
+      programs = {
         gamescope = {
           enable = true;
           capSysNice = true;
@@ -86,7 +97,7 @@ in
           localNetworkGameTransfers.openFirewall = true;
           dedicatedServer.openFirewall = true;
         };
-      })
-    ];
-  };
+      };
+    })
+  ];
 }

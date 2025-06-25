@@ -1,10 +1,10 @@
 { pkgs, lib, config, ... }:
 
 let
-  cfg = config.modules.common.dev.editor.jetbrains;
+  cfg = config.modules.hm.dev.editor.jetbrains;
 in
 {
-  options.modules.common.dev.editor.jetbrains = {
+  options.modules.hm.dev.editor.jetbrains = {
     enable = lib.mkEnableOption "Enable JetBrains IDEs for development";
 
     ides = lib.mkOption {
@@ -15,11 +15,12 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    home.packages = lib.optionals (cfg.ides != []) (lib.concatMap (ide:
-      let
-        idePackage = builtins.getAttr ide pkgs.jetbrains;
-      in
-        [ idePackage ]
-    ) cfg.ides);
+    home.packages = lib.optionals (cfg.ides != [])
+      (lib.concatMap (ide:
+        let
+          idePackage = builtins.getAttr ide pkgs.jetbrains;
+        in
+          [ idePackage ]
+      ) (lib.unique cfg.ides));
   };
 }

@@ -7,7 +7,6 @@ let
   pkgs = import inputs.hydenix.inputs.hydenix-nixpkgs {
     inherit (inputs.hydenix.lib) system;
     config = {
-      android_sdk.accept_license = true;
       allowUnfree = true;
     };
     overlays = [
@@ -15,10 +14,7 @@ let
       (final: prev: {
         userPkgs = import inputs.nixpkgs {
           inherit (inputs.hydenix.lib) system;
-          config = {
-            android_sdk.accept_license = true;
-            allowUnfree = true;
-          };
+          config.allowUnfree = true;
         };
       })
     ];
@@ -31,7 +27,7 @@ in
     inputs.hydenix.inputs.home-manager.nixosModules.home-manager
     inputs.hydenix.lib.nixOsModules
     ./hardware-configuration.nix
-    ../../modules/system/hosts/oak
+    ../../modules/system/hosts/pine
 
 
     # === GPU-specific configurations ===
@@ -45,7 +41,6 @@ in
     # === Other common modules ===
     inputs.hydenix.inputs.nixos-hardware.nixosModules.common-pc
     inputs.hydenix.inputs.nixos-hardware.nixosModules.common-pc-ssd
-    inputs.hydenix.inputs.nixos-hardware.nixosModules.asus-fa507nv
   ];
 
   boot.kernelParams = [ "video=HDMI-A-1:e" ];
@@ -61,20 +56,19 @@ in
       {
         # hm import
         imports = [
-          ../../modules/hm/desktops/hydenix.nix
-          ../../modules/hm/hosts/oak
+          ../../modules/hm/hosts/pine
         ];
 
         desktops.hydenix = {
           enable = true;
-          hostname = "oak";
+          hostname = "pine";
         };
       };
   };
 
   hydenix = {
     enable = true;
-    hostname = "oak";
+    hostname = "pine";
     timezone = "Europe/Paris";
     locale = "fr_FR.UTF-8";
   };

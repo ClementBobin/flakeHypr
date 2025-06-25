@@ -1,7 +1,7 @@
 { pkgs, lib, config, ... }:
 
 let
-  cfg = config.modules.common.dev.dotnet;
+  cfg = config.modules.hm.dev.dotnet;
 
   sdkVersions = cfg.sdk-versions;
 
@@ -14,7 +14,7 @@ let
 
 in
 {
-  options.modules.common.dev.dotnet = {
+  options.modules.hm.dev.dotnet = {
     enable = lib.mkEnableOption "Enable .NET development environment";
     sdk-versions = lib.mkOption {
       type = lib.types.listOf lib.types.str;

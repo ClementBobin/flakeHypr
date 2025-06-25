@@ -3,9 +3,9 @@
 with lib;
 
 let
-  cfg = config.modules.networks.print;
+  cfg = config.modules.system.networks.print;
 in {
-  options.modules.networks.print = {
+  options.modules.system.networks.print = {
     enable = mkEnableOption "Print services";
     cups.enable = mkOption {
       type = types.bool;

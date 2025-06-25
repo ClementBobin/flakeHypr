@@ -1,21 +1,29 @@
 { pkgs, lib, config, ... }:
 
 let
-  cfg = config.modules.common.documentation;
+  cfg = config.modules.hm.documentation;
+
+  # Map document editors to their packages
+  editorsToPackage = with pkgs; {
+    onlyoffice = onlyoffice-bin;
+    okular = okular;
+  };
+
+  # Get packages for enabled editors
+  editorsPackages = lib.unique (lib.filter (pkg: pkg != null)
+    (map (e: editorsToPackage.${e} or null) cfg.editors));
+
 in
 {
-  options.modules.common.documentation = {
-    editor = lib.mkOption {
-      type = lib.types.listOf (lib.types.enum ["onlyoffice" "okular"]);
+  options.modules.hm.documentation = {
+    editors = lib.mkOption {
+      type = lib.types.listOf (lib.types.enum (lib.attrNames editorsToPackage));
       default = [];
       description = "List of document editors to install";
     };
   };
 
   config = {
-    home.packages = with pkgs; (
-      (lib.optional (lib.elem "onlyoffice" cfg.editor) onlyoffice-bin) ++
-      (lib.optional (lib.elem "okular" cfg.editor) okular)
-    );
+    home.packages = editorsPackages;
   };
 }

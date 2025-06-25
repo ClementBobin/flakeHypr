@@ -1,15 +1,17 @@
 { pkgs, lib, config, ... }:
 
 let
-  cfg = config.modules.common.dev.rust;
+  cfg = config.modules.hm.dev.rust;
 
   rustDefaultPackages = with pkgs; [rustc cargo rust-analyzer clippy rustfmt];
 
-  rustPackages = rustDefaultPackages ++ (map (pkgName: pkgs.${pkgName}) cfg.extraPackages);
+  rustPackages = rustDefaultPackages
+  ++ (map (pkgName: pkgs.${pkgName} or (abort "Unknown Rust pkg: ${pkgName}"))
+        cfg.extraPackages);
 
 in
 {
-  options.modules.common.dev.rust = {
+  options.modules.hm.dev.rust = {
     enable = lib.mkEnableOption "Enable Rust development environment";
     extraPackages = lib.mkOption {
       type = lib.types.listOf lib.types.package;

@@ -1,10 +1,10 @@
 { pkgs, lib, config, ... }:
 
 let
-  cfg = config.modules.common.multimedia.openshot-qt;
+  cfg = config.modules.hm.multimedia.openshot-qt;
 in
 {
-  options.modules.common.multimedia.openshot-qt = {
+  options.modules.hm.multimedia.openshot-qt = {
     enable = lib.mkEnableOption "Enable OpenShot video editor";
   };
 

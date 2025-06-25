@@ -1,12 +1,12 @@
 { config, lib, pkgs, ... }:
 
 let
-  cfg = config.modules.common.documentation.obsidian;
+  cfg = config.modules.hm.documentation.obsidian;
 
   #──────── Canonical default ────────#
   defaultObsiPath =
     let dflt = builtins.getEnv "XDG_DOCUMENTS_DIR";
-    in if dflt == "" then "$HOME/Documents" else dflt;
+    in if dflt == "" then "${config.home.homeDirectory}/Documents" else dflt;
 
   /*──────────────────────────
   │ Assets (theme & colors)  │
@@ -119,7 +119,7 @@ in
   /*──────────────────────────
   │ Module options           │
   └──────────────────────────*/
-  options.modules.common.documentation.obsidian = {
+  options.modules.hm.documentation.obsidian = {
     enable = lib.mkEnableOption "Enable the Obsidian module";
 
     backupMethod = lib.mkOption {

@@ -9,6 +9,8 @@ with lib;
 
 let
   cfg = config.desktops.hydenix;
+
+  configHydenix = import ./configHydenix.nix { inherit lib; };
 in
 {
 
@@ -91,6 +93,8 @@ in
             kb_layout = fr
           }
 
+          ${configHydenix.hyprlandKeybindsConvert}
+
           # Example monitor configuration
           # Replace names like HDMI-A-1, DP-1, etc. with the actual names of your monitors (use `hyprctl monitors` to list)
           # monitor = <name>,<resolution@refresh>,<position>,<scale>,<features>,<enabled>
@@ -113,6 +117,14 @@ in
 
           # Disable an unused monitor (example)
           # monitor=DP-4,disable
+
+          # Alt + Enter to toggle fullscreen
+          bind = ALT, Return, fullscreen, 0
+          # Alt + Tab to cycle between fullscreen windows
+          bind = ALT, Tab, cyclenext
+          bind = ALT, Tab, bringactivetotop
+
+          exec-once = sleep 1 && bitwarden
         '';
         force = true;
         mutable = true;

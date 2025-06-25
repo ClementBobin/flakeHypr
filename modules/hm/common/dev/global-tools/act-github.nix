@@ -1,10 +1,10 @@
 { pkgs, lib, config, ... }:
 
 let
-  cfg = config.modules.common.dev.global-tools.act-github;
+  cfg = config.modules.hm.dev.global-tools.act-github;
 in
 {
-  options.modules.common.dev.global-tools.act-github = {
+  options.modules.hm.dev.global-tools.act-github = {
     enable = lib.mkEnableOption "Enable act for running GitHub Actions locally";
   };
 

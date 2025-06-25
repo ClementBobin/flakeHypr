@@ -2,14 +2,7 @@
 
 let
   # Shorthand for accessing module config
-  cfg = config.modules.common.dev.python;
-
-  # add home directory to devShell.shellPaths if not already present
-  homePath = cfg.devShell.defaultPath; # or: builtins.toString config.home.homeDirectory
-  devShellPaths = lib.unique (
-    (lib.optionals (cfg.devShell.shellPaths == []) [ homePath ])
-    ++ cfg.devShell.shellPaths
-  );
+  cfg = config.modules.hm.dev.python;
 
   # Function to get the required Python version with pipx, pip, and extra packages
   pythonWithPipx = version: let
@@ -32,38 +25,8 @@ let
   # Flattened list of all selected Python versions with extras
   allPythonPackages = lib.flatten (map pythonWithPipx cfg.versions);
 
-  # Template for shell.nix content
-  shellNixText = ''
-    let
-      pkgs = import <nixpkgs> {};
-      python = pkgs.${"python" + cfg.defaultVersion};
-    in
-    pkgs.mkShell {
-      buildInputs = [
-        python
-        python.pkgs.pip
-        python.pkgs.pipx
-        ${lib.concatMapStringsSep "\n      " (pkg: "python.pkgs.${pkg}") cfg.extraPackages}
-      ];
-
-      shellHook = '''
-        if [ -f "pyproject.toml" ] || [ -f "requirements.txt" ]; then
-          if [ ! -d ".venv" ]; then
-            echo "🔧 No .venv found. Creating it..."
-            python -m venv .venv
-          fi
-
-          source .venv/bin/activate
-          echo "🐍 Activated .venv"
-        else
-          echo "⚠️ No pyproject.toml or requirements.txt found, skipping .venv auto-activation."
-        fi
-      ''';
-    }
-  '';
-
 in {
-  options.modules.common.dev.python = {
+  options.modules.hm.dev.python = {
     # Main toggle
     enable = lib.mkEnableOption "Enable Python development environment";
 
@@ -92,62 +55,43 @@ in {
     poetry.enable = lib.mkEnableOption "Install Poetry";
     pdm.enable = lib.mkEnableOption "Install PDM";
     tools.enable = lib.mkEnableOption "Install dev tools (pytest, black, flake8)";
-
-    # Dev shell generation
-    devShell = {
-      enable = lib.mkEnableOption "Generate a shell.nix file";
-      defaultPath = lib.mkOption {
-        type = lib.types.str;
-        default = "./Templates";
-        description = "Default path for shell.nix generation";
-      };
-
-      # Additional paths to generate shell.nix in (besides $HOME)
-      shellPaths = lib.mkOption {
-        type = lib.types.listOf lib.types.str;
-        default = [];
-        description = "Additional relative paths to create shell.nix (besides home)";
-      };
-    };
   };
 
   # Actual config if module is enabled
   config = lib.mkIf cfg.enable {
     # Install core packages and optional tools
-    home.packages =
-      allPythonPackages
-      ++ lib.optional cfg.poetry.enable pkgs.poetry
-      ++ lib.optional cfg.pdm.enable pkgs.pdm
-      ++ lib.optionals cfg.tools.enable [
-        pkgs."python${cfg.defaultVersion}Packages".black
-        pkgs."python${cfg.defaultVersion}Packages".flake8
-        pkgs."python${cfg.defaultVersion}Packages".pytest
-      ];
+    home = {
+      packages =
+        allPythonPackages
+        ++ lib.optional cfg.poetry.enable pkgs.poetry
+        ++ lib.optional cfg.pdm.enable pkgs.pdm
+        ++ lib.optionals cfg.tools.enable [
+          pkgs."python${cfg.defaultVersion}Packages".black
+          pkgs."python${cfg.defaultVersion}Packages".flake8
+          pkgs."python${cfg.defaultVersion}Packages".pytest
+        ];
 
-    # Files to write to the home directory
-    home.file = lib.mkMerge (
-      [
-        {
-          ".config/profile.d/python-aliases.sh".text = ''
-            export PATH=${pkgs."python${cfg.defaultVersion}"}/bin:$PATH
-            alias py="python"
-            alias pipx="pipx"
-            alias pip="pip"
-            alias pyclean="find . -type f -name '*.py[co]' -delete"
-            alias pytest="python -m pytest"
-          '';
-        }
-      ]
-      ++
-      (lib.optionals cfg.devShell.enable (
-        map (path: {
-          "${path}/shell.nix" = {
-            text = shellNixText;
-            force = true;
-            mutable = true;
-          };
-        }) devShellPaths
-      ))
-    );
+      # Files to write to the home directory
+      file = lib.mkMerge (
+        [
+          {
+            ".config/profile.d/python-aliases.sh".text = ''
+              export PATH=${pkgs."python${cfg.defaultVersion}"}/bin:$PATH
+              alias py="python"
+              alias pipx="pipx"
+              alias pip="pip"
+              alias pyclean="find . -type f -name '*.py[co]' -delete"
+              alias pytest="python -m pytest"
+            '';
+          }
+        ]
+      );
+      # Shell aliases
+      shellAliases = {
+        py = "python";
+        pyclean = "find . -type f -name '*.py[co]' -delete";
+        pytest = "python -m pytest";
+      };
+    };
   };
 }

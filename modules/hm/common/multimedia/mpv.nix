@@ -1,10 +1,10 @@
 { pkgs, lib, config, ... }:
 
 let
-  cfg = config.modules.common.multimedia.mpv;
+  cfg = config.modules.hm.multimedia.mpv;
 in
 {
-  options.modules.common.multimedia.mpv = {
+  options.modules.hm.multimedia.mpv = {
     enable = lib.mkEnableOption "Enable mpv media player with custom scripts";
   };
 

@@ -6,6 +6,7 @@
     ./browser
 
     ./communication/mail
+    ./communication/discord.nix
     ./communication/teams.nix
 
     ./dev/editor/dbeaver.nix
@@ -29,14 +30,11 @@
 
     ./engine
 
-    #./extra/ignore-file-retriever.nix
+    ./extra/ignore-file-retriever.nix
 
+    ./games/games.nix
+    ./games/joystick.nix
     ./games/mangohud.nix
-    ./games/minecraft.nix
-    ./games/roblox.nix
-    ./games/rocket-league.nix
-    ./games/star-citizen.nix
-    ./games/northstar.nix
 
     ./multimedia/gimp.nix
     ./multimedia/mpv.nix

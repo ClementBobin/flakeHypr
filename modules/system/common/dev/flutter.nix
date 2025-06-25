@@ -1,7 +1,7 @@
 { pkgs, lib, config, vars, ... }:
 
 let
-  cfg = config.modules.dev.flutter;
+  cfg = config.modules.system.dev.flutter;
 
   # Android SDK configuration
   androidComposition = pkgs.androidenv.composeAndroidPackages {
@@ -12,7 +12,7 @@ let
   androidSdk = androidComposition.androidsdk;
 in
 {
-  options.modules.dev.flutter = {
+  options.modules.system.dev.flutter = {
     enable = lib.mkEnableOption "Flutter development environment";
 
     withAndroid = lib.mkEnableOption "Include Android SDK tooling";
@@ -56,7 +56,7 @@ in
     # Environment variables
     environment.variables = lib.mkMerge [
       { JAVA_HOME = "${cfg.jdkPackage}"; }
-      { STUDIO_JDK = "${cfg.jdkPackage}"; }
+      #{ STUDIO_JDK = "${cfg.jdkPackage}"; }
       (lib.mkIf cfg.withAndroid {
         ANDROID_HOME = "${androidSdk}/libexec/android-sdk";
       })
@@ -69,13 +69,5 @@ in
         "adbusers"
       ];
     };
-
-    # Shell profile additions
-    environment.shellInit = ''
-      export PATH="$JAVA_HOME/bin:${pkgs.flutter}/bin:${pkgs.flutter}/bin/cache/dart-sdk/bin:$PATH"
-      ${lib.optionalString cfg.withAndroid ''
-      export PATH="$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/emulator:$ANDROID_HOME/platform-tools:$PATH"
-      ''}
-    '';
   };
 }

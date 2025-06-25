@@ -5,10 +5,10 @@
   ...
 }:
 let
-  cfg = config.modules.fern.sunshine;
+  cfg = config.modules.system.fern.sunshine;
 in
 {
-  options.modules.fern.sunshine = {
+  options.modules.system.fern.sunshine = {
     enable = lib.mkEnableOption "Sunshine streaming server";
 
     allowedNetworks = lib.mkOption {
@@ -133,6 +133,5 @@ in
         iptables -A INPUT -p udp -s ${net} -j ACCEPT
       '') cfg.allowedNetworks;
     };
-
   };
 }

@@ -1,10 +1,10 @@
 { pkgs, lib, config, ... }:
 
 let
-  cfg = config.modules.common.utilities.filezilla;
+  cfg = config.modules.hm.utilities.filezilla;
 in
 {
-  options.modules.common.utilities.filezilla = {
+  options.modules.hm.utilities.filezilla = {
     enable = lib.mkEnableOption "Enable FileZilla (FTP client)";
   };
 

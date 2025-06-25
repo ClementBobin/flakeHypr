@@ -1,10 +1,10 @@
 { lib, config, ... }:
 
 let
-  cfg = config.modules.nix.polkit;
+  cfg = config.modules.system.nix.polkit;
 in
 {
-  options.modules.nix.polkit = {
+  options.modules.system.nix.polkit = {
     enable = lib.mkEnableOption "Enable polkit configuration";
   };
 

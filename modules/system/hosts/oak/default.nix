@@ -4,7 +4,7 @@
     ../../common
   ];
 
-  modules = {
+  modules.system = {
     nix = {
       nix-garbage = {
         enable = true;
@@ -13,15 +13,11 @@
       polkit.enable = true;
     };
     games = {
-      enable = true;
-      steam.enable = true;
-      lutris.enable = true;
+      clients = ["steam" "nexus"];
+      gamemode.enable = true;
     };
-    networks = {
-      print.enable = true;
-      vpn.tailscale.enable = true;
-    };
-    virtualisation.containers.engine = ["docker"];
+    networks.vpn = ["tailscale"];
+    virtualisation.containers.engines = ["docker"];
     backup.syncthing = {
       enable = true;
       dirSync = "/home/${vars.user}";
@@ -29,8 +25,7 @@
     };
     security = {
       antivirus = {
-        enable = true;
-        engine = "clamav";
+        engines = ["clamav"];
         gui.enable = true;
       };
       passwordManager.backend = ["bitwarden"];

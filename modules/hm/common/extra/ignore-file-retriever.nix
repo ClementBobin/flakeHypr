@@ -1,12 +1,14 @@
 { pkgs, lib, config, ... }:
 
 let
-  cfg = config.modules.common.extra.ignore-file-retriever;
+  cfg = config.modules.hm.extra.ignore-file-retriever;
 
-  expandPath = path: if lib.hasPrefix "~/" path then
-    lib.removeSuffix "/" (lib.replacePrefix "~/" "${config.home.homeDirectory}/" path)
+  expandPath = path: let
+    normalized = lib.removeSuffix "/" path;
+  in if lib.hasPrefix "~/" normalized then
+    config.home.homeDirectory + (lib.removePrefix "~/" normalized)
   else
-    lib.removeSuffix "/" path;
+    normalized;
 
   templatePath = expandPath cfg.templatePath;
   outputPath = expandPath cfg.outputPath;
@@ -64,15 +66,15 @@ let
         
         # Handle directory patterns
         if [[ "$pattern" =~ /$ ]]; then
-          echo "${rel_path}${pattern}" >> "$TMP_FILE"
+          echo "''${rel_path}''${pattern}" >> "$TMP_FILE"
         else
           # Handle normal patterns with proper directory prefix
           if [[ "$pattern" =~ / ]]; then
             # Pattern contains subdirectories
-            echo "${rel_path}${pattern}" >> "$TMP_FILE"
+            echo "''${rel_path}''${pattern}" >> "$TMP_FILE"
           else
             # Simple pattern applies to all levels
-            echo "**/${pattern}" >> "$TMP_FILE"
+            echo "**/''${pattern}" >> "$TMP_FILE"
           fi
         fi
       done < "$gitignore"
@@ -86,7 +88,7 @@ let
   '';
 in
 {
-  options.modules.common.extra.ignore-file-retriever = {
+  options.modules.hm.extra.ignore-file-retriever = {
     enable = lib.mkEnableOption "Enable ignore file retriever script to create .stignore from .gitignore patterns";
 
     templatePath = lib.mkOption {

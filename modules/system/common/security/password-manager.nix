@@ -1,49 +1,58 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
-  cfg = config.modules.security;
+  cfg = config.modules.system.security;
+
+  # Map password managers to their packages
+  passwordManagerToPackage = with pkgs; {
+    keepassxc = [ keepassxc ];
+    bitwarden = [ bitwarden-desktop ];
+  };
+
+  # YubiKey packages
+  yubikeyPackages = with pkgs; [
+    yubikey-manager
+    yubikey-personalization
+    yubioath-flutter
+    yubikey-touch-detector
+    age
+    age-plugin-yubikey
+    pam_u2f
+  ];
+
+  # Get packages for enabled password managers
+  passwordManagerPackages = lib.concatMap
+    (manager: passwordManagerToPackage.${manager} or [])
+    cfg.passwordManager.backend;
+
 in {
-  options.modules.security = {
-    yubikey.enable = mkEnableOption "Enable YubiKey support for password management";
+  options.modules.system.security = {
+    yubikey.enable = lib.mkEnableOption "Enable YubiKey support for password management";
 
     passwordManager = {
-      backend = mkOption {
-        type = types.listOf (types.enum ["keepassxc" "bitwarden"]);
+      backend = lib.mkOption {
+        type = lib.types.listOf (lib.types.enum (builtins.attrNames passwordManagerToPackage));
         default = ["keepassxc"];
         description = "Select the password manager backend(s) to use.";
       };
     };
   };
 
-  config = {
-    security.pam.u2f.enable = cfg.yubikey.enable;
-
-    services = {
-      pcscd.enable = cfg.yubikey.enable;
-
-      udev.packages = lib.optionals cfg.yubikey.enable [
-        pkgs.yubikey-personalization
-        pkgs.yubikey-manager
+  config = lib.mkMerge [
+    (lib.mkIf cfg.yubikey.enable {
+      security.pam.u2f.enable = true;
+      services.pcscd.enable = true;
+      services.udev.packages = with pkgs; [
+        yubikey-personalization
+        yubikey-manager
       ];
-    };
+    })
 
-    environment.systemPackages =
-      (lib.optionals cfg.yubikey.enable [
-        pkgs.yubikey-manager
-        pkgs.yubikey-personalization
-        pkgs.yubioath-flutter
-        pkgs.yubikey-touch-detector
-        pkgs.age
-        pkgs.age-plugin-yubikey
-        pkgs.pam_u2f
-      ]) ++
-      (lib.optionals (lib.elem "keepassxc" cfg.passwordManager.backend) [
-        pkgs.keepassxc
-      ]) ++
-      (lib.optionals (lib.elem "bitwarden" cfg.passwordManager.backend) [
-        pkgs.bitwarden-desktop
-      ]);
-  };
+    {
+      environment.systemPackages = lib.unique (
+        passwordManagerPackages
+        ++ lib.optionals cfg.yubikey.enable yubikeyPackages
+      );
+    }
+  ];
 }
