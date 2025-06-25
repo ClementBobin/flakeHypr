@@ -1,3 +1,19 @@
+# [1.2.0](https://github.com/ClementBobin/flakeHypr/compare/v1.1.0...v1.2.0) (2025-06-25)
+
+
+### Bug Fixes
+
+* :bug: explicitly set battery charge thresholds ([935a1f7](https://github.com/ClementBobin/flakeHypr/commit/935a1f74c1d1735620f7da64bc69e88467bad9cf))
+* :bug: mark yubikey touch detection task as complete ([087edab](https://github.com/ClementBobin/flakeHypr/commit/087edab3b5778ca3c6e874673609e0f0ef078e69))
+
+
+### Features
+
+* add configuration for container engines support ([9b5b159](https://github.com/ClementBobin/flakeHypr/commit/9b5b15917eeaa549b75fe556650bffc313eef147))
+* add game configuration module ([bff51e9](https://github.com/ClementBobin/flakeHypr/commit/bff51e92a32d747113b1101d478e73ff335ddf39))
+* add hyprland keybindings configuration ([bc3a674](https://github.com/ClementBobin/flakeHypr/commit/bc3a674d6800bd4b13e9fb1faebcebc5ec1b208d))
+* add joystick support for games configuration ([844085e](https://github.com/ClementBobin/flakeHypr/commit/844085ef01a77227fb974ac28def7bd4157cbdf2))
+
 # [1.1.0](https://github.com/ClementBobin/flakeHypr/compare/v1.0.0...v1.1.0) (2025-06-13)
 
 
