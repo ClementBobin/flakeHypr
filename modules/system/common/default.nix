@@ -8,7 +8,6 @@
     ./dev/flutter.nix
     ./dev/php.nix
 
-    ./games/gamescope.nix
     ./games/games.nix
 
     ./hardware/autologin.nix
