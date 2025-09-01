@@ -9,14 +9,19 @@
 - VMs: [hostname]-vm (fern-vm, oak-vm, cedar-vm)
 
 - [x] hydenix: some yubikey touch detection for hyprlock and waybar <https://github.com/maximbaz/yubikey-touch-detector>
-- [?] bluemail
+- [x] bluemail
 - [x] scalar
 - [x] rust
 - [x] ClamAV UI
 - [ ] Navi default nix template
 - [x] find replacement for diskonaut
-- [?] Flutter
+- [x] Flutter
 - [x] create own module for act-github
 - [ ] Update flake
 - [ ] Test workflows
 - [x] Prisma module
+- [x] Matrix Server
+- [x] Deskflow
+- [x] ping module
+- [x] db module
+- [x] nginx module
