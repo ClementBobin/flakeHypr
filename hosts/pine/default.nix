@@ -14,7 +14,9 @@ let
       (final: prev: {
         userPkgs = import inputs.nixpkgs {
           inherit (inputs.hydenix.lib) system;
-          config.allowUnfree = true;
+          config = {
+            allowUnfree = true;
+          };
         };
       })
     ];
@@ -27,7 +29,7 @@ in
     inputs.hydenix.inputs.home-manager.nixosModules.home-manager
     inputs.hydenix.lib.nixOsModules
     ./hardware-configuration.nix
-    ../../modules/system/hosts/pine
+    ../../modules/system/hosts/cedar
 
 
     # === GPU-specific configurations ===
@@ -39,11 +41,7 @@ in
 
     #! EDIT THIS SECTION
     # === Other common modules ===
-    inputs.hydenix.inputs.nixos-hardware.nixosModules.common-pc
-    inputs.hydenix.inputs.nixos-hardware.nixosModules.common-pc-ssd
   ];
-
-  boot.kernelParams = [ "video=HDMI-A-1:e" ];
 
   home-manager = {
     useGlobalPkgs = true;
@@ -56,19 +54,20 @@ in
       {
         # hm import
         imports = [
-          ../../modules/hm/hosts/pine
+          ../../modules/hm/desktops/hydenix.nix
+          ../../modules/hm/hosts/cedar.nix
         ];
 
         desktops.hydenix = {
           enable = true;
-          hostname = "pine";
+          hostname = "cedar";
         };
       };
   };
 
   hydenix = {
     enable = true;
-    hostname = "pine";
+    hostname = "cedar";
     timezone = "Europe/Paris";
     locale = "fr_FR.UTF-8";
   };
