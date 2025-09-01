@@ -7,6 +7,12 @@ in
   options.modules.system.nix.nix-garbage = {
     enable = lib.mkEnableOption "Enable automatic garbage collection for Nix";
 
+    autoGarbageCollection = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = "Whether to enable automatic garbage collection";
+    };
+
     dates = lib.mkOption {
       type = lib.types.str;
       default = "weekly";
@@ -33,7 +39,7 @@ in
       };
 
       gc = {
-        automatic = true;
+        automatic = lib.mkForce cfg.autoGarbageCollection;
         dates = cfg.dates;
         options = "--delete-older-than ${cfg.optionDate}";
       };

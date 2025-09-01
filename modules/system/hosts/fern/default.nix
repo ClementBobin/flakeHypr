@@ -2,9 +2,6 @@
 {
   imports = [
     ../../common
-    ./plex.nix
-    ./sunshine.nix
-    ./vfio
   ];
 
   modules.system = {
@@ -19,13 +16,6 @@
         enable = true;
         interface = "enp7s0";
       };
-    };
-
-    # fern specific modules
-    fern = {
-      plex.enable = true;
-      sunshine.enable = true;
-      vfio.enable = true;
     };
   };
 }

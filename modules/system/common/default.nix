@@ -1,23 +1,19 @@
-{ pkgs, inputs, ... }:
+{ inputs, ... }:
 {
   imports = [
-    ./backup/syncthing.nix
+    ./dev/languages/flutter.nix
+    ./dev/languages/php.nix
+    ./dev/tools/flatpak.nix
+    ./dev/environments.nix
 
-    ./dev/dev.nix
-    ./dev/flatpak.nix
-    ./dev/flutter.nix
-    ./dev/php.nix
-
-    ./games/games.nix
-
+    ./hardware/powersave
     ./hardware/autologin.nix
     ./hardware/boot.nix
-    ./hardware/powersave.nix
 
-    ./networks/print/print.nix
     ./networks/vpn.nix
     ./networks/wol.nix
 
+    ./nix
     ./nix/linux-cachyos.nix
     ./nix/nix-garbage.nix
     ./nix/polkit.nix
@@ -25,6 +21,26 @@
     ./security/antivirus.nix
     ./security/password-manager.nix
 
-    ./virtualisation/containers.nix
+    ./server/communication/agents.nix
+    ./server/communication/deskflow.nix
+    ./server/communication/matrix.nix
+    ./server/communication/ntfy-sh.nix
+    ./server/dev/vs-code.nix
+    ./server/games/sunshine.nix
+    ./server/media/multimedia.nix
+    ./server/media/paperless.nix
+    ./server/media/photoprism.nix
+    ./server/password-manager/vaultwarden.nix
+    ./server/storage/gitea.nix
+    ./server/storage/syncthing.nix
+    ./server/meal.nix
+    ./server/print.nix
+
+    ./virtualisation
+    ./virtualisation/ollama.nix
+
+    ./games.nix
   ];
+
+  nix.settings.experimental-features = [ "nix-command" "flakes" "pipe-operators" ];
 }
