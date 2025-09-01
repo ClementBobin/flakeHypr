@@ -5,7 +5,7 @@ let
 
   # Map document editors to their packages
   editorsToPackage = with pkgs; {
-    onlyoffice = onlyoffice-bin;
+    onlyoffice = null;
     okular = okular;
   };
 
@@ -25,5 +25,6 @@ in
 
   config = {
     home.packages = editorsPackages;
+    programs.onlyoffice.enable = lib.elem "onlyoffice" cfg.editors;
   };
 }

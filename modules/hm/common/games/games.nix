@@ -9,9 +9,9 @@ let
       packages = with pkgs; [ prismlauncher jdk17 gcc glibc ];
       description = "Minecraft Launcher with PrismLauncher";
     };
-    northstar = {
-      packages = with inputs.nix-gaming.packages.${pkgs.system}; [ northstar-proton viper ];
-      description = "Northstar (Titanfall 2 mod) with Proton and Viper";
+    titanfall2 = {
+      packages = with inputs.nix-gaming.packages.${pkgs.system}; [ viper (lib.hiPrio northstar-proton) ];
+      description = "Titanfall 2 via nix-gaming";
     };
     roblox = {
       packages = with inputs.nix-gaming.packages.${pkgs.system}; [ roblox-player ];
@@ -22,15 +22,12 @@ let
       description = "Rocket League via nix-gaming";
     };
     star-citizen = {
-      packages = with inputs.nix-gaming.packages.${pkgs.system}; [ star-citizen ];
+      packages = [ inputs.nix-gaming.packages.${pkgs.system}.star-citizen pkgs.lug-helper ];
       description = "Star Citizen Launcher";
     };
   };
 
-  # Get list of game names for the enum type
   gameNames = builtins.attrNames availableGames;
-
-  # Get packages for enabled games
   gamePackages = lib.unique (lib.concatMap (game: availableGames.${game}.packages) cfg.enabledGames);
 
 in {

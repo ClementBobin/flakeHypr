@@ -1,16 +1,45 @@
-{ lib }:
+{ lib, config }:
 
+let
+  cfg = config.desktops.hydenix;
+  utilities = config.modules.hm.utilities;
+
+  iannyOptions = utilities.safety.ianny;
+
+  kandoEnabled = utilities.app-launcher.kando.enable;
+
+  # Generate random command logic
+  randomCommand =
+    if cfg.randomOnBoot.wallpaper && cfg.randomOnBoot.theme then
+      "random-theme.sh -a"
+    else if cfg.randomOnBoot.wallpaper then
+      "wallpaper.sh -r"
+    else if cfg.randomOnBoot.theme then
+      "random-theme.sh -r"
+    else
+      null;
+
+  startupCmds = [
+    (lib.optionalString (randomCommand != null) randomCommand)
+    "sleep 1"
+    (lib.optionalString kandoEnabled "kando")
+  ];
+  filteredCmds = lib.filter (x: x != "") startupCmds;
+  execCmd = lib.concatStringsSep " && " filteredCmds;
+in
 {
-  hyprlandKeybindsConvert = ''
+  hyprlandKeybinds = ''
     ## █▄▀ █▀▀ █▄█ █▄▄ █ █▄░█ █▀▄ █ █▄░█ █▀▀ █▀
     ## █░█ ██▄ ░█░ █▄█ █ █░▀█ █▄▀ █ █░▀█ █▄█ ▄█
     # $scrPath=$HOME/.local/lib/hyde # set scripts path
-
 
     $l=Launcher
     $d=[$l|Rofi menus]
     bindd = $mainMod, colon, $d keybindings hint, exec, pkill -x rofi || $scrPath/keybinds_hint.sh c # launch keybinds hint
     bindd = $mainMod, semicolon , $d glyph picker , exec, pkill -x rofi || $scrPath/glyph-picker.sh # launch glyph picker
+    ${lib.optionalString kandoEnabled ''
+      bindd = Alt, Space, $d launch Kando app launcher, global, menu.kando.Kando:hypr
+    ''}
 
     $ws=Workspaces
     $d=[$ws|Navigation]
@@ -51,6 +80,43 @@
     bindd = $mainMod Alt, ccedilla, $d move to workspace 9  (silent), movetoworkspacesilent, 9
     bindd = $mainMod Alt, agrave, $d move to workspace 10 (silent), movetoworkspacesilent, 10
 
+    $ws=Modes
+    $d=[$ws|Safety]
+    ${lib.optionalString iannyOptions.enable ''
+      bindd = $mainMod, F1, $d toggle safety mode, exec, toggle-ianny
+      ${ lib.optionalString (iannyOptions.mode == "preset") ''
+        bindd = $mainMod, F2, $d select Ianny preset, exec, ianny-preset-selector
+        ${lib.optionalString (builtins.elem "game" iannyOptions.presets) ''
+          bindd = $mainMod Alt, G, $d activate game preset, exec, ianny-preset-selector --game
+        ''}
+      ''}
+    ''}
+    bindd = $mainMod Alt, F4, $d emergency shutdown all apps, exec, pkill -KILL -u $USER
+
     $d=#! unset the group name
+  '';
+
+  exec-once = ''
+    exec-once = ${execCmd}
+  '';
+
+  config = ''
+    ${lib.optionalString kandoEnabled ''
+      ### kando Section
+      input {
+        special_fallthrough = true # having only floating windows in the special workspace will not block focusing windows in the regular workspace.
+        focus_on_close = 1 # focus will shift to the window under the cursor.
+      }
+
+      windowrule = noblur, class:kando
+      windowrule = opaque, class:kando
+      windowrule = size 100% 100%, class:kando
+      windowrule = noborder, class:kando
+      windowrule = noanim, class:kando
+      windowrule = float, class:kando
+      windowrule = pin, class:kando
+
+      ###
+    ''}
   '';
 }

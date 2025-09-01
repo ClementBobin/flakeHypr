@@ -24,6 +24,8 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    home.file.".config/MangoHud/MangoHud.conf".enable = lib.mkForce false;
+
     # Enable mangohud
         programs.mangohud = {
           enable = true;

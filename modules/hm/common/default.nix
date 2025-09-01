@@ -1,60 +1,91 @@
-{
-  ...
-}:
+{ inputs, lib, config, ... }:
+let
+  cfg = config.modules.hm.nh;
+in
 {
   imports = [
     ./browser
 
-    ./communication/mail
+    ./communication/mail.nix
     ./communication/discord.nix
+    ./communication/matrix.nix
     ./communication/teams.nix
 
-    ./dev/editor/dbeaver.nix
-    ./dev/editor/jetbrains.nix
-    ./dev/editor/vs-code.nix
-    ./dev/editor/android-studio.nix
-    ./dev/global-tools/act-github.nix
-    ./dev/global-tools/nix.nix
-    ./dev/global-tools/cli.nix
-    ./dev/node/node.nix
-    ./dev/node/pm2.nix
-    ./dev/node/prisma.nix
-    ./dev/dotnet.nix
-    ./dev/python.nix
-    ./dev/rust.nix
+    ./dev/environments/containers.nix
+    ./dev/environments/editor.nix
+    ./dev/languages/dotnet.nix
+    ./dev/languages/node.nix
+    ./dev/languages/python.nix
+    ./dev/languages/rust.nix
+    ./dev/tools/cli.nix
+    ./dev/tools/git-action.nix
+    ./dev/tools/gitleaks.nix
+    ./dev/tools/nix.nix
+    ./dev/tools/prisma.nix
 
     ./documentation/obsidian.nix
     ./documentation
 
-    ./emulator
-
     ./engine
 
-    ./extra/ignore-file-retriever.nix
+    ./extra/shader-cache-cleanup.nix
+    ./extra/syncthing-ignore.nix
 
     ./games/games.nix
     ./games/joystick.nix
     ./games/mangohud.nix
 
-    ./multimedia/gimp.nix
-    ./multimedia/mpv.nix
-    ./multimedia/obs.nix
-    ./multimedia/openshot-qt.nix
-    ./multimedia/parsec.nix
-    ./multimedia/stremio.nix
+    ./multimedia/editing/image.nix
+    ./multimedia/editing/video.nix
+    ./multimedia/player.nix
+    ./multimedia/rambox.nix
+    ./multimedia/remote-desktop.nix
+    ./multimedia/streaming.nix
 
     ./network/tunnel.nix
 
-    ./shell/btop.nix
-    ./shell/fzf.nix
-    ./shell/navi.nix
-    ./shell/ranger.nix
-    ./shell/starship.nix
+    ./shell/disk-usage.nix
     ./shell/tools.nix
 
+    ./utilities/safety/ianny.nix
+    ./utilities/app-launcher.nix
     ./utilities/filezilla.nix
     ./utilities/kde-connect.nix
     ./utilities/scalar.nix
     ./utilities/stacer.nix
+
+    inputs.nix-podman-stacks.homeModules.nps
   ];
+
+  options.modules.hm.nh = {
+    enable = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = "Enable Home Manager configuration for this host";
+    };
+    clean.extraArgs = lib.mkOption {
+      type = lib.types.str;
+      default = "--keep-since 4d --keep 3";
+      description = "Extra arguments for NH clean up";
+    };
+    flakePath = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+      description = "Absolute path to the flake, or null";
+    };
+  };
+
+  config = {
+    programs = {
+      home-manager.enable = true;
+      nh = {
+        enable = cfg.enable;
+        clean = {
+          enable = cfg.enable;
+          extraArgs = cfg.clean.extraArgs;
+        };
+        flake = cfg.flakePath;
+      };
+    };
+  };
 }
