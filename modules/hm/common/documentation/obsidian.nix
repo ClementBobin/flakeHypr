@@ -24,96 +24,29 @@ let
   };
 
   /*──────────────────────────
-  │ Git‑based backup script  │
+  │ Find-based TODO copier   │
   └──────────────────────────*/
-  backupScript = pkgs.writeShellScript "obsidian-backup-git" ''
-    set -euo pipefail
-
-    REG_FILE="''${XDG_CONFIG_HOME:-$HOME/.config}/obsidian/obsidian.json"
-    if [ ! -f "$REG_FILE" ]; then
-      echo "No vault registry found at $REG_FILE — nothing to back up."
-      exit 0
-    fi
-
-    mapfile -t vaults < <(${pkgs.jq}/bin/jq -r '.[].path' "$REG_FILE" | ${pkgs.gawk}/bin/awk '!seen[$0]++')
-    if [ ''${#vaults[@]} -eq 0 ]; then
-      echo "Vault registry is empty."
-      exit 0
-    fi
-
-    for VAULT in "''${vaults[@]}"; do
-      if [ ! -d "$VAULT" ]; then
-        echo "⚠️  $VAULT missing — skipping"
-        continue
-      fi
-      gitDir="$(find "$VAULT" -maxdepth 2 -type d -name .git | head -n1 || true)"
-      if [ -z "$gitDir" ]; then
-        echo "ℹ️  $VAULT is not a git repo — skipping"
-        continue
-      fi
-
-      cd "$VAULT"
-      echo "→ Backing up: $VAULT"
-      git fetch --quiet origin || true
-      if git show-ref --verify --quiet refs/heads/temp; then
-        git checkout temp
-      else
-        git checkout -B temp
-      fi
-      git add -A
-      git commit -m "Backup on $(date -u +"%Y-%m-%dT%H:%M:%SZ")" || echo "  Nothing new to commit"
-      if ! git push origin temp; then
-        echo "⚠️  Failed to push $VAULT to remote"
-        continue
-      fi
-    done
-  '';
-
-  /*──────────────────────────
-  │ TODO‑link monitoring     │
-  └──────────────────────────*/
-  linkScript = pkgs.writeShellScript "obsidian-todo-linker" ''
+  copyScript = pkgs.writeShellScript "obsidian-todo-copier" (''
     OBSIDIAN_DIR="${cfg.projectsDir}"
     DEV_DIR="${cfg.devDir}"
 
     # Create obsidian projects directory if it doesn't exist
     mkdir -p "$OBSIDIAN_DIR"
-    mkdir -p "$DEV_DIR"
 
-    # Variable to track last update time
-    last_update=0
-    update_interval=1  # Minimum seconds between updates
+    rm -f "$OBSIDIAN_DIR"/*-todo.md
 
-    # Function to create/update hardlinks
-    update_links() {
-      current_time=$(date +%s)
-      time_diff=$((current_time - last_update))
+    # Find all TODO.md files (suppress permission errors)
+    find "$DEV_DIR" -name "T[Oo][Dd][Oo].md" -type f -readable 2>/dev/null | while read -r todo_file; do
+      # Get project name from path
+      dir_path=$(dirname "$todo_file")
+      project_name=$(basename "$dir_path")
+      target_file="$OBSIDIAN_DIR/$project_name-todo.md"
 
-      # Only update if enough time has passed since last update
-      if [ $time_diff -ge $update_interval ]; then
-        find "$DEV_DIR" -maxdepth "${toString cfg.searchLinkerDepth}" -name "TODO.md" | while read -r todo_file; do
-          project_name=$(basename "$(dirname "$todo_file")")
-          target_link="$OBSIDIAN_DIR/$project_name-todo.md"
+      cat "$todo_file" > "$target_file"
 
-          # Remove existing link if it exists
-          rm -f "$target_link"
-          # Create new hardlink
-          ln "$todo_file" "$target_link"
-        done
-        last_update=$current_time
-      fi
-    }
-
-    # Initial link creation
-    update_links
-
-    # Monitor both directories for changes
-    ${pkgs.inotify-tools}/bin/inotifywait -m -r -e modify,create,delete,move "$DEV_DIR" "$OBSIDIAN_DIR" | while read -r directory events filename; do
-      if [[ "$filename" == "TODO.md" ]] || [[ "$filename" == *-todo.md ]]; then
-        update_links
-      fi
+      echo "Copied: $todo_file → $target_file"
     done
-  '';
+  '');
 in
 {
   /*──────────────────────────
@@ -122,19 +55,9 @@ in
   options.modules.hm.documentation.obsidian = {
     enable = lib.mkEnableOption "Enable the Obsidian module";
 
-    backupMethod = lib.mkOption {
-      type    = lib.types.enum [ "none" "git-push-temp" ];
-      default = "none";
-      description = ''
-        Backup strategy.
-        • none – disable backups
-        • git-push-temp – commit & push vault to the **temp** branch
-      '';
-    };
-
     projectsDir = lib.mkOption {
       type        = lib.types.str;
-      default     = "${defaultObsiPath}/obsidian/home/Projects";
+      default     = "${defaultObsiPath}/obsidian/home/content/Projects";
       description = "Directory containing Obsidian project files";
     };
 
@@ -147,69 +70,45 @@ in
     linker = lib.mkOption {
       type        = lib.types.bool;
       default     = true;
-      description = "Create hard‑links from each project’s TODO.md into the vault";
-    };
-
-    searchLinkerDepth = lib.mkOption {       # ← renamed for consistency
-      type        = lib.types.int;
-      default     = 2;
-      description = "Max depth to search for TODO.md files under devDir";
+      description = "Enable automatic TODO.md copying at startup";
     };
   };
 
   /*──────────────────────────
   │ Module implementation    │
   └──────────────────────────*/
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf cfg.enable (lib.mkMerge [
+    {
+      home.packages = with pkgs; [
+        obsidian
+      ];
 
-    home.packages = with pkgs; [ obsidian inotify-tools jq gawk ];
+      home.sessionVariables.OBSIDIAN_VAULT = "${defaultObsiPath}/obsidian";
 
-    home.sessionVariables.OBSIDIAN_VAULT = "${defaultObsiPath}/obsidian";
-
-    home.file = {
-      ".config/hyde/wallbash/Wall-Ways/obsidian.dcol" = {
-        source   = obsidianDcol; force = true; mutable = true;
-      };
-      "${config.home.sessionVariables.OBSIDIAN_VAULT}/home/.obsidian/themes/Wallbash" = {
-        source   = wallbashTheme; recursive = true; force = true; mutable = true;
-      };
-    };
-
-    home.activation.obsidianBackup = lib.mkIf (cfg.backupMethod == "git-push-temp") (
-      lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-        echo "Running Obsidian backup to temp branch…"
-        ${backupScript}
-      ''
-    );
-
-    systemd.user = lib.mkIf (cfg.backupMethod == "git-push-temp") {
-      services.obsidian-backup = {
-        Unit.Description = "Obsidian vault backup to git temp branch";
-        Service = { Type = "oneshot"; ExecStart = "${backupScript}"; StandardOutput = "journal"; StandardError = "journal"; };
-      };
-      timers.obsidian-backup = {
-        Unit.Description = "Run Obsidian vault backup every 7 days";
-        Timer = {
-          OnBootSec       = "5m";
-          OnUnitActiveSec = "7d";
-          Persistent      = true;
-          Unit            = "obsidian-backup.service";
+      home.file = {
+        ".config/hyde/wallbash/Wall-Ways/obsidian.dcol" = {
+          source   = obsidianDcol; force = true; mutable = true;
         };
-        Install.WantedBy = [ "timers.target" ];
+        "${config.home.sessionVariables.OBSIDIAN_VAULT}/home/content/.obsidian/themes/Wallbash" = {
+          source   = wallbashTheme; recursive = true; force = true; mutable = true;
+        };
       };
+    }
 
-      services.obsidian-todo-linker = lib.mkIf cfg.linker {
-        Unit.Description = "Link & monitor project TODO files to Obsidian";
+    (lib.mkIf cfg.linker {
+      systemd.user.services.obsidian-todo-copier = {
+        Unit = {
+          Description = "Copy project TODO files to Obsidian";
+          After = [ "default.target" ];
+        };
         Service = {
-          Type      = "simple";
-          ExecStart = "${linkScript}";
-          Restart   = "always";
-          RestartSec = "5";
+          Type = "oneshot";
+          ExecStart = "${copyScript}";
           StandardOutput = "journal";
-          StandardError  = "journal";
+          StandardError = "journal";
         };
         Install.WantedBy = [ "default.target" ];
       };
-    };
-  };
+    })
+  ]);
 }

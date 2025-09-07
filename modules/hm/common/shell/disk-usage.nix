@@ -6,7 +6,6 @@ let
   # Map disk usage tools to their packages
   toolToPackage = with pkgs; {
     ncdu = ncdu;
-    diskonaut = diskonaut;
     gdu = gdu;
     dust = dust;
     parallel-disk-usage = parallel-disk-usage;

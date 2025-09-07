@@ -1,16 +1,3 @@
-    home.file = {
-      ".config/hypr/userprefs.conf" = lib.mkForce {
-        text = ''
-          # Set keyboard layout to French
-          input {
-            kb_layout = fr
-          }
-        '';
-        force = true;
-        mutable = true;
-      };
-    };
-
     /*
       ! Below are defaults
 
@@ -108,3 +95,18 @@
       wlogout.enable = true; # enable wlogout module
       xdg.enable = true; # enable xdg module
     */
+
+
+    tarow.podman = {
+      hostIP4Address = "127.0.0.1";
+      # This is the UID of the user that will own the podman containers
+      # and volumes created by tarow.podman.
+      # It should match the UID of the user running the tarow.podman service.
+      # If you are not sure, you can find it by running `id -u` in the terminal.
+      hostUid = 1000;
+      externalStorageBaseDir = "${config.home.homeDirectory}/podman-stoorage";
+
+      stacks = {
+        homepage.enable = true;
+      };
+    };

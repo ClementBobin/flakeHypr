@@ -13,5 +13,37 @@ in
     home.packages = (with pkgs; [
       tree
     ]);
+
+    programs = {
+      ranger.enable = true;
+      navi = {
+        # Enable navi
+        enable = true;
+        enableZshIntegration = true;
+      };
+      fzf = {
+        enable = true;
+        enableZshIntegration = true;
+        tmux.enableShellIntegration = true;
+      };
+      btop = {
+
+        # Enable btop
+        enable = true;
+
+        # Configuration for btop
+        settings = {
+
+          # Use default terminal background
+          theme_background = false;
+
+          # Use vim keys
+          vim_keys = true;
+
+          # Organise processes as a tree by default
+          proc_tree = true;
+        };
+      };
+    };
   };
 }

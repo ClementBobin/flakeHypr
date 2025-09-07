@@ -53,7 +53,7 @@ in {
   options.modules.hm.network.tunnel = {
     services = lib.mkOption {
       type = lib.types.listOf (lib.types.enum (lib.attrNames servicesToPackage));
-      default = ["localtunnel"];
+      default = [];
       description = "List of tunneling services to enable";
     };
 

@@ -1,4 +1,4 @@
-{ lib, config, ... }:
+{ lib, config, pkgs, ... }:
 
 let
   cfg = config.modules.system.nix.polkit;
@@ -18,5 +18,7 @@ in
         }
       });
     '';
+
+    environment.systemPackages = with pkgs; [ kdePackages.kdenetwork-filesharing ];
   };
 }

@@ -1,6 +1,7 @@
 {
   inputs,
   vars,
+  lib,
   ...
 }:
 let
@@ -9,6 +10,9 @@ let
     config = {
       android_sdk.accept_license = true;
       allowUnfree = true;
+      permittedInsecurePackages = [
+        "qtwebengine-5.15.19"
+      ];
     };
     overlays = [
       inputs.hydenix.lib.overlays
@@ -18,6 +22,9 @@ let
           config = {
             android_sdk.accept_license = true;
             allowUnfree = true;
+            permittedInsecurePackages = [
+              "qtwebengine-5.15.19"
+            ];
           };
         };
       })
@@ -48,7 +55,7 @@ in
     inputs.hydenix.inputs.nixos-hardware.nixosModules.asus-fa507nv
   ];
 
-  boot.kernelParams = [ "video=HDMI-A-1:e" ];
+  #boot.kernelParams = [ "video=HDMI-A-1:e" ];
 
   home-manager = {
     useGlobalPkgs = true;
@@ -77,6 +84,7 @@ in
     hostname = "oak";
     timezone = "Europe/Paris";
     locale = "fr_FR.UTF-8";
+    gaming.enable = false;
   };
 
   users.users.${vars.user} = {
@@ -91,4 +99,10 @@ in
     ];
     shell = pkgs.zsh;
   };
+
+  hardware.nvidia = {
+    prime.amdgpuBusId = lib.mkForce "PCI:36:0:0";
+  };
+
+  #boot.kernel.sysctl."net.ipv4.ip_unprivileged_port_start" = 0;
 }

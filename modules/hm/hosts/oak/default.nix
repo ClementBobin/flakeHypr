@@ -8,66 +8,80 @@
     ../../common
   ];
 
-  config.modules.hm = {
-    shell = {
-      btop.enable = true;
-      fzf.enable = true;
-      ranger.enable = true;
-      tools.enable = true;
-      navi.enable = true;
-    };
-    games = {
-      mangohud = {
+  config = {
+    modules.hm = {
+      nh.flakePath = "~/Documents/dev/multi-stack-project/nixos/flakeHypr";
+      shell = {
+        tools.enable = true;
+        disk-usage.tools = ["gdu"];
+      };
+      games = {
+        mangohud = {
+          enable = true;
+          cpu_text = "Ryzen 7 7435HS";
+        };
+        enabledGames = ["minecraft"];
+      };
+      multimedia = {
+        editing.image.enable = true;
+        player = {
+          clients = ["mpv" "jellyfin" "miru"];
+          jellyfin.rpc = true;
+        };
+        rambox.enable = true;
+      };
+      browser.clients = ["firefox"];
+      documentation = {
+        editors = ["onlyoffice"];
+        obsidian.enable = true;
+      };
+      dev = {
+        environments = {
+          ides = ["vs-code" "android-studio" "datagrip" "webstorm" "phpstorm" "rider"];
+          containers = {
+            engine = ["podman"];
+            enableSocket = true;
+            hostUid = 1001;
+            tui.enable = true;
+            overrideAliases = true;
+          };
+        };
+        languages = {
+          dotnet = {
+            enable = true;
+            extraPackages = ["dotnet-ef"];
+          };
+          node = {
+            enable = true;
+            extraPackages = ["node2nix" "fnm" "npm-check-updates"];
+          };
+          python.enable = true;
+        };
+        tools = {
+          git-action.packages = ["wrkflw"];
+          nix.enable = true;
+          gitleaks.enable = true;
+          prisma.enable = true;
+        };
+      };
+      communication = {
+        teams.enable = true;
+        mail.services = ["bluemail"];
+        discord.rpc.enable = true;
+        matrix.clients = ["element"];
+      };
+      utilities = {
+        scalar.enable = true;
+        safety.ianny = {
+          enable = true;
+          presets = ["dev" "game"];
+          defaultPreset = "dev";
+        };
+      };
+      extra.syncthing-ignore = {
         enable = true;
-        cpu_text = "Ryzen 7 7435HS";
-      };
-      enabledGames = ["minecraft"];
-    };
-    multimedia = {
-      gimp.enable = true;
-      stremio.enable = true;
-    };
-    browser = {
-      clients = ["firefox"];
-      driver.enable = true;
-    };
-    documentation = {
-      editors = ["onlyoffice"];
-      obsidian = {
-        enable = true;
-        backupMethod  = "git-push-temp";
+        excludedDirs = ["node_modules" "vendor" "storage" ".idea"];
       };
     };
-    dev = {
-      editor = {
-        dbeaver.enable = true;
-        jetbrains.enable = true;
-        vs-code.enable = true;
-        android-studio.enable = true;
-      };
-      dotnet = {
-        enable = true;
-        extraPackages = [ "dotnet-ef" ];
-      };
-      global-tools = {
-        act-github.enable = true;
-        nix.enable = true;
-      };
-      node = {
-        enable = true;
-        prisma.enable = true;
-      };
-      python.enable = true;
-    };
-    communication = {
-      teams.enable = true;
-      mail.services = ["thunderbird"];
-      discord.rpc.enable = true;
-    };
-    network.tunnel = {
-      services = ["localtunnel"];
-      localtunnel.port = 8080;
-    };
-    utilities.scalar.enable = true;
   };
 }

@@ -10,13 +10,17 @@ with lib;
 let
   cfg = config.desktops.hydenix;
 
-  configHydenix = import ./configHydenix.nix { inherit lib; };
+  configHydenix = import ./configHydenix.nix { inherit lib config; };
+
+  # Validate hostnames
+  validHostnames = [ "fern" "oak" "pine" "cedar" "sapling" "clover" ];
 in
 {
 
   imports = [
     ../common
     inputs.hydenix.lib.homeModules
+    inputs.nix-index-database.homeModules.nix-index
   ];
 
   options.desktops.hydenix = {
@@ -31,43 +35,11 @@ in
       description = "Hostname for Hydenix desktop, used to determine userprefs.conf";
       example = "fern";
     };
-  };
 
-  config = mkIf cfg.enable {
-
-    assertions = [
-      {
-        assertion = builtins.elem cfg.hostname [
-          "fern" # Desktop
-          "oak" # Laptop
-          "pine" # Media
-          "cedar" # Server
-          "sapling" # Live USB OS
-          "clover" # Main VM
-        ];
-        message = "Hostname must be one of: fern, oak, pine, cedar, sapling, clover";
-      }
-    ];
-
-    hydenix.hm = {
-      enable = true;
-      gaming.enable = false;
-      editors = {
-        vscode.enable = false;
-        neovim = false;
-      };
-      social = {
-        webcord.enable = false;
-        vesktop.enable = false;
-      };
-      git = {
-        enable = true;
-        name = "mirage";
-        email = "119869686+ClementBobin@users.noreply.github.com";
-      };
-      theme = {
-        active = "Tokyo Night";
-        themes = [
+    theme = {
+      themes = mkOption {
+        type = types.listOf types.str;
+        default = [
           "Another World"
           "Cat Latte"
           "Catppuccin Latte"
@@ -83,7 +55,74 @@ in
           "Sci-fi"
           "Tokyo Night"
         ];
+        description = "List of available themes for Hydenix desktop";
       };
+    };
+
+    randomOnBoot = {
+      wallpaper = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Enable random wallpaper on boot";
+      };
+
+      theme = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Enable random theme on boot (requires random wallpaper to be enabled)";
+      };
+    };
+  };
+
+  config = mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = builtins.elem cfg.hostname validHostnames;
+        message = "Hostname must be one of: ${toString validHostnames}. Got: ${cfg.hostname}";
+      }
+      {
+        assertion = cfg.theme.themes != [];
+        message = "Theme list cannot be empty";
+      }
+    ];
+
+    hydenix.hm = {
+      enable = true;
+      dolphin.enable = cfg.enable;
+      editors = {
+        enable = cfg.enable;
+        vscode.enable = false;
+        neovim = false;
+      };
+      firefox.enable = cfg.enable;
+      git = {
+        enable = true;
+        name = "mirage";
+        email = "119869686+ClementBobin@users.noreply.github.com";
+      };
+      hyde.enable = cfg.enable;
+      hyprland.enable = cfg.enable;
+      lockscreen.enable = cfg.enable;
+      notifications.enable = cfg.enable;
+      qt.enable = cfg.enable;
+      rofi.enable = cfg.enable;
+      screenshots.enable = cfg.enable;
+      social = {
+        enable = cfg.enable;
+        discord.enable = false;
+        webcord.enable = false;
+        vesktop.enable = cfg.enable;
+      };
+      spotify.enable = cfg.enable;
+      swww.enable = cfg.enable;
+      theme = {
+        enable = cfg.enable;
+        active = "Tokyo Night";
+        themes = cfg.theme.themes;
+      };
+      waybar.enable = cfg.enable;
+      wlogout.enable = cfg.enable;
+      xdg.enable = cfg.enable;
     };
 
     home.file = {
@@ -93,7 +132,8 @@ in
             kb_layout = fr
           }
 
-          ${configHydenix.hyprlandKeybindsConvert}
+          ${configHydenix.config}
+          ${configHydenix.hyprlandKeybinds}
 
           # Example monitor configuration
           # Replace names like HDMI-A-1, DP-1, etc. with the actual names of your monitors (use `hyprctl monitors` to list)
@@ -120,14 +160,26 @@ in
 
           # Alt + Enter to toggle fullscreen
           bind = ALT, Return, fullscreen, 0
+
           # Alt + Tab to cycle between fullscreen windows
           bind = ALT, Tab, cyclenext
           bind = ALT, Tab, bringactivetotop
 
-          exec-once = sleep 1 && bitwarden
+          bind = $mainMod+Ctrl, F, exec, rog-control-center
+          bind = $mainMod Alt, G, exec, powermode-toggle.sh
+
+          ${configHydenix.exec-once}
         '';
         force = true;
         mutable = true;
+      };
+      ".local/bin/powermode-toggle.sh" = {
+        source = ./powermode-toggle.sh;
+        executable = true;
+      };
+      ".local/bin/random-theme.sh" = mkIf cfg.randomOnBoot.theme {
+        source = ./random-theme.sh;
+        executable = true;
       };
     };
   };

@@ -1,0 +1,44 @@
+{
+  "dev": {
+    "timer": {
+      "ignoreIdleInhibitors": false,
+      "idleTimeout": 300,
+      "shortBreakTimeout": 2700,
+      "longBreakTimeout": 5400,
+      "shortBreakDuration": 180,
+      "longBreakDuration": 300
+    },
+    "notification": {
+      "showProgressBar": true,
+      "minimumUpdateDelay": 1
+    }
+  },
+  "game": {
+    "timer": {
+      "ignoreIdleInhibitors": true,
+      "idleTimeout": 600,
+      "shortBreakTimeout": 5400,
+      "longBreakTimeout": 10800,
+      "shortBreakDuration": 120,
+      "longBreakDuration": 480
+    },
+    "notification": {
+      "showProgressBar": true,
+      "minimumUpdateDelay": 1
+    }
+  },
+  "safety": {
+    "timer": {
+      "ignoreIdleInhibitors": false,
+      "idleTimeout": 240,
+      "shortBreakTimeout": 1200,
+      "longBreakTimeout": 3840,
+      "shortBreakDuration": 120,
+      "longBreakDuration": 240
+    },
+    "notification": {
+      "showProgressBar": true,
+      "minimumUpdateDelay": 1
+    }
+  }
+}
