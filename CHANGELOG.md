@@ -1,3 +1,15 @@
+# [1.3.0](https://github.com/ClementBobin/flakeHypr/compare/v1.2.0...v1.3.0) (2025-09-07)
+
+
+### Features
+
+* add multimedia editing tools and improve app launcher ([a223d5b](https://github.com/ClementBobin/flakeHypr/commit/a223d5b4fade841ea5330d3352507f092470ef7d))
+* add new host configurations for cedar, oak, and pine; update modules for improved functionality ([f024a20](https://github.com/ClementBobin/flakeHypr/commit/f024a209a0824ca77b7de664c8914da7c8f82ad2))
+* add Portmaster package for privacy protection tool ([0508e41](https://github.com/ClementBobin/flakeHypr/commit/0508e4107015f5d1686901a884befe672e56edc1))
+* enhance flake.lock with new inputs and configurations for Hyprland ecosystem; remove obsolete entries ([d0cd307](https://github.com/ClementBobin/flakeHypr/commit/d0cd307177638d1e76289b9973f3afb917734db6))
+* update nixpkgs references and streamline deployment scripts; remove obsolete configurations ([4f66eaa](https://github.com/ClementBobin/flakeHypr/commit/4f66eaa761cc467f30322b5b45297c0dd09110d8))
+* update TODO list and enhance podman configuration; mark completed tasks and add new settings ([f513d22](https://github.com/ClementBobin/flakeHypr/commit/f513d220abf4face532533d95df808bf68e14d8c))
+
 # [1.2.0](https://github.com/ClementBobin/flakeHypr/compare/v1.1.0...v1.2.0) (2025-06-25)
 
 
