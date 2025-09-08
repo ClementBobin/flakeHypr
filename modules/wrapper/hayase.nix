@@ -31,7 +31,7 @@ appimageTools.wrapType2 rec {
 
   meta = with lib; {
     description = "A bittorrent streaming application for anime";
-    homepage = "https://github.com/ThaUnknown/miru";
+    homepage = "https://github.com/hayase-app/ui";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ ];
     platforms = [ "x86_64-linux" ];
