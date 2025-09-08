@@ -25,6 +25,10 @@ let
       packages = [ inputs.nix-gaming.packages.${pkgs.system}.star-citizen pkgs.lug-helper ];
       description = "Star Citizen Launcher";
     };
+    geforce-now = {
+      packages = with pkgs; [ gfn-electron];
+      description = "NVIDIA GeForce Now Client";
+    };
   };
 
   gameNames = builtins.attrNames availableGames;
