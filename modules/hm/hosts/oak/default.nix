@@ -18,7 +18,8 @@
       games = {
         mangohud = {
           enable = true;
-          cpu_text = "Ryzen 7 7435HS";
+          cpu.text = ["Ryzen 7 7435HS"];
+          gpu.text = [ "AMD Rembrandt" "RTX 4060 Laptop" ];
         };
         enabledGames = ["minecraft"];
       };

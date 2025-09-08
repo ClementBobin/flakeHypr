@@ -10,9 +10,6 @@ let
     config = {
       android_sdk.accept_license = true;
       allowUnfree = true;
-      permittedInsecurePackages = [
-        "qtwebengine-5.15.19"
-      ];
     };
     overlays = [
       inputs.hydenix.lib.overlays
@@ -22,9 +19,6 @@ let
           config = {
             android_sdk.accept_license = true;
             allowUnfree = true;
-            permittedInsecurePackages = [
-              "qtwebengine-5.15.19"
-            ];
           };
         };
       })
@@ -100,9 +94,7 @@ in
     shell = pkgs.zsh;
   };
 
-  hardware.nvidia = {
-    prime.amdgpuBusId = lib.mkForce "PCI:36:0:0";
-  };
+  hardware.nvidia.prime.amdgpuBusId = lib.mkForce "PCI:36:0:0";
 
   #boot.kernel.sysctl."net.ipv4.ip_unprivileged_port_start" = 0;
 }
