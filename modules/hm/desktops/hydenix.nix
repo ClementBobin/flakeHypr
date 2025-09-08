@@ -168,6 +168,10 @@ in
           bind = $mainMod+Ctrl, F, exec, rog-control-center
           bind = $mainMod Alt, G, exec, powermode-toggle.sh
 
+          bind = $mainMod Alt, R, exec, random-theme.sh -all
+
+          bind = $mainMod, M, exec, spotify
+
           ${configHydenix.exec-once}
         '';
         force = true;
@@ -177,9 +181,16 @@ in
         source = ./powermode-toggle.sh;
         executable = true;
       };
+      ".local/bin/nvidia-run" = {
+        source = ./nvidia-run.sh;
+        executable = true;
+      };
       ".local/bin/random-theme.sh" = mkIf cfg.randomOnBoot.theme {
         source = ./random-theme.sh;
         executable = true;
+      };
+      ".local/share/waybar/layouts/mirage.jsonc" = {
+        source = ./mirage-waybar.jsonc;
       };
     };
   };

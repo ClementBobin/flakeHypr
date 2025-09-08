@@ -63,9 +63,12 @@ fi
 
 # Apply theme if set
 if [ -n "$THEME_TO_APPLY" ]; then
-    echo "Applying theme: $THEME_TO_APPLY"
+    notify-send "Applying theme: $THEME_TO_APPLY"
     "$HOME/.local/lib/hyde/theme.switch.sh" -s "$THEME_TO_APPLY"
 fi
+
+# wait 3 seconds to ensure theme is applied before changing wallpaper
+sleep 3
 
 # Apply random wallpaper if requested
 if [ "$APPLY_RANDOM_WALLPAPER" = true ]; then
