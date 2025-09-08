@@ -12,6 +12,10 @@
     # Hydenix and its nixpkgs - kept separate to avoid conflicts
     hydenix.url = "github:richen604/hydenix/v4.9.0";
 
+    caelestia-shell.url = "github:caelestia-dots/shell";
+    caelestia-cli.url = "github:caelestia-dots/cli";
+
+
     # Nix-index-database - for comma and command-not-found
     nix-index-database = {
       url = "github:nix-community/nix-index-database";
