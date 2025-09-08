@@ -19,6 +19,7 @@ in
     editors = lib.mkOption {
       type = lib.types.listOf (lib.types.enum (lib.attrNames editorsToPackage));
       default = [];
+      example = [ "onlyoffice" "okular" ];
       description = "List of document editors to install";
     };
   };
