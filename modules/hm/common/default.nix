@@ -48,10 +48,10 @@ in
     ./shell/tools.nix
 
     ./utilities/safety/ianny.nix
+    ./utilities/api.nix
     ./utilities/app-launcher.nix
     ./utilities/filezilla.nix
     ./utilities/kde-connect.nix
-    ./utilities/scalar.nix
     ./utilities/stacer.nix
 
     inputs.nix-podman-stacks.homeModules.nps

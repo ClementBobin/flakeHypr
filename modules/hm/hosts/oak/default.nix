@@ -72,7 +72,10 @@
         matrix.clients = ["element"];
       };
       utilities = {
-        scalar.enable = true;
+        api = {
+          scalar.enable = true;
+          autoswagger.enable = true;
+        };
         safety.ianny = {
           enable = true;
           presets = ["dev" "game"];
