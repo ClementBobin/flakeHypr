@@ -7,24 +7,66 @@ let
   portmasterPkg = pkgs.callPackage ./package.nix {};
 in {
   options.services.portmaster = {
-    enable = mkEnableOption "Portmaster application firewall";
+    enable = mkEnableOption (mdDoc ''
+      Portmaster application firewall and network monitoring tool
+
+      The Portmaster is a free and open-source application firewall that
+      puts you back in charge over your device's network traffic. It
+      automatically blocks thousands of trackers, protects against
+      malware, and gives you deep insights into which apps are doing what.
+
+      **Warning**: Enabling this service will modify your system's
+      firewall rules. Make sure to understand the implications before
+      enabling.
+    '');
 
     package = mkOption {
       type = types.package;
       default = portmasterPkg;
-      description = "Portmaster package to use";
+      example = literalExpression "pkgs.portmaster";
+      description = mdDoc ''
+        The Portmaster package to use. This allows overriding the default
+        package with a custom version or build.
+
+        Defaults to the Portmaster package defined in this module.
+      '';
     };
 
     devmode.enable = mkOption {
       type = types.bool;
       default = false;
-      description = "Enable development mode (makes UI available at 127.0.0.1:817)";
+      example = true;
+      description = mdDoc ''
+        Enable development mode for Portmaster.
+
+        When enabled, this makes the Portmaster UI available at
+        `http://127.0.0.1:817` instead of the usual integration with
+        the system's browser extension. This is useful for debugging
+        and development purposes.
+
+        **Note**: Enabling this will open TCP port 817 in the firewall.
+      '';
     };
 
     extraArgs = mkOption {
       type = types.listOf types.str;
       default = [];
-      description = "Extra command-line arguments for portmaster-core";
+      example = [ "--verbose" "--no-autostart" ];
+      description = mdDoc ''
+        Extra command-line arguments to pass to the portmaster-core process.
+
+        These arguments are appended after the default arguments and any
+        development mode arguments. For a complete list of available
+        arguments, refer to the Portmaster documentation.
+
+        Common arguments include:
+        - `--verbose`: Enable verbose logging
+        - `--log-level=debug`: Set specific log level
+        - `--no-autostart`: Don't autostart components
+
+        **Warning**: Use caution when adding arguments as they may affect
+        the stability or security of the Portmaster service.
+      '';
     };
   };
 

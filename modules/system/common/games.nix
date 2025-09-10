@@ -20,46 +20,142 @@ in {
       type = lib.types.listOf (lib.types.enum (lib.attrNames clientToPackage));
       default = [];
       description = ''
-        List of gaming clients to enable. Supported options are "steam", "lutris",
-        "heroic", and "nexus". This allows you to specify which gaming clients should be
-        configured in your NixOS setup.
+        List of gaming clients to install and configure.
+        
+        Supported options:
+        - "steam": Valve's Steam gaming platform with Proton compatibility
+        - "lutris": Open gaming platform that manages games from different sources
+        - "heroic": Alternative game launcher for Epic Games Store and GOG
+        - "nexus": Nexus Mods application for managing game modifications
+        
+        Note: Enabling "steam" automatically configures additional components
+        like gamescope and Proton compatibility tools.
       '';
     };
 
     steam.compatToolsPath = lib.mkOption {
       type = lib.types.path;
       default = "${builtins.getEnv "HOME"}/.steam/root/compatibilitytools.d";
-      description = "Path for Steam compatibility tools";
+      example = "/home/user/.local/share/Steam/compatibilitytools.d";
+      description = ''
+        Path where Steam compatibility tools (like Proton-GE) should be installed.
+        
+        This directory is used by Steam to find custom Proton versions and
+        other compatibility tools. The path is exposed via the
+        STEAM_EXTRA_COMPAT_TOOLS_PATHS environment variable.
+        
+        Defaults to the standard Steam installation location.
+      '';
     };
 
     gamemode = {
-      enable = lib.mkEnableOption "Enable GameMode support";
+      enable = lib.mkEnableOption ''
+        Feral Interactive's GameMode optimization daemon
+        
+        GameMode is a tool that optimizes Linux system performance on demand.
+        When activated, it applies various optimizations like:
+        - CPU governor tuning
+        - Process priority (nice level) adjustment
+        - I/O priority tuning
+        - Kernel scheduler adjustment
+        - GPU performance mode setting (for supported GPUs)
+        
+        Games and applications can request GameMode through the libgamemode library.
+      '';
+
       enableRenice = lib.mkOption {
         type = lib.types.bool;
         default = true;
-        description = "Enable renice support in GameMode";
+        description = ''
+          Enable process priority (renice) optimization in GameMode.
+          
+          When enabled, GameMode will adjust the nice level of the game process
+          and its children to give them higher scheduling priority.
+          
+          This generally improves game performance but may affect system
+          responsiveness for other applications while gaming.
+        '';
       };
+
       notificationCommands = lib.mkOption {
         type = lib.types.attrsOf lib.types.str;
         default = {
           start = "notify-send 'GameMode started'";
           end = "notify-send 'GameMode ended'";
         };
-        description = "Custom notification commands for GameMode start and end events";
+        example = lib.literalExpression ''
+          {
+            start = "notify-send -u critical 'GameMode' 'Optimizations activated'";
+            end = "notify-send -u normal 'GameMode' 'Optimizations deactivated'";
+          }
+        '';
+        description = ''
+          Custom shell commands to execute when GameMode starts and stops.
+          
+          These commands are executed as the user who launched the game.
+          The default configuration uses notify-send to display desktop
+          notifications.
+          
+          You can customize these to:
+          - Change notification appearance
+          - Log GameMode events
+          - Trigger other automation scripts
+          - Control RGB lighting or other peripherals
+        '';
       };
+
       generalSettings = lib.mkOption {
         type = lib.types.attrsOf (lib.types.oneOf [ lib.types.int lib.types.bool lib.types.str ]);
         default = {
           inhibit_screensaver = 1;
         };
-        description = "General GameMode settings";
+        example = lib.literalExpression ''
+          {
+            inhibit_screensaver = 1;
+            desiredgov = "performance";
+            softrealtime = "auto";
+          }
+        '';
+        description = ''
+          General GameMode configuration settings.
+          
+          Common settings include:
+          - inhibit_screensaver: Prevent screen blanking during gameplay (0/1)
+          - desiredgov: CPU governor to use ("performance", "powersave", etc.)
+          - softrealtime: Enable soft real-time scheduling ("auto", "on", "off")
+          - ioprio: I/O priority for game processes
+          - renice: Nice level adjustment value
+          
+          See the GameMode documentation for a complete list of available options.
+        '';
       };
+
       gpuSettings = lib.mkOption {
         type = lib.types.attrsOf lib.types.str;
         default = {
           apply_gpu_optimisations = "accept-responsibility";
         };
-        description = "GPU-related GameMode settings";
+        example = lib.literalExpression ''
+          {
+            apply_gpu_optimisations = "accept-responsibility";
+            gpu_device = "0";
+            amd_performance_level = "high";
+          }
+        '';
+        description = ''
+          GPU-specific optimization settings for GameMode.
+          
+          These settings control GPU performance states and optimizations.
+          The "accept-responsibility" value is required to acknowledge that
+          GPU overclocking/optimizations may potentially damage hardware.
+          
+          GPU vendor-specific options:
+          - AMD: amd_performance_level, amd_power_profile
+          - NVIDIA: nvidia_clock_offset, nvidia_mem_offset
+          - Intel: intel_max_perf, intel_min_perf
+          
+          Use with caution and ensure proper cooling for your GPU.
+        '';
       };
     };
   };
