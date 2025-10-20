@@ -3,7 +3,7 @@
 let
   scalar-deb = pkgs.fetchurl {
     url = "https://download.scalar.com/linux/deb/x64";
-    sha256 = "sha256-25TbihHJ6cVQvktI8MW/upP46tEYX7/9DJiS3qPBIk0=";
+    sha256 = "sha256-G+opvZ6AIeFGaSRRrNQwTyIKqvINhhTqmsVyG4QQca0=";
   };
 
   scalar-app = pkgs.stdenv.mkDerivation {
