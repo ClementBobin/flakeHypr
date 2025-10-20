@@ -12,6 +12,10 @@ let
     phpstorm = jetbrains.phpstorm;
     rider = jetbrains.rider;
     webstorm = jetbrains.webstorm;
+    pycharm = jetbrains.pycharm-community;
+    idea = jetbrains.idea-ultimate;
+    clion = jetbrains.clion;
+    goland = jetbrains.goland;
   };
 
   otherIDEs = with pkgs; {
