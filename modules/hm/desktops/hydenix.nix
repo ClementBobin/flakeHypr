@@ -19,8 +19,7 @@ in
 
   imports = [
     ../common
-    inputs.hydenix.lib.homeModules
-    inputs.nix-index-database.homeModules.nix-index
+    inputs.hydenix.homeModules.default
   ];
 
   options.desktops.hydenix = {
@@ -165,12 +164,12 @@ in
           bind = ALT, Tab, cyclenext
           bind = ALT, Tab, bringactivetotop
 
-          bind = $mainMod+Ctrl, F, exec, rog-control-center
           bind = $mainMod Alt, G, exec, powermode-toggle.sh
 
           bind = $mainMod Alt, R, exec, random-theme.sh -all
 
           bind = $mainMod, M, exec, spotify
+          bind = $mainMod, O, exec, obsidian
 
           ${configHydenix.exec-once}
         '';
@@ -189,9 +188,9 @@ in
         source = ./random-theme.sh;
         executable = true;
       };
-      ".local/share/waybar/layouts/mirage.jsonc" = {
-        source = ./mirage-waybar.jsonc;
-      };
+      # ".local/share/waybar/layouts/mirage.jsonc" = {
+      #   source = ./mirage-waybar.jsonc;
+      # };
     };
   };
 }

@@ -14,7 +14,6 @@
     ./networks/wol.nix
 
     ./nix
-    ./nix/linux-cachyos.nix
     ./nix/nix-garbage.nix
     ./nix/polkit.nix
 

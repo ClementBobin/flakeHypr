@@ -1,4 +1,4 @@
-{ inputs, lib, config, ... }:
+{ inputs, lib, config, pkgs, ... }:
 let
   cfg = config.modules.hm.nh;
 in
@@ -14,6 +14,7 @@ in
     ./dev/environments/containers.nix
     ./dev/environments/editor.nix
     ./dev/languages/dotnet.nix
+    ./dev/languages/kotlin.nix
     ./dev/languages/node.nix
     ./dev/languages/python.nix
     ./dev/languages/rust.nix
@@ -35,14 +36,18 @@ in
     ./games/joystick.nix
     ./games/mangohud.nix
 
+    ./multimedia/editing/audio.nix
     ./multimedia/editing/image.nix
     ./multimedia/editing/video.nix
+    ./multimedia/management-utility.nix
     ./multimedia/player.nix
     ./multimedia/rambox.nix
     ./multimedia/remote-desktop.nix
     ./multimedia/streaming.nix
 
     ./network/tunnel.nix
+
+    ./security/burp.nix
 
     ./shell/disk-usage.nix
     ./shell/tools.nix
@@ -77,7 +82,7 @@ in
 
   config = {
     programs = {
-      home-manager.enable = true;
+      #home-manager.enable = true;
       nh = {
         enable = cfg.enable;
         clean = {

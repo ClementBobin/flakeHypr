@@ -11,19 +11,14 @@ let
     config = {
       allowUnfree = true;
     };
-    overlays = [
-      inputs.hydenix.overlays.default
-    ];
   };
 in
 {
   nixpkgs.pkgs = pkgs;
 
   imports = [
-    inputs.home-manager.nixosModules.home-manager
-    inputs.hydenix.nixosModules.default
     ./hardware-configuration.nix
-    ../../modules/system/hosts/oak
+    ../../modules/system/hosts/seed-birch
 
 
     # === GPU-specific configurations ===
@@ -35,7 +30,6 @@ in
 
     #! EDIT THIS SECTION
     # === Other common modules ===
-    inputs.nixos-hardware.nixosModules.asus-fa507nv
     inputs.nixos-hardware.nixosModules.common-pc-ssd
     inputs.nixos-hardware.nixosModules.common-hidpi # High-DPI displays
     inputs.nixos-hardware.nixosModules.common-pc-laptop # Laptops
@@ -52,14 +46,8 @@ in
       {
         # hm import
         imports = [
-          ../../modules/hm/desktops/hydenix.nix
-          ../../modules/hm/hosts/oak
+          ../../modules/hm/hosts/seed-birch
         ];
-
-        desktops.hydenix = {
-          enable = true;
-          hostname = "oak";
-        };
       };
   };
 
@@ -75,21 +63,6 @@ in
     ];
     shell = pkgs.zsh;
   };
-
-  hydenix = {
-    enable = true;
-    hostname = "oak";
-    timezone = "Europe/Paris";
-    locale = "fr_FR.UTF-8";
-    gaming.enable = false;
-  };
-
-  hardware = {
-    asus.battery.chargeUpto = 60;
-    nvidia.prime.amdgpuBusId = lib.mkForce "PCI:36:0:0";
-  };
-
-  #boot.kernel.sysctl."net.ipv4.ip_unprivileged_port_start" = 0;
 
   system.stateVersion = "25.05";
 }

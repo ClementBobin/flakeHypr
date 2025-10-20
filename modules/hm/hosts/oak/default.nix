@@ -26,10 +26,12 @@
       multimedia = {
         editing.image.enable = true;
         player = {
-          clients = ["mpv" "jellyfin" "miru"];
+          clients = ["mpv" "miru"];
           jellyfin.rpc = true;
         };
         rambox.enable = true;
+        #remote-desktop.clients = ["remmina"];
+        management-utility.clients = ["nwg-displays"];
       };
       browser.clients = ["firefox"];
       documentation = {
@@ -38,7 +40,7 @@
       };
       dev = {
         environments = {
-          ides = ["vs-code" "android-studio" "datagrip" "webstorm" "phpstorm" "rider"];
+          ides = ["vs-code" "datagrip" "rider"];
           containers = {
             engine = ["podman"];
             enableSocket = true;
@@ -83,6 +85,7 @@
         enable = true;
         excludedDirs = ["node_modules" "vendor" "storage" ".idea"];
       };
+      security.burp.enable = true;
     };
   };
 }
