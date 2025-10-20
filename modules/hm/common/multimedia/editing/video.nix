@@ -5,12 +5,12 @@ let
 in
 {
   options.modules.hm.multimedia.editing.video = {
-    enable = lib.mkEnableOption "Enable OpenShot video editor";
+    enable = lib.mkEnableOption "Enable video editor";
   };
 
   config = lib.mkIf cfg.enable {
     home.packages = (with pkgs; [
-      openshot-qt
+      lightworks
     ]);
   };
 }

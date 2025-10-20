@@ -1,19 +1,21 @@
 { pkgs, config, lib, ... }:
 
 let
-  cfg = config.modules.hm.multimedia.obs;
+  cfg = config.modules.hm.multimedia.streaming;
 in
 {
-  options.modules.hm.multimedia.obs = {
-    enable = lib.mkEnableOption "Enable OBS Studio for video recording and streaming";
+  options.modules.hm.multimedia.streaming = {
+    obs.enable = lib.mkEnableOption "Enable OBS Studio for video recording and streaming";
+    kooha.enable = lib.mkEnableOption "Enable Kooha for simple screen recording";
   };
 
-  config = lib.mkIf cfg.enable {
-    home.packages = (with pkgs; [
-      v4l-utils
-    ]);
+  config = {
+    home.packages = (with pkgs; []
+      ++ (lib.optional cfg.kooha.enable kooha)
+      ++ (lib.optional cfg.obs.enable v4l-utils)
+    );
 
-    programs.obs-studio = {
+    programs.obs-studio = lib.mkIf cfg.obs.enable {
       enable = true;
       plugins = with pkgs.obs-studio-plugins; [
         wlrobs
