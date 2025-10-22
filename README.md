@@ -168,6 +168,7 @@ We welcome contributions to flakeHypr! Here's how you can help:
 
 Open an issue via GitHub
 Include:
+    
     - Your NixOS version
     - Relevant hardware details
     - Logs and config snippets
@@ -177,6 +178,7 @@ Include:
 Create an issue and label it enhancement
 
 Clearly describe:
+    
     - The use case
     - Suggested implementation or configuration options
 
