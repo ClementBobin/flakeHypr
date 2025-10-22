@@ -76,5 +76,11 @@
         oak = self.nixosConfigurations.oak.config.system.build.toplevel;
         cedar = self.nixosConfigurations.cedar.config.system.build.toplevel;
       };
+
+      nixosModules = {
+        common = import ./modules/system/common;
+        hm = import ./modules/hm/common;
+        wrapper = import ./modules/wrapper;
+      };
     };
 }
