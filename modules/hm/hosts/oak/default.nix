@@ -74,7 +74,7 @@
         matrix.clients = ["element"];
       };
       utilities = {
-        api.scalar.enable = true;
+        api.clients = ["scalar" "yaak"];
         safety.ianny = {
           enable = true;
           presets = ["dev" "game"];
