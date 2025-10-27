@@ -7,6 +7,7 @@ let
   clientToPackage = {
     scalar = (import ../../../wrapper/scalar.nix { inherit pkgs lib config; }).scalarApp;
     yaak   = pkgs.yaak;
+    requestly = pkgs.requestly;
   };
 
   # Get packages for enabled clients
