@@ -11,9 +11,6 @@
     hydenix.url = "github:richen604/hydenix";
     nixos-hardware.url = "github:nixos/nixos-hardware/master";
 
-    caelestia-shell.url = "github:caelestia-dots/shell";
-    caelestia-cli.url = "github:caelestia-dots/cli";
-
     nix-podman-stacks = {
       url = "github:Tarow/nix-podman-stacks";
       inputs.nixpkgs.follows = "nixpkgs";
