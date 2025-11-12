@@ -5,15 +5,15 @@
 
 let
   pname = "hayase";
-  version = "6.4.23";
-  hash = "sha256-lP1F1jFXenFDyLX04YZZ00KhG21LUU2OaI0OvHxpgNo=";
+  version = "6.4.37";
+  hash = "sha256-7fXu8ySC8FioLA1PlyorS6F7Kv34nlo8Djhj54kCEOI=";
 in
 
 appimageTools.wrapType2 rec {
   inherit pname version;
 
   src = fetchurl {
-    url = "https://github.com/hayase-app/ui/releases/download/v${version}/linux-hayase-${version}-linux.AppImage";
+    url = "https://github.com/hayase-app/docs/releases/download/v${version}/linux-hayase-${version}-linux.AppImage";
     name = "${pname}-${version}.AppImage";
     inherit hash;
   };
