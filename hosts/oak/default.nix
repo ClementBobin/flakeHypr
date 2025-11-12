@@ -10,6 +10,9 @@ let
     inherit system;
     config = {
       allowUnfree = true;
+      permittedInsecurePackages = [
+        "jitsi-meet-1.0.8792"
+      ];
     };
     overlays = [
       inputs.hydenix.overlays.default
@@ -23,6 +26,7 @@ in
     inputs.home-manager.nixosModules.home-manager
     inputs.hydenix.nixosModules.default
     ./hardware-configuration.nix
+    #./temp.nix
     ../../modules/system/hosts/oak
 
 
@@ -65,7 +69,7 @@ in
 
   users.users.${vars.user} = {
     isNormalUser = true;
-    #initialPassword = "${vars.user}";
+    initialPassword = "epsilon21C";
     extraGroups = [
       "wheel"
       "networkmanager"
