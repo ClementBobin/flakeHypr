@@ -69,7 +69,7 @@ in
 
   users.users.${vars.user} = {
     isNormalUser = true;
-    initialPassword = "epsilon21C";
+    #initialPassword = "mirage";
     extraGroups = [
       "wheel"
       "networkmanager"
