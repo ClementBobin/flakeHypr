@@ -18,7 +18,7 @@ in
     settings = lib.mkOption {
       type = lib.types.attrsOf lib.types.anything;
       default = {};
-      description = "Custom settings for photoprism configuration";
+      description = "Custom settings for vaultwarden configuration";
     };
   };
 

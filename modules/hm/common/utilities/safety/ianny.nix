@@ -32,12 +32,13 @@ let
     minimum_update_delay = ${toString settings.notification.minimumUpdateDelay}
   '';
 
-  # Create preset files
+  # Create preset files (respect cfg.presets)
+  selectedPresets = lib.filterAttrs (name: _: lib.elem name cfg.presets) presets;
   presetFiles = lib.mapAttrs' (name: preset:
     lib.nameValuePair ".config/io.github.zefr0x.ianny/preset/${name}.toml" {
       text = generateToml name preset;
     }
-  ) presets;
+  ) selectedPresets;
 
   # Custom configuration file content
   customConfig = generateToml "custom" cfg.settings;
@@ -205,6 +206,21 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = cfg.mode != "preset" || cfg.presets != [];
+        message = "ianny: when mode = \"preset\", at least one preset must be listed in ianny.presets.";
+      }
+      {
+        assertion = cfg.defaultPreset == null || lib.elem cfg.defaultPreset cfg.presets;
+        message = "ianny: defaultPreset must be one of ianny.presets (or null).";
+      }
+      {
+        assertion = lib.all (p: lib.hasAttr p presets) cfg.presets;
+        message = "ianny: every preset in ianny.presets must exist in config.json.";
+      }
+    ];
+
     home.packages = [
       pkgs.ianny
     ];
@@ -218,8 +234,6 @@ in
         ".local/bin/ianny-preset-selector" = {
           text = selectorScriptContent;
           executable = true;
-          force = true;
-          mutable = true;
         };
       }
     ];
@@ -238,6 +252,7 @@ in
         Description = "ianny - Safety net for Hydenix desktop";
         After = [ "graphical-session.target" ];
         PartOf = [ "graphical-session.target" ];
+        ConditionPathExists = "%h/.config/io.github.zefr0x.ianny/config.toml";
       };
       Service = {
         ExecStart = "${pkgs.ianny}/bin/ianny";

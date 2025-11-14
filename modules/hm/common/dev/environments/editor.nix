@@ -12,6 +12,10 @@ let
     phpstorm = jetbrains.phpstorm;
     rider = jetbrains.rider;
     webstorm = jetbrains.webstorm;
+    pycharm = jetbrains.pycharm-community;
+    idea = jetbrains.idea-ultimate;
+    clion = jetbrains.clion;
+    goland = jetbrains.goland;
   };
 
   otherIDEs = with pkgs; {
@@ -24,13 +28,13 @@ let
   allIDEs = jetbrainsIDEs // otherIDEs;
 
   # Get packages for enabled IDEs (excluding vs-code which is handled separately)
-  idePackages = lib.concatMap (ide:
+  idePackages = lib.unique (lib.concatMap (ide:
     let pkg = allIDEs.${ide};
     in
       if pkg == null then []
       else if lib.isList pkg then pkg
       else [ pkg ]
-  ) cfg.ides;
+  ) cfg.ides);
 
   # Get just the JetBrains packages for remote support
   jetbrainsPackages = lib.concatMap (ide:
@@ -45,7 +49,7 @@ in
       type = lib.types.listOf (lib.types.enum (lib.attrNames allIDEs));
       default = [];
       example = [ "webstorm" "android-studio" "datagrip" "vs-code" ];
-      description = "List of IDEs to install";
+      description = "List of IDEs to install. Note: 'vs-code' is enabled via programs.vscode; others are added to home.packages.";
     };
   };
 
@@ -58,10 +62,7 @@ in
         ides = jetbrainsPackages;
       };
 
-      vscode = {
-        enable = lib.elem "vs-code" cfg.ides;
-        package = pkgs.vscode;
-      };
+      vscode.enable = lib.elem "vs-code" cfg.ides;
     };
   };
 }

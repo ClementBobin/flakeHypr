@@ -2,7 +2,6 @@
 
 let
   cfg = config.modules.system.hardware.powersave;
-  kernelVersion = config.boot.kernelPackages.kernel.version;
 
   # Import scripts as derivations
   power-benchmark = pkgs.writeShellScript "power-benchmark" (builtins.readFile ./power-benchmark.sh);
@@ -40,32 +39,57 @@ let
   '';
 in {
   options.modules.system.hardware.powersave = {
-    enable = lib.mkEnableOption "Enable power saving configuration";
+    enable = lib.mkEnableOption "Enable comprehensive power saving configuration for laptops";
 
     architecture = lib.mkOption {
       type = lib.types.enum [ "intel" "amd" ];
       default = "amd";
-      description = "Select the architecture for power saving optimizations";
+      description = ''
+        Select the CPU architecture for power saving optimizations.
+
+        This determines which specific power management features and kernel parameters
+        are applied for your processor type.
+      '';
+      example = "intel";
     };
 
     enableBenchmarkTools = lib.mkOption {
       type = lib.types.bool;
       default = true;
-      description = "Install power benchmarking and tuning tools";
+      description = ''
+        Install power benchmarking and tuning tools including:
+        - power-tools: Comprehensive power management utility
+        - power-benchmark: Power consumption measurement script
+        - power-tuning: System power tuning script
+      '';
     };
 
     batteryHealth = {
-      enable = lib.mkEnableOption "Enable battery health preservation features";
+      enable = lib.mkEnableOption "Enable battery health preservation features including charge thresholds";
+
       chargeThresholds = {
         start = lib.mkOption {
           type = lib.types.int;
-          default = cfg.batteryHealth.chargeThresholds.stop - 5;
-          description = "Start charging when battery falls below this percentage";
+          default = lib.max 0 (cfg.batteryHealth.chargeThresholds.stop - 5);
+          description = ''
+            Start charging when battery level falls below this percentage.
+
+            Recommended to keep 5-10% below the stop threshold for optimal
+            battery health preservation.
+          '';
+          example = 75;
         };
+
         stop = lib.mkOption {
           type = lib.types.int;
           default = 80;
-          description = "Stop charging when battery reaches this percentage";
+          description = ''
+            Stop charging when battery reaches this percentage.
+
+            Keeping maximum charge level at 80-85% significantly extends
+            battery lifespan.
+          '';
+          example = 80;
         };
       };
     };
@@ -73,21 +97,40 @@ in {
     forcePerfOnAC = lib.mkOption {
       type = lib.types.bool;
       default = true;
-      description = "Force performance mode when on AC power (overrides power profile daemon)";
+      description = ''
+        Force performance mode when connected to AC power.
+
+        This overrides power profile daemon settings to ensure maximum
+        performance when plugged in, while maintaining power savings
+        on battery.
+      '';
     };
 
     disk = lib.mkOption {
       type = lib.types.listOf lib.types.str;
       default = [];
-      description = "List of disks for power management";
+      description = ''
+        List of disk devices for power management.
+
+        Example: ["sda" "nvme0n1"]
+        These disks will have advanced power management features applied
+        including APM levels and spindown timeouts.
+      '';
+      example = [ "nvme0n1" ];
     };
 
     nvidiaPowerManagement = {
-      enable = lib.mkEnableOption "Enable NVIDIA power management features";
+      enable = lib.mkEnableOption "Enable NVIDIA GPU power management features";
+
       dynamicBoost = lib.mkOption {
         type = lib.types.bool;
         default = true;
-        description = "Enable dynamic boost for NVIDIA GPUs";
+        description = ''
+          Enable NVIDIA Dynamic Boost technology.
+
+          Dynamically balances power between CPU, GPU, and GPU memory
+          for optimal performance in gaming and creative workloads.
+        '';
       };
     };
 
@@ -96,7 +139,10 @@ in {
       default = true;
       description = ''
         Enable basic power profile management through kernel parameters.
+
         Note: For advanced control (fan curves, lighting, etc.) use asusctl instead.
+        This provides system-level power management while asusctl offers
+        hardware-specific features.
       '';
     };
 
@@ -104,18 +150,32 @@ in {
       enable = lib.mkOption {
         type = lib.types.bool;
         default = false;
-        description = "Enable ASUS hardware support for power management.";
+        description = ''
+          Enable ASUS-specific hardware support for power management.
+
+          This enables asusctl and supergfxctl services for comprehensive
+          control over ASUS laptop features including:
+          - GPU mode switching (Integrated, Hybrid, Dedicated)
+          - Fan curve control
+          - Keyboard lighting
+          - Performance profiles
+        '';
       };
 
       armouryCrate = lib.mkOption {
         type = lib.types.bool;
         default = cfg.asus.enable;
-        description = "Enable Armoury Crate for ASUS hardware management.";
+        description = ''
+          Enable Armoury Crate functionality for ASUS hardware management.
+
+          Provides GUI-like control over system performance profiles and
+          hardware features through the asusctl service.
+        '';
       };
     };
 
     override = {
-      thermald = lib.mkEnableOption "Overide thermald params";
+      thermald = lib.mkEnableOption "Override default thermald parameters with custom thermal management settings";
     };
   };
 
@@ -135,7 +195,6 @@ in {
     # Enable power management
     powerManagement = {
       enable = true;
-      cpuFreqGovernor = lib.mkDefault "powersave";
       powertop.enable = true;
     };
 
@@ -218,7 +277,7 @@ in {
           turbo = "never";
         };
         charger = {
-          governor = if cfg.architecture == "amd" then "ondemand" else "performance";
+          governor = if cfg.architecture == "amd" then "schedutil" else "performance";
           turbo = "auto";
         };
       };

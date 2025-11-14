@@ -6,7 +6,8 @@ let
   # Map clients to their packages
   clientsToPackage = with pkgs; {
     parsec = [ parsec-bin ];
-    rustdesk = [ rustdesk ];
+    rustdesk = [ rustdesk-flutter ];
+    remmina = [ remmina ];
   };
 
   # Get packages for enabled clients

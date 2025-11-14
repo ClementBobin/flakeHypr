@@ -177,6 +177,7 @@ in
     };
 
     # Integration for matrix
+    # TODO: Enable matrix-hookshot integration once required configuration and dependencies are in place.
     #services = {
       #matrix-hookshot.enable = true;
     #};

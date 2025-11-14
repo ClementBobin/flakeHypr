@@ -51,6 +51,7 @@ let
   fetchOfficialTheme = name:
     let
       theme = officialThemes.${name};
+      sanitizedName = lib.strings.sanitizeDerivationName name;
       src = pkgs.fetchzip {
         url = "https://github.com/${themeRepo.owner}/${themeRepo.repo}/releases/download/${themeRepo.tag}/${theme.file}";
         sha256 = theme.sha256;
@@ -58,8 +59,9 @@ let
       };
       themeDir = "${src}/${lib.removeSuffix ".zip" theme.file}";
     in
-    pkgs.runCommand "kando-theme-${name}" {} ''
-      mkdir -p $out
+    pkgs.runCommand "kando-theme-${sanitizedName}" {} ''
+      mkdir -p "$out"
+      set -eu
       
       if [ ! -d "${themeDir}" ]; then
         echo "Error: Theme directory not found: ${themeDir}"
@@ -68,11 +70,11 @@ let
         exit 1
       fi
       
-      cp -r "${themeDir}"/* $out/
+      cp -r "${themeDir}"/* "$out/"
       
       if [ ! -f "$out/theme.json5" ]; then
         echo "Error: Required file theme.json5 missing in theme"
-        ls -la $out
+        ls -la "$out"
         exit 1
       fi
     '';

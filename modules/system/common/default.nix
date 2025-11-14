@@ -14,7 +14,6 @@
     ./networks/wol.nix
 
     ./nix
-    ./nix/linux-cachyos.nix
     ./nix/nix-garbage.nix
     ./nix/polkit.nix
 
@@ -31,7 +30,7 @@
     ./server/media/paperless.nix
     ./server/media/photoprism.nix
     ./server/password-manager/vaultwarden.nix
-    ./server/storage/gitea.nix
+    ./server/storage/forgejo.nix
     ./server/storage/syncthing.nix
     ./server/meal.nix
     ./server/print.nix

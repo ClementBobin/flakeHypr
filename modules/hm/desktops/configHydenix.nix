@@ -20,9 +20,9 @@ let
       null;
 
   startupCmds = [
-    (lib.optionalString (randomCommand != null) randomCommand)
     "sleep 1"
     (lib.optionalString kandoEnabled "kando")
+    (lib.optionalString (randomCommand != null) randomCommand)
   ];
   filteredCmds = lib.filter (x: x != "") startupCmds;
   execCmd = lib.concatStringsSep " && " filteredCmds;

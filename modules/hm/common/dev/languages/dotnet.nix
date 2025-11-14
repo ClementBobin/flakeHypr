@@ -18,7 +18,7 @@ in
     enable = lib.mkEnableOption "Enable .NET development environment";
     sdk-versions = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      default = [ "8" ];
+      default = [ "9" ];
       description = "List of .NET SDK versions to install (e.g. ["6" "7" "8"])";
     };
     extraPackages = lib.mkOption {

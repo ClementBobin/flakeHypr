@@ -42,13 +42,6 @@ let
     };
   };
 
-  ngrokConfig = lib.mkIf (builtins.elem "ngrok" cfg.services && cfg.ngrok.configPath != null) {
-    home.file.".config/ngrok/ngrok.yml" = {
-      source = cfg.ngrok.configPath;
-      target.recursive = true;
-    };
-  };
-
 in {
   options.modules.hm.network.tunnel = {
     services = lib.mkOption {
@@ -84,11 +77,6 @@ in {
         default = 3000;
         description = "Default port for ngrok";
       };
-      configPath = lib.mkOption {
-        type = lib.types.nullOr lib.types.str;
-        default = null;
-        description = "Path to ngrok config file";
-      };
     };
   };
 
@@ -99,6 +87,5 @@ in {
     }
 
     cloudflareTokenConfig
-    ngrokConfig
   ];
 }

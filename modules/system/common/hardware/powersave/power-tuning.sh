@@ -25,12 +25,12 @@ EOF
         echo "pcie_aspm=$(cat /sys/module/pcie_aspm/parameters/policy)" >> "$SETTINGS_FILE"
     fi
 
-    # Backup runtime PM settings for some common devices
+    # Backup runtime PM settings (store as path|value pairs)
     for device in /sys/bus/pci/devices/*/power/control; do
         if [[ -f "$device" ]]; then
-            local device_path=$(dirname "$device")
-            local device_id=$(basename "$(dirname "$device_path")")
-            echo "runtime_pm_${device_id}=$(cat "$device")" >> "$SETTINGS_FILE"
+            local device_path
+            device_path=$(dirname "$device")
+            echo "runtime_pm:${device}|$(cat "$device")" >> "$SETTINGS_FILE"
         fi
     done
 }
@@ -51,6 +51,15 @@ restore_settings() {
         set_cpu_governor "$cpu_governor"
     fi
 
+    # Restore runtime PM paths
+    while IFS= read -r line; do
+        [[ $line == runtime_pm:* ]] || continue
+        local payload=${line#runtime_pm:}
+        local path=${payload%%|*}
+        local val=${payload#*|}
+        echo "$val" | sudo tee "$path" >/dev/null || true
+    done < "$SETTINGS_FILE"
+
     log "Settings restored"
 }
 
@@ -59,7 +68,7 @@ set_cpu_governor() {
     local available_governors
     available_governors=$(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors 2>/dev/null || echo "")
 
-    if [[ ! "$available_governors" =~ $governor ]]; then
+    if ! grep -Eq "(^|[[:space:]])${governor}([[:space:]]|$)" <<< "$available_governors"; then
         log "Error: Governor '$governor' not available. Available: $available_governors"
         return 1
     fi
@@ -67,7 +76,7 @@ set_cpu_governor() {
     log "Setting CPU governor to: $governor"
     for cpu_dir in /sys/devices/system/cpu/cpu*/cpufreq/; do
         if [[ -f "${cpu_dir}scaling_governor" ]]; then
-            echo "$governor" > "${cpu_dir}scaling_governor"
+            echo "$governor" | sudo tee "${cpu_dir}scaling_governor" >/dev/null
         fi
     done
 }

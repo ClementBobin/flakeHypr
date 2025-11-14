@@ -18,20 +18,15 @@
       gamemode.enable = true;
     };
     networks.vpn = ["tailscale"];
-    virtualisation.enable = true;
     server.storage.syncthing = {
       enable = true;
       dirSync = "/home/${vars.user}";
       subDir = "Documents";
     };
     security.passwordManager.backend = ["bitwarden"];
-    dev.languages = {
-      php.enable = true;
-      android.enable = true;
-    };
     hardware.powersave = {
       enable = true;
-      architecture = "amd";
+      architecture = "intel";
       enableBenchmarkTools = true;
       forcePerfOnAC = false;
       batteryHealth = {
@@ -42,13 +37,12 @@
         };
       };
       managePowerProfiles = false;
-      disk = [ "nvme0n1" "nvme1n1" ];
-      asus.enable = true;
+      disk = [ ];
     };
   };
 
-  services.portmaster = {
-    enable = true;
-    devmode.enable = true;
-  };
+#  services.portmaster = {
+#    enable = true;
+#    devmode.enable = true;
+#  };
 }

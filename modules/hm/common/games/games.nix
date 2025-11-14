@@ -9,6 +9,10 @@ let
       packages = with pkgs; [ prismlauncher jdk17 gcc glibc ];
       description = "Minecraft Launcher with PrismLauncher";
     };
+    minecraft-modrinth = {
+      packages = with pkgs; [ modrinth-app jdk17 gcc glibc ];
+      description = "Minecraft Launcher with Modrinth Launcher";
+    };
     titanfall2 = {
       packages = with inputs.nix-gaming.packages.${pkgs.system}; [ viper (lib.hiPrio northstar-proton) ];
       description = "Titanfall 2 via nix-gaming";
@@ -22,8 +26,12 @@ let
       description = "Rocket League via nix-gaming";
     };
     star-citizen = {
-      packages = [ inputs.nix-gaming.packages.${pkgs.system}.star-citizen pkgs.lug-helper ];
+      packages = [ inputs.nix-gaming.packages.${pkgs.system}.star-citizen ]; #pkgs.lug-helper ];
       description = "Star Citizen Launcher";
+    };
+    geforce-now = {
+      packages = with pkgs; [ gfn-electron];
+      description = "NVIDIA GeForce Now Client";
     };
   };
 

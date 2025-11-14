@@ -9,7 +9,7 @@ LOGFILE="/tmp/power-benchmark-$(date +%Y%m%d-%H%M%S).log"
 DURATION=${1:-60}  # Default benchmark duration in seconds
 
 # Force US locale for consistent number formatting
-export LC_NUMERIC="en_US.UTF-8"
+export LC_ALL=C
 
 log() {
     echo "[$(date '+%Y-%m-%d %H:%M:%S')] $*" | tee -a "$LOGFILE"
@@ -39,8 +39,10 @@ get_power_usage() {
     if [[ $power_uw -eq 0 ]]; then
         for bat_path in "${battery_paths[@]}"; do
             if [[ -f "${bat_path}/current_now" && -f "${bat_path}/voltage_now" ]]; then
-                local current_ua=$(cat "${bat_path}/current_now" 2>/dev/null || echo 0)
-                local voltage_uv=$(cat "${bat_path}/voltage_now" 2>/dev/null || echo 0)
+                local current_ua
+                current_ua=$(cat "${bat_path}/current_now" 2>/dev/null || echo 0)
+                local voltage_uv
+                voltage_uv=$(cat "${bat_path}/voltage_now" 2>/dev/null || echo 0)
                 power_uw=$(( (current_ua * voltage_uv) / 1000000 ))
                 [[ $power_uw -gt 0 ]] && break
             fi
@@ -54,9 +56,9 @@ get_power_usage() {
     
     # Method 4: Try other AC power supply names
     if [[ $power_uw -eq 0 ]]; then
-        for ac_path in /sys/class/power_supply/ACAD/* /sys/class/power_supply/ADP*; do
-            if [[ -f "${ac_path}/power_now" ]]; then
-                power_uw=$(cat "${ac_path}/power_now" 2>/dev/null || echo 0)
+        for ac_dir in /sys/class/power_supply/ACAD /sys/class/power_supply/ADP*; do
+            if [[ -f "${ac_dir}/power_now" ]]; then
+                power_uw=$(cat "${ac_dir}/power_now" 2>/dev/null || echo 0)
                 [[ $power_uw -gt 0 ]] && break
             fi
         done
@@ -76,7 +78,8 @@ get_cpu_freq() {
     local count=0
     for freq_file in /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq; do
         if [[ -f "$freq_file" ]]; then
-            local freq=$(cat "$freq_file" 2>/dev/null || echo 0)
+            local freq
+            freq=$(cat "$freq_file" 2>/dev/null || echo 0)
             total=$((total + freq))
             count=$((count + 1))
         fi
@@ -108,9 +111,10 @@ benchmark_current_settings() {
     local samples=0
 
     for ((i=0; i<DURATION; i++)); do
-        local power=$(get_power_usage)
-        local freq=$(get_cpu_freq)
-        local temp=$(get_temperature)
+        local power freq temp
+        power=$(get_power_usage)
+        freq=$(get_cpu_freq)
+        temp=$(get_temperature)
 
         # Ensure we're working with dot-separated decimals for calculations
         power_sum=$(echo "$power_sum + $power" | bc -l)
@@ -118,17 +122,17 @@ benchmark_current_settings() {
         temp_sum=$(echo "$temp_sum + $temp" | bc -l)
         samples=$((samples + 1))
 
-        # Use awk for consistent formatting to avoid locale issues
         printf "\rProgress: %d/%d - Power: %.2fW, Freq: %.0fMHz, Temp: %.1f°C" \
-            "$i" "$DURATION" "$power" "$freq" "$temp"
+            "$((i+1))" "$DURATION" "$power" "$freq" "$temp"
         sleep 1
     done
 
     echo  # New line after progress
 
-    local avg_power=$(echo "scale=2; $power_sum / $samples" | bc -l)
-    local avg_freq=$(echo "scale=0; $freq_sum / $samples" | bc -l)
-    local avg_temp=$(echo "scale=1; $temp_sum / $samples" | bc -l)
+    local avg_power avg_freq avg_temp
+    avg_power=$(echo "scale=2; $power_sum / $samples" | bc -l)
+    avg_freq=$(echo "scale=0; $freq_sum / $samples" | bc -l)
+    avg_temp=$(echo "scale=1; $temp_sum / $samples" | bc -l)
 
     log "Benchmark complete!"
     log "Average Power Consumption: ${avg_power}W"

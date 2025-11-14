@@ -9,28 +9,86 @@
     ];
 
   boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "thunderbolt" ];
-  boot.initrd.kernelModules = [ ];
+  boot.initrd.kernelModules = [ "dm-snapshot" ];
   boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/9db27eac-7c19-48c0-bdbf-028bbe611afc";
-      fsType = "ext4";
+    { device = "/dev/mapper/vg--system-root";
+      fsType = "btrfs";
+      options = [
+	      "subvol=@"
+        "compress=zstd:1"
+        "noatime"
+        "ssd"
+      ];
     };
 
-  fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/A3A3-0005";
-      fsType = "vfat";
-      options = [ "fmask=0077" "dmask=0077" ];
-    };
-
-  fileSystems."/home/${vars.user}/mnt" = {
-    device = "/dev/disk/by-uuid/cd70c50f-c6c2-49c1-935a-854ba3e8c153";
-    fsType = "ext4";
-    options = [ "defaults" "noatime" "discard" "nofail" "errors=remount-ro" ];
+  fileSystems."/boot" = {
+    device = "/dev/disk/by-uuid/5A63-E7F1";
+    fsType = "vfat";
+    options = [ "fmask=0077" "dmask=0077" ];
   };
 
-  swapDevices = [ ];
+  fileSystems."/nix" =
+    { device = "/dev/mapper/vg--system-nix";
+      fsType = "btrfs";
+      options = [
+	      "subvol=@nix"
+        "compress=zstd:1"
+        "noatime"
+        "ssd"
+      ];
+    };
+
+  fileSystems."/var/log" =
+    { device = "/dev/mapper/vg--system-log";
+      fsType = "btrfs";
+      options = [
+	      "subvol=@log"
+        "compress=zstd:3"
+        "noatime"
+        "ssd"
+      ];
+    };
+
+  fileSystems."/home" =
+    { device = "/dev/mapper/vg--home-home";
+      fsType = "btrfs";
+      options = [
+        "subvol=@home"
+        "compress=zstd:1"
+        "noatime"
+        "ssd"
+        "space_cache=v2"
+      ];
+    };
+
+  fileSystems."/home/${vars.user}/games" =
+    { device = "/dev/mapper/vg--home-home";
+      fsType = "btrfs";
+      options = [
+        "subvol=@games"
+        "compress=zstd:1"
+        "noatime"
+        "ssd"
+      ];
+      neededForBoot = false;
+    };
+
+  fileSystems."/home/${vars.user}/Documents" =
+    { device = "/dev/mapper/vg--home-home";
+      fsType = "btrfs";
+      options = [
+        "subvol=@Documents"
+        "compress=zstd:3"
+        "noatime"
+        "ssd"
+      ];
+      neededForBoot = false;
+    };
+
+  swapDevices = [{ device = "/dev/disk/by-uuid/ef2296c9-8615-4d43-88cf-cd82171ec49b"; }];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's

@@ -12,6 +12,14 @@ in {
     drivers = mkOption {
       type = types.listOf types.package;
       default = [ pkgs.cnijfilter2 ];
+      example = literalExpression ''
+        with pkgs; [
+          cnijfilter2
+          gutenprint
+          hplip
+          samsung-unified-linux-driver
+        ]
+      '';
       description = ''
         List of printer drivers to use. Defaults to [ pkgs.cnijfilter2 ], which
         is an unfree package for Canon printers.
@@ -20,21 +28,32 @@ in {
     listenAddresses = mkOption {
       type = types.listOf types.str;
       default = [ "localhost:631" ];
-      description = ''
-        List of addresses to listen on for incoming print jobs. Defaults to
-        [ "localhost:631" ].
+      example = [ "*:631" "192.168.1.100:631" ];
+      description = mdDoc ''
+        Network addresses and ports where CUPS should listen for connections.
+        
+        Format: [ "address:port" ] or [ "port" ] for all interfaces
+        Examples:
+        - ["localhost:631"]: Listen only on localhost (default, most secure)
+        - ["*:631"]: Listen on all network interfaces
+        - ["192.168.1.100:631"]: Listen on specific IP address
+        - ["631"]: Listen on all interfaces (legacy format)
+        
+        For network printing, you may want to use ["*:631"] to allow
+        connections from other computers on your network.
       '';
     };
     allowFrom = mkOption {
       type = types.listOf types.str;
       default = [ "localhost" ];
+      example = [ "localhost" "192.168.1.0/24" "*.example.com" ];
       description = ''
         List of addresses allowed to send print jobs. Defaults to [ "localhost" ].
         You can add more addresses or networks as needed.
       '';
     };
     logLevel = mkOption {
-      type = types.str;
+      type = types.enum [ "debug" "info" "warn" "error" "fatal" "none" ];
       default = "info";
       description = ''
         Log level for CUPS. Can be set to "debug", "info", "warn", or "error".
@@ -63,6 +82,13 @@ in {
       packages = mkOption {
         type = types.listOf types.package;
         default = [ pkgs.system-config-printer ];
+        example = literalExpression ''
+          with pkgs; [
+            system-config-printer
+            print-manager
+            gtklp
+          ]
+        '';
         description = ''
           List of GUI tools for managing printers. Defaults to
           [ pkgs.system-config-printer ].
