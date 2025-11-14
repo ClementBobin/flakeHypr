@@ -1,3 +1,45 @@
+# [1.4.0](https://github.com/ClementBobin/flakeHypr/compare/v1.3.0...v1.4.0) (2025-11-14)
+
+
+### Bug Fixes
+
+* add example values to documentation option for editors ([a11acd1](https://github.com/ClementBobin/flakeHypr/commit/a11acd14b1e66bf6ebb61f0897974050fd083b40))
+* add TODO comment for enabling matrix-hookshot integration ([41b302f](https://github.com/ClementBobin/flakeHypr/commit/41b302f58f552b298067314708a154b833d30170))
+* correct description for vaultwarden custom settings option ([2e63d6c](https://github.com/ClementBobin/flakeHypr/commit/2e63d6cd90b95a8044affae8da238850b42f9b6c))
+* enhance documentation for gaming clients, CUPS options, Ollama service, and Portmaster configuration ([bf95308](https://github.com/ClementBobin/flakeHypr/commit/bf95308b19b14bec68fdba71fad67cbdfa5d0866))
+* enhance power saving configuration options and descriptions for clarity and usability ([195166a](https://github.com/ClementBobin/flakeHypr/commit/195166a68a03c8e513bdaa769a6e1f021d934347))
+* ensure unique IDE packages and improve description for IDE installation options ([85e7ac5](https://github.com/ClementBobin/flakeHypr/commit/85e7ac546fd730066bb59487ce211d4d2f88b6df))
+* improve locale handling and enhance runtime PM settings backup in power scripts ([70ab54d](https://github.com/ClementBobin/flakeHypr/commit/70ab54d91ea464b8ead733764f44c68e1f5416dc))
+* refactor Scalar application configuration by moving to api.nix and removing scalar.nix ([0604145](https://github.com/ClementBobin/flakeHypr/commit/0604145d8aae600620ac57e4ec09f538df98665c))
+* refactor shell tools configuration to use default options for better clarity and maintainability ([7428752](https://github.com/ClementBobin/flakeHypr/commit/7428752c21a5dee459c67a39d0a338a4aab436b8))
+* refactor Thunderbird configuration to use mkIf for conditional enabling ([7f1a00f](https://github.com/ClementBobin/flakeHypr/commit/7f1a00f97b9d949974da948fc316ea5b7c5e9783))
+* remove linux-cachyos module to streamline system configuration ([ba99253](https://github.com/ClementBobin/flakeHypr/commit/ba99253f885e55f95e02ecc7c2abf19029f40c98))
+* remove obsolete result symlink for NixOS manual HTML ([a37ff90](https://github.com/ClementBobin/flakeHypr/commit/a37ff902f71b5084dce6dc4bf0262fc27db3e342))
+* sanitize theme name in fetchOfficialTheme function for improved safety and error handling ([a770d6d](https://github.com/ClementBobin/flakeHypr/commit/a770d6d65c675314d4c34c4dee93f0dd4f09f9fc))
+* simplify api configuration by flattening scalar settings ([1661b21](https://github.com/ClementBobin/flakeHypr/commit/1661b2100381a372c1fa56f56524e57af5e75a02))
+* update homepage URL for hayase application to correct repository ([5d83d3a](https://github.com/ClementBobin/flakeHypr/commit/5d83d3a52631160819254328786b867537670376))
+* update MangoHud configuration to use array format for CPU and GPU text descriptions ([b32dfaa](https://github.com/ClementBobin/flakeHypr/commit/b32dfaa36c1c96ab5ce6e15cc5b0eae04e2e7922))
+* update preset file creation to respect cfg.presets and add assertions for configuration validation ([7a43d2e](https://github.com/ClementBobin/flakeHypr/commit/7a43d2ee7495ebd3263abb8866eb36878e1abae1))
+* update sha256 checksum for scalar-deb package ([d95ac14](https://github.com/ClementBobin/flakeHypr/commit/d95ac148623b6cb34b0d7834f296ab4125c782c1))
+* update storage module reference from gitea to forgejo ([267e8ef](https://github.com/ClementBobin/flakeHypr/commit/267e8efa2495fcb4191d6946e36afca447d84570))
+
+
+### Features
+
+* add audio and management utility modules; update video and streaming configurations ([5b5d936](https://github.com/ClementBobin/flakeHypr/commit/5b5d93676ec49011dc1c0d9cb65c93b551d6114a))
+* add caelestia module with upower service and system packages ([fe08675](https://github.com/ClementBobin/flakeHypr/commit/fe08675bebfa9455f1fe31160a6218b8eeb5771e))
+* add default.nix wrapper module with necessary imports ([277c076](https://github.com/ClementBobin/flakeHypr/commit/277c0761fb344d3e04c909d9e829c20febf3b095))
+* add forgejo service module with configuration options ([8186ec2](https://github.com/ClementBobin/flakeHypr/commit/8186ec2fcf1d64a84c2d5e8fd9b26749291abc7d))
+* add GeForce Now client to available games ([8b6a281](https://github.com/ClementBobin/flakeHypr/commit/8b6a281dc1f8dec90539f10e8368a42e7b834104))
+* add hyprDisplays and winboat modules for enhanced display management and Windows app support ([ac68070](https://github.com/ClementBobin/flakeHypr/commit/ac68070d8592029df354f9497813a76f3f69b63f))
+* add JetBrains IDEs support and update .NET SDK version to 9 ([a3cef4b](https://github.com/ClementBobin/flakeHypr/commit/a3cef4b8f5df10ae74b6bda9711e7df8f0558e44))
+* enhance Hydenix desktop configuration with new keybindings and scripts ([a03fa50](https://github.com/ClementBobin/flakeHypr/commit/a03fa50102982d555fa01d18aa2666ad8d219404))
+* enhance MangoHud configuration with new options for session-wide enablement, FPS limit, appearance, and hotkeys ([7a23778](https://github.com/ClementBobin/flakeHypr/commit/7a237781db1dfef0a16ffdef69e38c37da1ad3d0))
+* refactor Android configuration by removing Flutter support and streamlining environment setup ([498d2e9](https://github.com/ClementBobin/flakeHypr/commit/498d2e9bcc985c1ba381cc5da113fd7c3e8539a3))
+* remove ngrok configuration and add Burp Suite module for security management ([3976e1e](https://github.com/ClementBobin/flakeHypr/commit/3976e1ec5d5ff9a319a01a9442cc63e82f394359))
+* update flake.nix with caelestia-cli and caelestia-shell URLs; add result symlink for nixos manual ([c51a8e9](https://github.com/ClementBobin/flakeHypr/commit/c51a8e9fe0f48855eb951a0a23c8be131b12b45d))
+* update NixOS configurations for oak and seed-birch hosts; streamline imports and add management utilities ([f45ea81](https://github.com/ClementBobin/flakeHypr/commit/f45ea81acca100ccdd56eca84d30c4afc14d8ef6))
+
 # [1.3.0](https://github.com/ClementBobin/flakeHypr/compare/v1.2.0...v1.3.0) (2025-09-07)
 
 
