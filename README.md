@@ -1,4 +1,4 @@
-# 🧊 flakeHypr (aka richendots)
+# 🧊 flakeHypr (fork from [richendots](https://github.com/richen604/richendots))
 
 My personal dotfiles from the flake template of hydenix
 
