@@ -188,9 +188,9 @@ in
         source = ./random-theme.sh;
         executable = true;
       };
-      # ".local/share/waybar/layouts/mirage.jsonc" = {
-      #   source = ./mirage-waybar.jsonc;
-      # };
+    };
+    home.shellAliases = {
+      fix-hypr-rules = "sudo cp ~/.config/hypr/windowrules.conf ~/.config/hypr/windowrules.conf.local && sed -i 's/initialtitle:/title:/g' ~/.config/hypr/windowrules.conf.local && ln -sf ~/.config/hypr/windowrules.conf.local ~/.config/hypr/windowrules.conf";
     };
   };
 }

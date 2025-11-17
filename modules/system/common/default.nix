@@ -1,7 +1,7 @@
 { inputs, ... }:
 {
   imports = [
-    ./dev/languages/flutter.nix
+    ./dev/languages/android.nix
     ./dev/languages/php.nix
     ./dev/tools/flatpak.nix
     ./dev/environments.nix
