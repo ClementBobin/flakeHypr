@@ -8,6 +8,7 @@ let
     parsec = [ parsec-bin ];
     rustdesk = [ rustdesk-flutter ];
     remmina = [ remmina ];
+    remote-viewer = [ virt-viewer ];
   };
 
   # Get packages for enabled clients

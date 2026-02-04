@@ -6,7 +6,7 @@ let
 
   iannyOptions = utilities.safety.ianny;
 
-  kandoEnabled = utilities.app-launcher.kando.enable;
+  kandoEnabled = lib.elem "kando" utilities.app-launcher.clients;
 
   # Generate random command logic
   randomCommand =
@@ -21,7 +21,7 @@ let
 
   startupCmds = [
     "sleep 1"
-    (lib.optionalString kandoEnabled "kando")
+    # (lib.optionalString kandoEnabled "kando")
     (lib.optionalString (randomCommand != null) randomCommand)
   ];
   filteredCmds = lib.filter (x: x != "") startupCmds;

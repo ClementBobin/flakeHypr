@@ -5,7 +5,7 @@
 
 let
   pname = "hayase";
-  version = "6.4.37";
+  version = "6.4.50";
   hash = "sha256-7fXu8ySC8FioLA1PlyorS6F7Kv34nlo8Djhj54kCEOI=";
 in
 
@@ -13,7 +13,7 @@ appimageTools.wrapType2 rec {
   inherit pname version;
 
   src = fetchurl {
-    url = "https://github.com/hayase-app/docs/releases/download/v${version}/linux-hayase-${version}-linux.AppImage";
+    url = "https://api.hayase.watch/files/linux-hayase-${version}-linux.AppImage";
     name = "${pname}-${version}.AppImage";
     inherit hash;
   };
@@ -31,7 +31,7 @@ appimageTools.wrapType2 rec {
 
   meta = with lib; {
     description = "A bittorrent streaming application for anime";
-    homepage = "https://github.com/hayase-app/ui";
+    homepage = "https://hayase.watch/";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ ];
     platforms = [ "x86_64-linux" ];

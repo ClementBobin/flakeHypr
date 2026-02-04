@@ -87,10 +87,10 @@ in
 
       home.file = {
         ".config/hyde/wallbash/Wall-Ways/obsidian.dcol" = {
-          source   = obsidianDcol; force = true; mutable = true;
+          source   = obsidianDcol; force = true;
         };
         "${config.home.sessionVariables.OBSIDIAN_VAULT}/home/content/.obsidian/themes/Wallbash" = {
-          source   = wallbashTheme; recursive = true; force = true; mutable = true;
+          source   = wallbashTheme; recursive = true; force = true;
         };
       };
     }

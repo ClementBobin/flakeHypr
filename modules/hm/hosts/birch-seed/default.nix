@@ -22,9 +22,7 @@
       multimedia = {
         editing.image.enable = true;
         editing.audio.enable = true;
-        player = {
-          clients = ["mpv" "miru"];
-        };
+        player.clients = ["mpv"];
         remote-desktop.clients = ["rustdesk"];
       };
       browser.clients = ["firefox"];
@@ -42,8 +40,8 @@
       };
       utilities.safety.ianny = {
         enable = true;
-        presets = ["safety" "game"];
-        defaultPreset = "safety";
+        presets = ["game"];
+        defaultPreset = "game";
       };
       extra.syncthing-ignore.enable = true;
     };

@@ -40,7 +40,7 @@ let
 
   # Additional packages based on configuration
   additionalPackages = with pkgs; []
-    ++ lib.optionals cfg.wine.enable [ (winePackages.${cfg.wine.version} or pkgs.wine-stable) winetricks ]
+    ++ lib.optionals cfg.wine.enable [ (winePackages.${cfg.wine.version} or pkgs.wine-stable) winetricks winboat ]
     ++ lib.optionals cfg.proton.enable protonPackages
     ++ lib.optionals (lib.elem "podman" cfg.engines) [ podman-compose ]
     ++ lib.optionals (lib.elem "docker" cfg.engines) [ docker-compose ];

@@ -12,6 +12,9 @@ let
 
   configHydenix = import ./configHydenix.nix { inherit lib config; };
 
+  # Check if spicetify is in the clients list
+  spicetifyEnabled = lib.elem "spicetify" config.modules.hm.multimedia.player.clients;
+
   # Validate hostnames
   validHostnames = [ "fern" "oak" "pine" "cedar" "sapling" "clover" ];
 in
@@ -51,8 +54,8 @@ in
           "Pixel Dream"
           "Rain Dark"
           "Rosé Pine"
-          "Sci-fi"
-          "Tokyo Night"
+          # "Sci-fi"
+          # "Tokyo Night"
         ];
         description = "List of available themes for Hydenix desktop";
       };
@@ -95,7 +98,7 @@ in
       };
       firefox.enable = cfg.enable;
       git = {
-        enable = true;
+        enable = cfg.enable;
         name = "mirage";
         email = "119869686+ClementBobin@users.noreply.github.com";
       };
@@ -109,10 +112,9 @@ in
       social = {
         enable = cfg.enable;
         discord.enable = false;
-        webcord.enable = false;
         vesktop.enable = cfg.enable;
       };
-      spotify.enable = cfg.enable;
+      spotify.enable = cfg.enable && !spicetifyEnabled;
       swww.enable = cfg.enable;
       theme = {
         enable = cfg.enable;
@@ -189,8 +191,8 @@ in
         executable = true;
       };
     };
-    home.shellAliases = {
-      fix-hypr-rules = "sudo cp ~/.config/hypr/windowrules.conf ~/.config/hypr/windowrules.conf.local && sed -i 's/initialtitle:/title:/g' ~/.config/hypr/windowrules.conf.local && ln -sf ~/.config/hypr/windowrules.conf.local ~/.config/hypr/windowrules.conf";
-    };
+    # home.shellAliases = {
+    #   fix-hypr-rules = "sudo cp ~/.config/hypr/windowrules.conf ~/.config/hypr/windowrules.conf.local && sed -i 's/initialtitle:/title:/g' ~/.config/hypr/windowrules.conf.local && ln -sf ~/.config/hypr/windowrules.conf.local ~/.config/hypr/windowrules.conf";
+    # };
   };
 }

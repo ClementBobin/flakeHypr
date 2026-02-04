@@ -11,7 +11,7 @@ in {
 
     drivers = mkOption {
       type = types.listOf types.package;
-      default = [ pkgs.cnijfilter2 ];
+      default = [ pkgs.epson-escpr2 ];
       example = literalExpression ''
         with pkgs; [
           cnijfilter2
@@ -108,7 +108,10 @@ in {
       webInterface = cfg.webInterface;
     };
 
-    services.avahi.enable = cfg.browsed.enable;
+    services.avahi = {
+      enable = cfg.browsed.enable;
+      nssmdns4 = cfg.browsed.enable;
+    };
 
     users.users.${vars.user}.extraGroups = [ "lp" "lpadmin" ];
 

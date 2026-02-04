@@ -15,20 +15,22 @@
     };
     games = {
       clients = ["steam"];
-      gamemode.enable = true;
+      # gamemode.enable = true;
     };
     networks.vpn = ["tailscale"];
-    virtualisation.enable = true;
+    # virtualisation.enable = true;
     server.storage.syncthing = {
       enable = true;
       dirSync = "/home/${vars.user}";
       subDir = "Documents";
     };
-    security.passwordManager.backend = ["bitwarden"];
-    dev.languages = {
-      php.enable = true;
-      android.enable = true;
+    server.print = {
+      enable = true;
+      browsed.enable = true;
+      gui.enable = true;
     };
+    security.passwordManager.backend = ["bitwarden"];
+    dev.languages.android.enable = true;
     hardware.powersave = {
       enable = true;
       architecture = "amd";
@@ -48,7 +50,7 @@
   };
 
   services.portmaster = {
-    enable = true;
-    devmode.enable = true;
+    enable = false;
+    devmode.enable = false;
   };
 }

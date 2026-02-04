@@ -19,21 +19,20 @@
         mangohud = {
           enable = true;
           cpu.text = ["Ryzen 7 7435HS"];
-          gpu.text = [ "AMD Rembrandt" "RTX 4060 Laptop" ];
+          gpu.text = [ "RTX 4060 Laptop" "AMD Rembrandt" ];
         };
         enabledGames = ["minecraft"];
       };
       multimedia = {
         editing.image.enable = true;
         player = {
-          clients = ["mpv" "miru"];
+          clients = ["mpv" "jellyfin-client" "spicetify"];
           jellyfin.rpc = true;
         };
-        rambox.enable = true;
-        #remote-desktop.clients = ["remmina"];
+        remote-desktop.clients = ["remote-viewer"]; # "remmina"
         management-utility.clients = ["nwg-displays"];
       };
-      browser.clients = ["firefox"];
+      browser.clients = ["zen" "firefox"];
       documentation = {
         editors = ["onlyoffice"];
         obsidian.enable = true;
@@ -58,34 +57,35 @@
             enable = true;
             extraPackages = ["node2nix" "fnm" "npm-check-updates"];
           };
+          rust.enable = true;
           python.enable = true;
         };
         tools = {
-          git-action.packages = ["wrkflw"];
+          git-action.packages = ["act"];
           nix.enable = true;
-          gitleaks.enable = true;
+          #gitleaks.enable = true;
           prisma.enable = true;
         };
       };
       communication = {
         teams.enable = true;
-        mail.services = ["bluemail"];
         discord.rpc.enable = true;
         matrix.clients = ["element"];
       };
       utilities = {
-        api.clients = ["scalar" "yaak"];
+        api.clients = ["scalar"];
         safety.ianny = {
           enable = true;
           presets = ["dev" "game"];
           defaultPreset = "dev";
         };
+        tracker.enable = true;
+        app-launcher.clients = ["hyprshell"];
       };
       extra.syncthing-ignore = {
         enable = true;
         excludedDirs = ["node_modules" "vendor" "storage" ".idea"];
       };
-      security.burp.enable = true;
     };
   };
 }

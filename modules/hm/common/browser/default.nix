@@ -1,4 +1,4 @@
-{ pkgs, lib, config, ... }:
+{ pkgs, lib, config, inputs, ... }:
 
 let
   cfg = config.modules.hm.browser;
@@ -11,6 +11,7 @@ let
     brave    = [ brave ];
     vivaldi  = [ vivaldi ];
     edge     = [ microsoft-edge ];
+    zen      = [ (inputs.zen-browser.packages.${pkgs.system}.default) ];
   };
 
   # Map browsers to their drivers (using pkgs.)
@@ -21,6 +22,7 @@ let
     brave    = chromedriver;
     firefox  = geckodriver;
     edge     = msedgedriver;
+    zen      = null;
   };
 
   # Get packages for enabled browsers

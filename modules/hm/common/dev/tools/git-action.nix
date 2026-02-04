@@ -2,8 +2,6 @@
 
 let
   cfg = config.modules.hm.dev.tools.git-action;
-
-  wrkflw = pkgs.callPackage ../../../../wrapper/wrkflw.nix {};
 in
 {
   options.modules.hm.dev.tools.git-action = {
@@ -17,6 +15,6 @@ in
   config = {
     home.packages =
       (lib.optional (lib.elem "act" cfg.packages) pkgs.act) ++
-      (lib.optional (lib.elem "wrkflw" cfg.packages) wrkflw);
+      (lib.optional (lib.elem "wrkflw" cfg.packages) pkgs.wrkflw);
   };
 }

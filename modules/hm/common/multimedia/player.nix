@@ -1,7 +1,9 @@
-{ pkgs, lib, config, ... }:
+{ pkgs, lib, config, inputs, ... }:
 
 let
   cfg = config.modules.hm.multimedia.player;
+
+  spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.stdenv.system};
 
   # Miru package definition
   miru = pkgs.callPackage ../../../wrapper/hayase.nix { };
@@ -10,10 +12,13 @@ let
   clientsToPackage = with pkgs; {
     mpv = null;
     vlc = vlc;
-    stremio = stremio;
     jellyfin = jellyfin-media-player;
+    jellyfin-client = jellyflix;
+    jellyfin-music = finamp;
+    jellyfin-music-tui = jellyfin-tui;
     plex = plex-desktop;
     miru = miru;
+    spicetify = null;
   };
 
   # Get packages for enabled clients
@@ -26,11 +31,39 @@ let
 
 in
 {
+  imports = [
+    inputs.spicetify-nix.homeManagerModules.spicetify
+  ];
+
   options.modules.hm.multimedia.player = {
     clients = lib.mkOption {
       type = lib.types.listOf (lib.types.enum (lib.attrNames clientsToPackage));
       default = [];
       description = "List of multimedia player clients to install";
+    };
+
+    spicetify = {
+      extensions = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [
+          "shuffle"
+          "autoSkipExplicit"
+          "autoVolume"
+          "adblock"
+          "coverAmbience"
+        ];
+        description = "List of Spicetify extension names to enable.";
+      };
+      theme = lib.mkOption {
+        type = lib.types.str;
+        default = "text";
+        description = "Spicetify theme to use.";
+      };
+      colorScheme = lib.mkOption {
+        type = lib.types.str;
+        default = "Spotify";
+        description = "Spicetify color scheme to use.";
+      };
     };
 
     jellyfin.rpc = lib.mkEnableOption "Enable Jellyfin RPC support";
@@ -40,24 +73,25 @@ in
     home.packages = finalPackages;
 
     # Configure mpv media player if it's in the clients list
-    programs.mpv = lib.mkIf (lib.elem "mpv" cfg.clients) {
+    programs = {
+      mpv = lib.mkIf (lib.elem "mpv" cfg.clients) {
+        enable = true;
+        scripts = with pkgs.mpvScripts; [
+          uosc
+        ];
+        scriptOpts."uosc" = {
+          "timeline_style" = "bar";
+          "volume_step" = 5;
+        };
+      };
 
-      # Enable mpv
-      enable = true;
-
-      # Install custom scripts
-      scripts = with pkgs.mpvScripts; [
-        uosc
-      ];
-
-      # Script configuration
-      scriptOpts."uosc" = {
-
-        # Style of timeline
-        "timeline_style" = "bar";
-
-        # Volume to step when scrolling
-        "volume_step" = 5;
+      spicetify = lib.mkIf (lib.elem "spicetify" cfg.clients) {
+        enable = true;
+        enabledExtensions = with spicePkgs.extensions; [
+          # Convert extension names to actual extension paths/derivations
+        ] ++ (map (ext: spicePkgs.extensions.${ext}) cfg.spicetify.extensions);
+        theme = spicePkgs.themes.${cfg.spicetify.theme};
+        colorScheme = cfg.spicetify.colorScheme;
       };
     };
   };

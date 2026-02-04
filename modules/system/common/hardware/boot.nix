@@ -15,7 +15,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    hydenix.boot.enable = false;
+    #hydenix.boot.enable = false;
 
     boot = {
       plymouth.enable = true;

@@ -20,7 +20,7 @@ in
     ./dev/languages/rust.nix
     ./dev/tools/cli.nix
     ./dev/tools/git-action.nix
-    ./dev/tools/gitleaks.nix
+    ./dev/tools/gitleaks
     ./dev/tools/nix.nix
     ./dev/tools/prisma.nix
 
@@ -55,9 +55,7 @@ in
     ./utilities/safety/ianny.nix
     ./utilities/api.nix
     ./utilities/app-launcher.nix
-    ./utilities/filezilla.nix
-    ./utilities/kde-connect.nix
-    ./utilities/stacer.nix
+    ./utilities/tracker.nix
 
     inputs.nix-podman-stacks.homeModules.nps
   ];

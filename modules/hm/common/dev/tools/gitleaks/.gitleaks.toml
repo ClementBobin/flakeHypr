@@ -1,0 +1,25 @@
+title = "Global Gitleaks Config"
+
+[[rules]]
+id = "generic-password-assignment"
+description = "Generic Password Assignment"
+regex = '''(?i)(password|passwd|pwd)\s*[=:]\s*['"][^'"]+['"]'''
+tags = ["password", "secret"]
+
+[[rules]]
+id = "generic-api-key"
+description = "Generic API Key"
+regex = '''(?i)(api[_-]?key|secret[_-]?key)\s*[=:]\s*['"][^'"]{10,}['"]'''
+tags = ["key", "API"]
+
+[[rules]]
+id = "simple-password-variable"
+description = "Simple Password in Variable"
+regex = '''(?i)(password|pass|pwd)\s*=\s*['"][^'"]{6,}['"]'''
+tags = ["password", "secret"]
+
+[[rules]]
+id = "suspicious-string-assignment"
+description = "Any suspicious string assignment"
+regex = '''\b(?:password|passwd|pwd|secret|key|token|auth)\b\s*[:=]\s*['"`]([^'"`]{4,})['"`]'''
+tags = ["password", "secret", "key", "token"]

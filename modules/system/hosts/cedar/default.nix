@@ -23,30 +23,16 @@
         };
       };
       dev.vs-code.enable = true;
-      media = {
-        multimedia = {
-          enable = true;
-          jellyfin.enable = true;
-          sonarr.enable = true;
-          radarr.enable = true;
-          prowlarr.enable = true;
-          bazarr.enable = true;
-          jellyseerr.enable = true;
-        };
-        paperless.enable = true;
-        photoprism.enable = true;
-      };
       communication = {
         ntfy-sh.enable = true;
-        matrix-synapse.enable = true;
+        #matrix-synapse.enable = true;
         agents = ["qemu"];
       };
-      meal.clients = ["mealie"];
     };
   };
 
-  services.portmaster = {
-    enable = true;
-    devmode.enable = true;
-  };
+  # services.portmaster = {
+  #   enable = true;
+  #   devmode.enable = true;
+  # };
 }

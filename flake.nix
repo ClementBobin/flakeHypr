@@ -8,11 +8,18 @@
     nix-gaming.url = "github:fufexan/nix-gaming";
 
     # Hydenix and its nixpkgs - kept separate to avoid conflicts
-    hydenix.url = "github:richen604/hydenix";
+    hydenix.url = "github:richen604/hydenix/v5.0.0";
     nixos-hardware.url = "github:nixos/nixos-hardware/master";
 
     nix-podman-stacks = {
       url = "github:Tarow/nix-podman-stacks";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    spicetify-nix.url = "github:Gerg-L/spicetify-nix";
+
+    zen-browser = {
+      url = "github:youwen5/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -30,16 +37,17 @@
       system = "x86_64-linux";
 
       # Create a function to generate host configurations
-      mkHost = hostname: inputs.nixpkgs.lib.nixosSystem {
-          inherit system;
-          specialArgs = {
-            inherit inputs vars system;
-            hostname = hostname;
-          };
-          modules = [
-            ./hosts/${hostname}
-          ];
+      mkHost = hostname: extraVars: inputs.nixpkgs.lib.nixosSystem {
+        inherit system;
+        specialArgs = {
+          inherit inputs system;
+          vars = vars // extraVars;
+          hostname = hostname;
         };
+        modules = [
+          ./hosts/${hostname}
+        ];
+      };
 
       # Create VM variant function
       mkVm = hostname:
@@ -57,19 +65,27 @@
     in
     {
       nixosConfigurations = {
-        fern = mkHost "fern";
-        oak = mkHost "oak";
-        pine = mkHost "pine";
-        cedar = mkHost "cedar";
-        default = mkHost "oak";
+        fern = mkHost "fern" {};
+        oak = mkHost "oak" {};
+        pine = mkHost "pine" {};
+        cedar = mkHost "cedar" {};
+
+        # Override vars for birch-seed specifically
+        birch-seed = mkHost "birch-seed" { user = "fanny"; };
+
+        default = mkHost "oak" {};
       };
 
       packages.${system} = {
         cedar-vm = mkVm "cedar";
         fern-vm = mkVm "fern";
+        pine-vm = mkVm "pine";
+        birch-seed-vm = mkVm "birch-seed";
         oak-vm = mkVm "oak";
 
         fern = self.nixosConfigurations.fern.config.system.build.toplevel;
+        birch-seed = self.nixosConfigurations.birch-seed.config.system.build.toplevel;
+        pine = self.nixosConfigurations.pine.config.system.build.toplevel;
         oak = self.nixosConfigurations.oak.config.system.build.toplevel;
         cedar = self.nixosConfigurations.cedar.config.system.build.toplevel;
       };
