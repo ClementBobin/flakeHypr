@@ -18,7 +18,6 @@ in
     ./dev/languages/node.nix
     ./dev/languages/python.nix
     ./dev/languages/rust.nix
-    ./dev/tools/cli.nix
     ./dev/tools/git-action.nix
     ./dev/tools/gitleaks
     ./dev/tools/nix.nix
@@ -26,8 +25,6 @@ in
 
     ./documentation/obsidian.nix
     ./documentation
-
-    ./engine
 
     ./extra/shader-cache-cleanup.nix
     ./extra/syncthing-ignore.nix
@@ -41,7 +38,6 @@ in
     ./multimedia/editing/video.nix
     ./multimedia/management-utility.nix
     ./multimedia/player.nix
-    ./multimedia/rambox.nix
     ./multimedia/remote-desktop.nix
     ./multimedia/streaming.nix
 
@@ -52,7 +48,6 @@ in
     ./shell/disk-usage.nix
     ./shell/tools.nix
 
-    ./utilities/safety/ianny.nix
     ./utilities/api.nix
     ./utilities/app-launcher.nix
     ./utilities/tracker.nix

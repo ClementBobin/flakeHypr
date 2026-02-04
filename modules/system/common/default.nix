@@ -3,7 +3,6 @@
   imports = [
     ./dev/languages/android.nix
     ./dev/languages/php.nix
-    ./dev/tools/flatpak.nix
     ./dev/environments.nix
 
     ./hardware/powersave
@@ -36,8 +35,6 @@
     ./server/print.nix
 
     ./virtualisation
-    ./virtualisation/ollama.nix
-
     ./games.nix
   ];
 

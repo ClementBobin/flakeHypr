@@ -32,7 +32,7 @@
         remote-desktop.clients = ["remote-viewer"]; # "remmina"
         management-utility.clients = ["nwg-displays"];
       };
-      browser.clients = ["zen" "firefox"];
+      browser.clients = ["zen"];
       documentation = {
         editors = ["onlyoffice"];
         obsidian.enable = true;
@@ -74,11 +74,6 @@
       };
       utilities = {
         api.clients = ["scalar"];
-        safety.ianny = {
-          enable = true;
-          presets = ["dev" "game"];
-          defaultPreset = "dev";
-        };
         tracker.enable = true;
         app-launcher.clients = ["hyprshell"];
       };
