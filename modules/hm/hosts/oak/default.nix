@@ -26,7 +26,7 @@
       multimedia = {
         editing.image.enable = true;
         player = {
-          clients = ["mpv" "jellyfin-client" "spicetify"];
+          clients = ["mpv" "jellyfin-client" "spicetify" "ani-cli" "mangayomi"];
           jellyfin.rpc = true;
         };
         remote-desktop.clients = ["remote-viewer"]; # "remmina"

@@ -21,7 +21,6 @@
       };
       multimedia = {
         editing.image.enable = true;
-        editing.audio.enable = true;
         player.clients = ["mpv"];
         remote-desktop.clients = ["rustdesk"];
       };
@@ -37,11 +36,6 @@
       communication = {
         teams.enable = true;
         mail.services = ["bluemail"];
-      };
-      utilities.safety.ianny = {
-        enable = true;
-        presets = ["game"];
-        defaultPreset = "game";
       };
       extra.syncthing-ignore.enable = true;
     };

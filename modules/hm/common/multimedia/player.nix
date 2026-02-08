@@ -5,9 +5,6 @@ let
 
   spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.stdenv.system};
 
-  # Miru package definition
-  miru = pkgs.callPackage ../../../wrapper/hayase.nix { };
-
   # Map document clients to their packages
   clientsToPackage = with pkgs; {
     mpv = null;
@@ -17,7 +14,8 @@ let
     jellyfin-music = finamp;
     jellyfin-music-tui = jellyfin-tui;
     plex = plex-desktop;
-    miru = miru;
+    mangayomi = mangayomi;
+    ani-cli = ani-cli;
     spicetify = null;
   };
 
@@ -93,6 +91,11 @@ in
         theme = spicePkgs.themes.${cfg.spicetify.theme};
         colorScheme = cfg.spicetify.colorScheme;
       };
+    };
+
+    home.shellAliases = {
+      # shell alias for ani-cli to anime
+      anime = lib.mkIf (lib.elem "ani-cli" cfg.clients) ''ani-cli'';
     };
   };
 }

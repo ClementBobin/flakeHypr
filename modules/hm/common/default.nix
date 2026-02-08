@@ -33,7 +33,6 @@ in
     ./games/joystick.nix
     ./games/mangohud.nix
 
-    ./multimedia/editing/audio.nix
     ./multimedia/editing/image.nix
     ./multimedia/editing/video.nix
     ./multimedia/management-utility.nix

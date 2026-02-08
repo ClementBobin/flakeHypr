@@ -12,13 +12,13 @@ mkdir -p "$CONFIG_DIR"
 
 # Function to get current profile
 get_current_profile() {
-    asusctl profile -p 2>/dev/null | awk '/Active profile is/ {print $4}'
+    asusctl profile get 2>/dev/null | awk '/Active profile:/ {print $4}'
 }
 
 # Function to set profile
 set_profile() {
     local profile="$1"
-    asusctl profile -P "$profile"
+    asusctl profile set "$profile"
 }
 
 # Main toggle function

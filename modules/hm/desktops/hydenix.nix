@@ -2,6 +2,7 @@
   inputs,
   lib,
   config,
+  vars,
   ...
 }:
 
@@ -61,6 +62,12 @@ in
       };
     };
 
+    browser.enable = mkOption {
+      type = types.bool;
+      default = cfg.enable;
+      description = "Enable Hydenix browser configuration";
+    };
+
     randomOnBoot = {
       wallpaper = mkOption {
         type = types.bool;
@@ -96,7 +103,7 @@ in
         vscode.enable = false;
         neovim = false;
       };
-      firefox.enable = cfg.enable;
+      firefox.enable = cfg.browser.enable;
       git = {
         enable = cfg.enable;
         name = "mirage";
@@ -133,7 +140,6 @@ in
             kb_layout = fr
           }
 
-          ${configHydenix.config}
           ${configHydenix.hyprlandKeybinds}
 
           # Example monitor configuration
@@ -191,8 +197,9 @@ in
         executable = true;
       };
     };
-    # home.shellAliases = {
-    #   fix-hypr-rules = "sudo cp ~/.config/hypr/windowrules.conf ~/.config/hypr/windowrules.conf.local && sed -i 's/initialtitle:/title:/g' ~/.config/hypr/windowrules.conf.local && ln -sf ~/.config/hypr/windowrules.conf.local ~/.config/hypr/windowrules.conf";
-    # };
+    home.shellAliases = {
+      #fix-hypr-rules = "sudo cp ~/.config/hypr/windowrules.conf ~/.config/hypr/windowrules.conf.local && sed -i 's/initialtitle:/title:/g' ~/.config/hypr/windowrules.conf.local && ln -sf ~/.config/hypr/windowrules.conf.local ~/.config/hypr/windowrules.conf";
+      fix-hypr-rules = "CHANGED=false; [ -s ~/.config/hypr/windowrules.conf ] && sudo mv ~/.config/hypr/windowrules.conf ~/.config/hypr/windowrules.conf.bak && sudo touch ~/.config/hypr/windowrules.conf && CHANGED=true || echo 'First file empty, skipping'; [ -s ~/.local/share/hypr/windowrules.conf ] && sudo mv ~/.local/share/hypr/windowrules.conf ~/.local/share/hypr/windowrules.conf.bak && sudo touch ~/.local/share/hypr/windowrules.conf && CHANGED=true || echo 'Second file empty, skipping'; if [ \"\$CHANGED\" = true ]; then echo 'Changes detected, reloading Hyprland...'; hyprctl reload; else echo 'No changes made.'; fi";
+    };
   };
 }
