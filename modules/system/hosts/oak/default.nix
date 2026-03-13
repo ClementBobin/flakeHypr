@@ -15,8 +15,10 @@
     };
     games = {
       clients = ["steam"];
+      steamtinkerlauncher = true;
       # gamemode.enable = true;
     };
+    virtualisation.wine.enable = true;
     networks.vpn = ["tailscale"];
     # virtualisation.enable = true;
     server.storage.syncthing = {

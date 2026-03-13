@@ -34,8 +34,8 @@ in {
     };
 
     steam.compatToolsPath = lib.mkOption {
-      type = lib.types.path;
-      default = "${builtins.getEnv "HOME"}/.steam/root/compatibilitytools.d";
+      type = lib.types.str;
+      default = "~/.local/share/Steam/compatibilitytools.d";
       example = "/home/user/.local/share/Steam/compatibilitytools.d";
       description = ''
         Path where Steam compatibility tools (like Proton-GE) should be installed.
@@ -45,6 +45,22 @@ in {
         STEAM_EXTRA_COMPAT_TOOLS_PATHS environment variable.
         
         Defaults to the standard Steam installation location.
+      '';
+    };
+
+    steamtinkerlauncher = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = ''
+        Enable integration with Steam Tinker Launcher (STL).
+        
+        STL is a third-party tool that provides advanced management of Steam
+        Proton versions and game-specific configurations. Enabling this option
+        allows the system to automatically detect and configure STL for use with
+        Steam games.
+        
+        This includes setting up necessary environment variables and ensuring
+        compatibility with the configured Proton versions.
       '';
     };
 
@@ -162,9 +178,20 @@ in {
 
   config = lib.mkMerge [
     {
-      environment.systemPackages = lib.unique clientPackages;
+      environment.systemPackages = lib.unique clientPackages ++ (if cfg.steamtinkerlauncher then [ pkgs.steamtinkerlaunch ] else []);
       environment.sessionVariables = lib.mkIf (lib.elem "steam" cfg.clients) {
         STEAM_EXTRA_COMPAT_TOOLS_PATHS = cfg.steam.compatToolsPath;
+      };
+      environment.shellAliases = {
+        stl = lib.optionalString cfg.steamtinkerlauncher "steam-tinker-launcher";
+        recursion = lib.optionalString cfg.steamtinkerlauncher ''
+          if [ -d "~/games/SteamLibrary/steamapps/compatdata/218230/pfx" ]; then
+            cd ~/games/SteamLibrary/steamapps/compatdata/218230/pfx
+            WINEPREFIX=$PWD wine explorer /desktop=Recursion,1920x1080 "drive_c/Program Files (x86)/Recursion/RecursionTracker/RTST.exe"
+          else
+            echo "Recursion directory not found"
+          fi
+        '';
       };
     }
 

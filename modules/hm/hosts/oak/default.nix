@@ -69,8 +69,11 @@
       };
       communication = {
         teams.enable = true;
-        discord.rpc.enable = true;
-        matrix.clients = ["element"];
+        mail.services = ["velo"];
+        discord = {
+          clients = ["fluxer"];
+          rpc.enable = true;
+        };
       };
       utilities = {
         api.clients = ["scalar"];

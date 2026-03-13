@@ -1,52 +1,45 @@
 { lib
-, fetchurl
-, appimageTools
-, gtk3
-, gsettings-desktop-schemas
-, glib
+, pkgs
 }:
 
 let
   pname = "tock-ui";
+  name = "Tock UI";
   version = "1.13.0";
-  hash = "sha256-4cSVEPVVqC2/dU7IyUEFds9jLVDn1GxsIwxIDRjxTHc=";
-in
 
-appimageTools.wrapType2 rec {
-  inherit pname version;
-
-  src = fetchurl {
+  src = pkgs.fetchurl {
     url = "https://github.com/DiiageCUCDB/tockApplicationCRA/releases/download/v${version}/Tock.UI_${version}_amd64.AppImage";
-    name = "${pname}-${version}.AppImage";
-    inherit hash;
+    hash = "sha256-4cSVEPVVqC2/dU7IyUEFds9jLVDn1GxsIwxIDRjxTHc=";
   };
+
+  appimageContents = pkgs.appimageTools.extractType2 {
+    inherit pname src version;
+  };
+in
+pkgs.appimageTools.wrapType2 {
+  inherit pname src version;
 
   # Use system libraries instead of AppImage bundled ones
   extraPkgs = pkgs: with pkgs; [
     glib
     gtk3
     gsettings-desktop-schemas
+    hicolor-icon-theme
   ];
 
-  extraInstallCommands = let
-    contents = appimageTools.extractType2 { inherit pname version src; };
-  in ''
-    # Only copy non-library files
-    mkdir -p "$out/share/applications"
-    
-    # Copy desktop file
-    if ls "${contents}"/*.desktop 1>/dev/null 2>&1; then
-      cp "${contents}"/*.desktop "$out/share/applications/${pname}.desktop"
-      substituteInPlace "$out/share/applications/${pname}.desktop" \
-        --replace 'Exec=AppRun' 'Exec=${pname}' \
-        --replace 'Icon=${pname}' "Icon=${pname}" 2>/dev/null
-    fi
-  '';
+  extraInstallCommands = ''
+    # Install desktop file
+    install -m 444 -D "${appimageContents}/Tock UI.desktop" "$out/share/applications/${pname}.desktop"
 
+    # Install icon
+    install -m 444 -D "${appimageContents}/usr/share/icons/hicolor/128x128/apps/tock-ui.png" \
+      "$out/share/icons/hicolor/512x512/apps/${pname}.png"
+  '';
+  
   meta = with lib; {
     description = "Tock UI application";
     homepage = "https://github.com/DiiageCUCDB/tockApplicationCRA";
-    license = licenses.unfree;
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [];
     platforms = [ "x86_64-linux" ];
   };

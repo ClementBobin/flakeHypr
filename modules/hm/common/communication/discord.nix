@@ -4,14 +4,15 @@ let
   cfg = config.modules.hm.communication.discord;
 
   # Map Discord clients to their packages
-  clientsToPackage = with pkgs; {
-    discord = discord;
-    discordo = discordo;
-    discord-sh = discord-sh;
-    discord-ptb = discord-ptb;
-    discord-canary = discord-canary;
-    discord-development = discord-development;
-    cordless = cordless;
+  clientsToPackage = {
+    fluxer = (import ../../../wrapper/fluxer.nix { inherit pkgs lib; });
+    discord = pkgs.discord;
+    discordo = pkgs.discordo;
+    discord-sh = pkgs.discord-sh;
+    discord-ptb = pkgs.discord-ptb;
+    discord-canary = pkgs.discord-canary;
+    discord-development = pkgs.discord-development;
+    cordless = pkgs.cordless;
   };
 
   # Map overlay names to their packages

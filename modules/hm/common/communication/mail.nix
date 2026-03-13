@@ -5,8 +5,12 @@ let
 
   serviceList = cfg.services;
 
+  # Import velo package (adjust path as needed)
+  velo = pkgs.callPackage ../../../wrapper/velo.nix { };
+
   # Map service names to their corresponding packages or list of packages
   serviceToPackage = {
+    velo = [ velo ];
     thunderbird = [ ];
     bluemail    = [ pkgs.bluemail ];
   };

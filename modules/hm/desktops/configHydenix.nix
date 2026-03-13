@@ -6,6 +6,9 @@ let
 
   zen-browserEnabled = lib.elem "zen-browser" config.modules.hm.browser.clients;
 
+  # app-launcher hyprshell actif
+  hyprshellActive = lib.elem "hyprshell" config.modules.hm.utilities.app-launcher.clients;
+
   # Generate random command logic
   randomCommand =
     if cfg.randomOnBoot.wallpaper && cfg.randomOnBoot.theme then
@@ -18,8 +21,8 @@ let
       null;
 
   startupCmds = [
-    "sleep 1"
-    "fix-hypr-rules"
+    "sleep 5"
+    (lib.optionalString hyprshellActive "hyprshell run &")
     (lib.optionalString (randomCommand != null) randomCommand)
   ];
   filteredCmds = lib.filter (x: x != "") startupCmds;
