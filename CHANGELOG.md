@@ -1,3 +1,13 @@
+# [1.5.0](https://github.com/ClementBobin/flakeHypr/compare/v1.4.0...v1.5.0) (2026-03-25)
+
+
+### Features
+
+* enhance communication and utility modules with new packages and configurations ([f49aed8](https://github.com/ClementBobin/flakeHypr/commit/f49aed8bd5329baefbf9bc7b66b5211f3bea7355))
+* **gitleaks:** add Gitleaks integration for secret detection in git repositories ([449bccf](https://github.com/ClementBobin/flakeHypr/commit/449bccfae3531070061c57517b6ed9d5c832948c))
+* update flake.lock and host configurations for improved package management and multimedia support ([c6a9b20](https://github.com/ClementBobin/flakeHypr/commit/c6a9b20cc0a0745d3a473d984ca3df5402b057ab))
+* **vpn:** add support for WireGuard and OpenFortiVPN with unified dispatcher ([9902f95](https://github.com/ClementBobin/flakeHypr/commit/9902f95831017651a6abc76f2c07fcbccbf3bffd))
+
 # [1.4.0](https://github.com/ClementBobin/flakeHypr/compare/v1.3.0...v1.4.0) (2025-11-14)
 
 
