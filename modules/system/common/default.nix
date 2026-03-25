@@ -1,9 +1,7 @@
 { inputs, ... }:
 {
   imports = [
-    ./dev/languages/flutter.nix
-    ./dev/languages/php.nix
-    ./dev/tools/flatpak.nix
+    ./dev/languages/android.nix
     ./dev/environments.nix
 
     ./hardware/powersave
@@ -21,8 +19,6 @@
     ./security/password-manager.nix
 
     ./server/communication/agents.nix
-    ./server/communication/deskflow.nix
-    ./server/communication/matrix.nix
     ./server/communication/ntfy-sh.nix
     ./server/dev/vs-code.nix
     ./server/games/sunshine.nix
@@ -36,8 +32,6 @@
     ./server/print.nix
 
     ./virtualisation
-    ./virtualisation/ollama.nix
-
     ./games.nix
   ];
 

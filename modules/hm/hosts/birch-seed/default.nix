@@ -21,10 +21,7 @@
       };
       multimedia = {
         editing.image.enable = true;
-        editing.audio.enable = true;
-        player = {
-          clients = ["mpv" "miru"];
-        };
+        player.clients = ["mpv"];
         remote-desktop.clients = ["rustdesk"];
       };
       browser.clients = ["firefox"];
@@ -39,11 +36,6 @@
       communication = {
         teams.enable = true;
         mail.services = ["bluemail"];
-      };
-      utilities.safety.ianny = {
-        enable = true;
-        presets = ["safety" "game"];
-        defaultPreset = "safety";
       };
       extra.syncthing-ignore.enable = true;
     };

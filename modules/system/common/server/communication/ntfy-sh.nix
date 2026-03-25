@@ -37,12 +37,12 @@ in
       notify-client
     ]);
 
-    home-manager.sharedModules = lib.mkIf cfg.configure-client [
-      {
-        home.file.".config/ntfy/client.yml".text = ''
-          default-host: ${cfg.baseUrl}
-        '';
-      }
-    ];
+    # home-manager.sharedModules = lib.mkIf cfg.configure-client [
+    #   {
+    #     home.file.".config/ntfy/client.yml".text = ''
+    #       default-host: ${cfg.baseUrl}
+    #     '';
+    #   }
+    # ];
   };
 }

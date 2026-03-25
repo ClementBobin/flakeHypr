@@ -2,6 +2,7 @@
   inputs,
   lib,
   config,
+  vars,
   ...
 }:
 
@@ -11,6 +12,9 @@ let
   cfg = config.desktops.hydenix;
 
   configHydenix = import ./configHydenix.nix { inherit lib config; };
+
+  # Check if spicetify is in the clients list
+  spicetifyEnabled = lib.elem "spicetify" config.modules.hm.multimedia.player.clients;
 
   # Validate hostnames
   validHostnames = [ "fern" "oak" "pine" "cedar" "sapling" "clover" ];
@@ -51,11 +55,17 @@ in
           "Pixel Dream"
           "Rain Dark"
           "Rosé Pine"
-          "Sci-fi"
-          "Tokyo Night"
+          # "Sci-fi"
+          # "Tokyo Night"
         ];
         description = "List of available themes for Hydenix desktop";
       };
+    };
+
+    browser.enable = mkOption {
+      type = types.bool;
+      default = cfg.enable;
+      description = "Enable Hydenix browser configuration";
     };
 
     randomOnBoot = {
@@ -93,9 +103,9 @@ in
         vscode.enable = false;
         neovim = false;
       };
-      firefox.enable = cfg.enable;
+      firefox.enable = cfg.browser.enable;
       git = {
-        enable = true;
+        enable = cfg.enable;
         name = "mirage";
         email = "119869686+ClementBobin@users.noreply.github.com";
       };
@@ -109,10 +119,9 @@ in
       social = {
         enable = cfg.enable;
         discord.enable = false;
-        webcord.enable = false;
         vesktop.enable = cfg.enable;
       };
-      spotify.enable = cfg.enable;
+      spotify.enable = cfg.enable && !spicetifyEnabled;
       swww.enable = cfg.enable;
       theme = {
         enable = cfg.enable;
@@ -131,7 +140,6 @@ in
             kb_layout = fr
           }
 
-          ${configHydenix.config}
           ${configHydenix.hyprlandKeybinds}
 
           # Example monitor configuration
@@ -164,7 +172,7 @@ in
           bind = ALT, Tab, cyclenext
           bind = ALT, Tab, bringactivetotop
 
-          bind = $mainMod Alt, G, exec, powermode-toggle.sh
+          bind = $mainMod Alt, G, exec, power-tools toggle
 
           bind = $mainMod Alt, R, exec, random-theme.sh -all
 
@@ -176,10 +184,6 @@ in
         force = true;
         mutable = true;
       };
-      ".local/bin/powermode-toggle.sh" = {
-        source = ./powermode-toggle.sh;
-        executable = true;
-      };
       ".local/bin/nvidia-run" = {
         source = ./nvidia-run.sh;
         executable = true;
@@ -188,9 +192,14 @@ in
         source = ./random-theme.sh;
         executable = true;
       };
-      # ".local/share/waybar/layouts/mirage.jsonc" = {
-      #   source = ./mirage-waybar.jsonc;
-      # };
+    };
+    home.shellAliases = {
+      #fix-hypr-rules = "sudo cp ~/.config/hypr/windowrules.conf ~/.config/hypr/windowrules.conf.local && sed -i 's/initialtitle:/title:/g' ~/.config/hypr/windowrules.conf.local && ln -sf ~/.config/hypr/windowrules.conf.local ~/.config/hypr/windowrules.conf";
+      fix-hypr-rules = "CHANGED=false; [ -s ~/.config/hypr/windowrules.conf ] && sudo mv ~/.config/hypr/windowrules.conf ~/.config/hypr/windowrules.conf.bak && sudo touch ~/.config/hypr/windowrules.conf && CHANGED=true || echo 'First file empty, skipping'; [ -s ~/.local/share/hypr/windowrules.conf ] && sudo mv ~/.local/share/hypr/windowrules.conf ~/.local/share/hypr/windowrules.conf.bak && sudo touch ~/.local/share/hypr/windowrules.conf && CHANGED=true || echo 'Second file empty, skipping'; if [ \"\$CHANGED\" = true ]; then echo 'Changes detected, reloading Hyprland...'; hyprctl reload; else echo 'No changes made.'; fi";
+      rebuild-fix = "sudo rm /home/mirage/.local/share/hypr/windowrules.conf && sudo rm /home/mirage/.config/hypr/windowrules.conf";
+      run-gittype = "nix run github:unhappychoice/gittype";
+      run-gitlogue = "nix run github:unhappychoice/gitlogue";
+      run-deadnix = "nix run github:astro/deadnix";
     };
   };
 }

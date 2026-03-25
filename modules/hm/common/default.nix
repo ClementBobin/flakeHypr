@@ -8,26 +8,22 @@ in
 
     ./communication/mail.nix
     ./communication/discord.nix
-    ./communication/matrix.nix
     ./communication/teams.nix
 
     ./dev/environments/containers.nix
     ./dev/environments/editor.nix
     ./dev/languages/dotnet.nix
-    ./dev/languages/kotlin.nix
     ./dev/languages/node.nix
+    ./dev/languages/php.nix
     ./dev/languages/python.nix
     ./dev/languages/rust.nix
-    ./dev/tools/cli.nix
     ./dev/tools/git-action.nix
-    ./dev/tools/gitleaks.nix
+    ./dev/tools/gitleaks
     ./dev/tools/nix.nix
     ./dev/tools/prisma.nix
 
     ./documentation/obsidian.nix
     ./documentation
-
-    ./engine
 
     ./extra/shader-cache-cleanup.nix
     ./extra/syncthing-ignore.nix
@@ -36,28 +32,21 @@ in
     ./games/joystick.nix
     ./games/mangohud.nix
 
-    ./multimedia/editing/audio.nix
     ./multimedia/editing/image.nix
     ./multimedia/editing/video.nix
     ./multimedia/management-utility.nix
     ./multimedia/player.nix
-    ./multimedia/rambox.nix
     ./multimedia/remote-desktop.nix
     ./multimedia/streaming.nix
 
     ./network/tunnel.nix
 
-    ./security/burp.nix
-
     ./shell/disk-usage.nix
     ./shell/tools.nix
 
-    ./utilities/safety/ianny.nix
     ./utilities/api.nix
     ./utilities/app-launcher.nix
-    ./utilities/filezilla.nix
-    ./utilities/kde-connect.nix
-    ./utilities/stacer.nix
+    ./utilities/tracker.nix
 
     inputs.nix-podman-stacks.homeModules.nps
   ];

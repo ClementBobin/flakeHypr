@@ -13,7 +13,9 @@ in
       android-studio
     ];
 
-    programs.adb.enable = true;
+    environment.shellAliases = {
+      adb-restart = "adb kill-server && adb start-server && adb devices";
+    };
 
     users.users.${vars.user}.extraGroups = [
       "adbusers"

@@ -1,36 +1,47 @@
 {
   inputs,
+  modulesPath,
   vars,
   lib,
+  system,
   ...
 }:
 let
-  pkgs = import inputs.hydenix.inputs.hydenix-nixpkgs {
-    inherit (inputs.hydenix.lib) system;
+  pkgs = import inputs.nixpkgs {
+    inherit system;
     config = {
       allowUnfree = true;
     };
     overlays = [
-      inputs.hydenix.lib.overlays
-      (final: prev: {
-        userPkgs = import inputs.nixpkgs {
-          inherit (inputs.hydenix.lib) system;
-          config = {
-            allowUnfree = true;
-          };
-        };
-      })
+      inputs.hydenix.overlays.default
     ];
   };
 in
 {
+  nix.settings = { sandbox = false; };
+  proxmoxLXC = {
+    manageNetwork = false;
+    privileged = true;
+  };
+  security.pam.services.sshd.allowNullPassword = true;
+  services.fstrim.enable = false; # Let Proxmox host handle fstrim
+
+  # Cache DNS lookups to improve performance
+  services.resolved = {
+    extraConfig = ''
+      Cache=true
+      CacheFromLocalhost=true
+    '';
+  };
+
+  # =================================== LXC-specific settings ===================================
   nixpkgs.pkgs = pkgs;
 
   imports = [
-    inputs.hydenix.inputs.home-manager.nixosModules.home-manager
-    inputs.hydenix.lib.nixOsModules
-    ./hardware-configuration.nix
+    inputs.home-manager.nixosModules.home-manager
+    inputs.hydenix.nixosModules.default
     ../../modules/system/hosts/cedar
+    (modulesPath + "/virtualisation/proxmox-lxc.nix")
 
 
     # === GPU-specific configurations ===
@@ -66,6 +77,16 @@ in
       };
   };
 
+  users.users.${vars.user} = {
+    isNormalUser = true;
+    #initialPassword = "${vars.user}";
+    extraGroups = [
+      "wheel"
+      "networkmanager"
+    ];
+    shell = pkgs.zsh;
+  };
+
   hydenix = {
     enable = true;
     hostname = "cedar";
@@ -80,45 +101,8 @@ in
     gaming.enable = false;
   };
 
-  boot.loader = {
-    grub = {
-      device = lib.mkForce "/dev/sda";
-      efiSupport = lib.mkForce false;
-    };
-    efi.canTouchEfiVariables = lib.mkForce false;
-  };
-
-  # Select internationalisation properties.
-  i18n.extraLocaleSettings = {
-    LC_ADDRESS = "fr_FR.UTF-8";
-    LC_IDENTIFICATION = "fr_FR.UTF-8";
-    LC_MEASUREMENT = "fr_FR.UTF-8";
-    LC_MONETARY = "fr_FR.UTF-8";
-    LC_NAME = "fr_FR.UTF-8";
-    LC_NUMERIC = "fr_FR.UTF-8";
-    LC_PAPER = "fr_FR.UTF-8";
-    LC_TELEPHONE = "fr_FR.UTF-8";
-    LC_TIME = "fr_FR.UTF-8";
-  };
-  # Configure keymap in X11
-  services.xserver.xkb = {
-    layout = "fr";
-    variant = "";
-  };
-  # Configure console keymap
-  console.keyMap = "fr";
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.${vars.user} = {
-    isNormalUser = true;
-    description = "${vars.user}";
-    # initialPassword = "${vars.user}"; # Uncomment to set a password on first boot.
-    extraGroups = [ "networkmanager" "wheel" "nix-ssh" ];
-    shell = pkgs.zsh;
-  };
 
   programs.zsh.enable = true;
-  # Enable automatic login for the user.
-  services.getty.autologinUser = "${vars.user}";
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

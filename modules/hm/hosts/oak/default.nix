@@ -26,14 +26,13 @@
       multimedia = {
         editing.image.enable = true;
         player = {
-          clients = ["mpv" "miru"];
+          clients = ["mpv" "jellyfin-client" "spicetify" "ani-cli" "mangayomi"];
           jellyfin.rpc = true;
         };
-        rambox.enable = true;
-        #remote-desktop.clients = ["remmina"];
+        remote-desktop.clients = ["remote-viewer"]; # "remmina"
         management-utility.clients = ["nwg-displays"];
       };
-      browser.clients = ["firefox"];
+      browser.clients = ["zen"];
       documentation = {
         editors = ["onlyoffice"];
         obsidian.enable = true;
@@ -58,10 +57,11 @@
             enable = true;
             extraPackages = ["node2nix" "fnm" "npm-check-updates"];
           };
+          rust.enable = true;
           python.enable = true;
         };
         tools = {
-          git-action.packages = ["wrkflw"];
+          git-action.packages = ["act"];
           nix.enable = true;
           gitleaks.enable = true;
           prisma.enable = true;
@@ -69,23 +69,21 @@
       };
       communication = {
         teams.enable = true;
-        mail.services = ["bluemail"];
-        discord.rpc.enable = true;
-        matrix.clients = ["element"];
+        mail.services = ["velo"];
+        discord = {
+          clients = ["fluxer"];
+          rpc.enable = true;
+        };
       };
       utilities = {
-        api.clients = ["scalar" "yaak"];
-        safety.ianny = {
-          enable = true;
-          presets = ["dev" "game"];
-          defaultPreset = "dev";
-        };
+        api.clients = ["scalar"];
+        tracker.enable = true;
+        app-launcher.clients = ["hyprshell"];
       };
       extra.syncthing-ignore = {
         enable = true;
         excludedDirs = ["node_modules" "vendor" "storage" ".idea"];
       };
-      security.burp.enable = true;
     };
   };
 }

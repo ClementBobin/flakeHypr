@@ -30,15 +30,10 @@
         python.enable = true;
       };
       tools = {
-        git-action.packages = [ "wrkflw" ];
+        git-action.packages = [ "act" ];
         nix.enable = true;
         prisma.enable = true;
-        gitleaks.enable = true;
       };
-    };
-    network.tunnel = {
-      services = ["localtunnel"];
-      localtunnel.port = 8080;
     };
     extra.syncthing-ignore = {
       enable = true;

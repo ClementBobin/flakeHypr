@@ -4,9 +4,10 @@ let
   cfg = config.desktops.hydenix;
   utilities = config.modules.hm.utilities;
 
-  iannyOptions = utilities.safety.ianny;
+  zen-browserEnabled = lib.elem "zen-browser" config.modules.hm.browser.clients;
 
-  kandoEnabled = utilities.app-launcher.kando.enable;
+  # app-launcher hyprshell actif
+  hyprshellActive = lib.elem "hyprshell" config.modules.hm.utilities.app-launcher.clients;
 
   # Generate random command logic
   randomCommand =
@@ -20,8 +21,8 @@ let
       null;
 
   startupCmds = [
-    "sleep 1"
-    (lib.optionalString kandoEnabled "kando")
+    "sleep 5"
+    (lib.optionalString hyprshellActive "hyprshell run &")
     (lib.optionalString (randomCommand != null) randomCommand)
   ];
   filteredCmds = lib.filter (x: x != "") startupCmds;
@@ -34,12 +35,12 @@ in
     # $scrPath=$HOME/.local/lib/hyde # set scripts path
 
     $l=Launcher
+    ${lib.optionalString zen-browserEnabled ''
+      bindd = $mainMod, B, $l zen browser, exec, zen
+    ''}
     $d=[$l|Rofi menus]
     bindd = $mainMod, colon, $d keybindings hint, exec, pkill -x rofi || $scrPath/keybinds_hint.sh c # launch keybinds hint
     bindd = $mainMod, semicolon , $d glyph picker , exec, pkill -x rofi || $scrPath/glyph-picker.sh # launch glyph picker
-    ${lib.optionalString kandoEnabled ''
-      bindd = Alt, Space, $d launch Kando app launcher, global, menu.kando.Kando:hypr
-    ''}
 
     $ws=Workspaces
     $d=[$ws|Navigation]
@@ -82,15 +83,6 @@ in
 
     $ws=Modes
     $d=[$ws|Safety]
-    ${lib.optionalString iannyOptions.enable ''
-      bindd = $mainMod, F1, $d toggle safety mode, exec, toggle-ianny
-      ${ lib.optionalString (iannyOptions.mode == "preset") ''
-        bindd = $mainMod, F2, $d select Ianny preset, exec, ianny-preset-selector
-        ${lib.optionalString (builtins.elem "game" iannyOptions.presets) ''
-          bindd = $mainMod Alt, G, $d activate game preset, exec, ianny-preset-selector --game
-        ''}
-      ''}
-    ''}
     bindd = $mainMod Alt, F4, $d emergency shutdown all apps, exec, pkill -KILL -u $USER
 
     $d=#! unset the group name
@@ -98,25 +90,5 @@ in
 
   exec-once = ''
     exec-once = ${execCmd}
-  '';
-
-  config = ''
-    ${lib.optionalString kandoEnabled ''
-      ### kando Section
-      input {
-        special_fallthrough = true # having only floating windows in the special workspace will not block focusing windows in the regular workspace.
-        focus_on_close = 1 # focus will shift to the window under the cursor.
-      }
-
-      windowrule = noblur, class:kando
-      windowrule = opaque, class:kando
-      windowrule = size 100% 100%, class:kando
-      windowrule = noborder, class:kando
-      windowrule = noanim, class:kando
-      windowrule = float, class:kando
-      windowrule = pin, class:kando
-
-      ###
-    ''}
   '';
 }

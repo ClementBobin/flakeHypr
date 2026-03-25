@@ -5,11 +5,10 @@
     ./safing/module.nix
     ./safing/package.nix
     #./caelestia.nix
-    ./hayase.nix
-    ./hyprDisplays.nix
-    ./hyprpaper.nix
+    ./fluxer.nix
     ./scalar.nix
-    ./winboat.nix
-    ./wrkflw.nix
+    ./tock-ui.nix
+    ./tock.nix
+    ./velo.nix
   ];
 }

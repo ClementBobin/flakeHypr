@@ -1,8 +1,8 @@
-{ vars, ... }:
+{ vars, pkgs, ... }:
 {
   imports = [
     ../../common
-    ../../../wrapper/safing/module.nix
+    #../../../wrapper/safing/module.nix
   ];
 
   modules.system = {
@@ -23,12 +23,18 @@
       dirSync = "/home/${vars.user}";
       subDir = "Documents";
     };
+    server.print = {
+      enable = true;
+      browsed.enable = true;
+      drivers = [ pkgs.epson-escpr2 pkgs.hplip ];
+      gui.enable = true;
+    };
     security.passwordManager.backend = ["bitwarden"];
     hardware.powersave = {
       enable = true;
       architecture = "intel";
       enableBenchmarkTools = true;
-      forcePerfOnAC = false;
+      forcePerfOnAC = true;
       batteryHealth = {
         enable = true;
         chargeThresholds = {
@@ -37,7 +43,7 @@
         };
       };
       managePowerProfiles = false;
-      disk = [ ];
+      disk = [ "nvme0n1" ];
     };
   };
 

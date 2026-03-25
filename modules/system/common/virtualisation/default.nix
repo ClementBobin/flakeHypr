@@ -22,10 +22,10 @@ let
 
   # Wine packages based on version
   winePackages = with pkgs; {
-    stable = wine-stable;
+    stable64 = wineWowPackages.wayland;
+    stable = wine;
     staging = wine-staging;
     wayland = wineWayland;
-    fonts = winePackages.stable;
   };
 
   # Proton packages
@@ -40,7 +40,7 @@ let
 
   # Additional packages based on configuration
   additionalPackages = with pkgs; []
-    ++ lib.optionals cfg.wine.enable [ (winePackages.${cfg.wine.version} or pkgs.wine-stable) winetricks ]
+    ++ lib.optionals cfg.wine.enable [ (winePackages.${cfg.wine.version} or pkgs.wine-stable) winetricks winboat ]
     ++ lib.optionals cfg.proton.enable protonPackages
     ++ lib.optionals (lib.elem "podman" cfg.engines) [ podman-compose ]
     ++ lib.optionals (lib.elem "docker" cfg.engines) [ docker-compose ];
@@ -135,12 +135,13 @@ in {
       
       version = mkOption {
         type = types.enum (builtins.attrNames winePackages);
-        default = "stable";
+        default = "stable64";
         example = "staging";
         description = ''
           Wine version to install and configure.
           
           Available versions:
+          - stable64: 64-bit Wine package (recommended for most users)
           - stable: Most tested and reliable version
           - staging: Includes experimental patches and features
           - wayland: Experimental Wayland support

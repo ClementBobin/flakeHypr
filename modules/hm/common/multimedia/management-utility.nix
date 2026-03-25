@@ -2,13 +2,11 @@
 
 let
   cfg = config.modules.hm.multimedia.management-utility;
-  hyprdisplays = pkgs.callPackage ../../../wrapper/hyprDisplays.nix {};
 
   clientsList = cfg.clients;
 
   # Map service names to their corresponding packages or list of packages
   clientsToPackage = {
-    hyprdisplays = [ hyprdisplays ];
     nwg-displays    = [ pkgs.nwg-displays ];
     wdisplays = [ pkgs.wdisplays ];
     wlay = [ pkgs.wlay ];

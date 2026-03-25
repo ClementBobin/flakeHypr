@@ -19,9 +19,9 @@ let
   };
 
   otherIDEs = with pkgs; {
-    android-studio = [ android-studio android-studio-tools ];
     dbeaver = dbeaver-bin;
     vs-code = null;
+    codium = vscodium;
   };
 
   # Combine all IDE options

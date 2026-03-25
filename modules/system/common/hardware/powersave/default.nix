@@ -4,10 +4,10 @@ let
   cfg = config.modules.system.hardware.powersave;
 
   # Import scripts as derivations
+  power-toggle = pkgs.writeShellScript "power-toggle" (builtins.readFile ./power-toggle.sh);
   power-benchmark = pkgs.writeShellScript "power-benchmark" (builtins.readFile ./power-benchmark.sh);
   power-tuning = pkgs.writeShellScript "power-tuning" (builtins.readFile ./power-tuning.sh);
 
-  # Create a package that includes both scripts
   power-tools = pkgs.writeShellScriptBin "power-tools" ''
     case "$1" in
       benchmark)
@@ -18,6 +18,10 @@ let
         shift
         exec ${power-tuning} "$@"
         ;;
+      toggle)
+        shift
+        exec ${power-toggle} "$@"
+        ;;
       *)
         echo "Power Tools for ASUS Vivobook Pro 16"
         echo "Usage: power-tools <command> [options]"
@@ -25,15 +29,18 @@ let
         echo "Commands:"
         echo "  benchmark [duration]    Run power consumption benchmarks"
         echo "  tune <command>          Tune power settings"
+        echo "  toggle                  Toggle power profile (AC: Balanced↔Performance, Battery: Balanced↔Quiet)"
         echo ""
         echo "Examples:"
         echo "  power-tools benchmark 60"
         echo "  power-tools tune profile max-powersave"
-        echo "  power-tools tune status"
+        echo "  power-tools toggle"
+        echo "  power-tools toggle set Balanced"
         echo ""
         echo "For detailed help:"
         echo "  power-tools benchmark --help"
         echo "  power-tools tune help"
+        echo "  power-tools toggle help"
         ;;
     esac
   '';
@@ -332,6 +339,10 @@ in {
 
     # Create symlinks to individual scripts for direct access
     environment.etc = lib.mkIf cfg.enableBenchmarkTools {
+      "power-scripts/power-toggle.sh" = {
+        source = power-toggle;
+        mode = "0755";
+      };
       "power-scripts/power-benchmark.sh" = {
         source = power-benchmark;
         mode = "0755";

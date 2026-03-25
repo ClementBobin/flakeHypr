@@ -11,7 +11,7 @@ in
   config = lib.mkIf cfg.enable {
     # Install nix-related tools via home-manager
     home.packages = (with pkgs; [
-      nixfmt-rfc-style
+      nixfmt
       nix-direnv
       direnv
       nix-output-monitor
