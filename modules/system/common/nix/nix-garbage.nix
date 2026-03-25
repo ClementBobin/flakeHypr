@@ -5,7 +5,11 @@ let
 in
 {
   options.modules.system.nix.nix-garbage = {
-    enable = lib.mkEnableOption "Enable automatic garbage collection for Nix";
+    enable = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = "Enable automatic garbage collection for Nix";
+    };
 
     autoGarbageCollection = lib.mkOption {
       type = lib.types.bool;
@@ -27,7 +31,7 @@ in
 
     autoOptimiseStore = lib.mkOption {
       type = lib.types.bool;
-      default = false;
+      default = true;
       description = "Whether to enable automatic store optimization";
     };
   };

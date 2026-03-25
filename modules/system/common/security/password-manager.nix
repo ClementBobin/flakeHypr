@@ -5,7 +5,6 @@ let
 
   # Map password managers to their packages
   passwordManagerToPackage = with pkgs; {
-    keepassxc = [ keepassxc ];
     bitwarden = [ bitwarden-desktop ];
   };
 
@@ -32,7 +31,7 @@ in {
     passwordManager = {
       backend = lib.mkOption {
         type = lib.types.listOf (lib.types.enum (builtins.attrNames passwordManagerToPackage));
-        default = ["keepassxc"];
+        default = ["bitwarden"];
         description = "Select the password manager backend(s) to use.";
       };
     };

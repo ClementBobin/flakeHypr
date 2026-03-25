@@ -6,13 +6,8 @@ let
   # Map Discord clients to their packages
   clientsToPackage = {
     fluxer = (import ../../../wrapper/fluxer.nix { inherit pkgs lib; });
-    discord = pkgs.discord;
-    discordo = pkgs.discordo;
     discord-sh = pkgs.discord-sh;
     discord-ptb = pkgs.discord-ptb;
-    discord-canary = pkgs.discord-canary;
-    discord-development = pkgs.discord-development;
-    cordless = pkgs.cordless;
   };
 
   # Map overlay names to their packages

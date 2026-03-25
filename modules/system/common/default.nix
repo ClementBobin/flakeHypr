@@ -2,7 +2,6 @@
 {
   imports = [
     ./dev/languages/android.nix
-    ./dev/languages/php.nix
     ./dev/environments.nix
 
     ./hardware/powersave
@@ -20,8 +19,6 @@
     ./security/password-manager.nix
 
     ./server/communication/agents.nix
-    ./server/communication/deskflow.nix
-    ./server/communication/matrix.nix
     ./server/communication/ntfy-sh.nix
     ./server/dev/vs-code.nix
     ./server/games/sunshine.nix

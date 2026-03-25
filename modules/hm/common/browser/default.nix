@@ -5,24 +5,18 @@ let
 
   # Map browsers to their packages (using pkgs.)
   browserToPackage = with pkgs; {
-    chromium = [ chromium ];
     chrome   = [ google-chrome ];
     firefox  = [ firefox ];
     brave    = [ brave ];
-    vivaldi  = [ vivaldi ];
-    edge     = [ microsoft-edge ];
     zen      = [ (inputs.zen-browser.packages.${pkgs.system}.default) ];
   };
 
   # Map browsers to their drivers (using pkgs.)
   browserToDriver = with pkgs; {
-    chromium = chromedriver;
     chrome   = chromedriver;
-    vivaldi  = chromedriver;
     brave    = chromedriver;
     firefox  = geckodriver;
-    edge     = msedgedriver;
-    zen      = null;
+    zen      = geckodriver;
   };
 
   # Get packages for enabled browsers

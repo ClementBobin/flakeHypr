@@ -11,8 +11,6 @@ let
   # Map service names to their corresponding packages or list of packages
   serviceToPackage = {
     velo = [ velo ];
-    thunderbird = [ ];
-    bluemail    = [ pkgs.bluemail ];
   };
 
   # Flatten the list of packages from all enabled services

@@ -6,6 +6,7 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-stable.url = "github:nixos/nixpkgs/release-25.05";
     nix-gaming.url = "github:fufexan/nix-gaming";
+    sops-nix.url = "github:Mic92/sops-nix";
 
     # Hydenix and its nixpkgs - kept separate to avoid conflicts
     hydenix.url = "github:richen604/hydenix/v5.0.0";

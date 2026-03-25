@@ -52,6 +52,14 @@ in
         ];
         description = "List of Spicetify extension names to enable.";
       };
+      apps = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [
+          "marketplace"
+          "ncsVisualizer"
+        ];
+        description = "List of Spicetify apps to enable.";
+      };
       theme = lib.mkOption {
         type = lib.types.str;
         default = "text";
@@ -90,6 +98,9 @@ in
         ] ++ (map (ext: spicePkgs.extensions.${ext}) cfg.spicetify.extensions);
         theme = spicePkgs.themes.${cfg.spicetify.theme};
         colorScheme = cfg.spicetify.colorScheme;
+        enabledCustomApps = with spicePkgs.apps; [
+          # Convert app names to actual app paths/derivations
+        ] ++ (map (app: spicePkgs.apps.${app}) cfg.spicetify.apps);
       };
     };
 

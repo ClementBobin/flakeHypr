@@ -8,14 +8,13 @@ in
 
     ./communication/mail.nix
     ./communication/discord.nix
-    ./communication/matrix.nix
     ./communication/teams.nix
 
     ./dev/environments/containers.nix
     ./dev/environments/editor.nix
     ./dev/languages/dotnet.nix
-    ./dev/languages/kotlin.nix
     ./dev/languages/node.nix
+    ./dev/languages/php.nix
     ./dev/languages/python.nix
     ./dev/languages/rust.nix
     ./dev/tools/git-action.nix
@@ -41,8 +40,6 @@ in
     ./multimedia/streaming.nix
 
     ./network/tunnel.nix
-
-    ./security/burp.nix
 
     ./shell/disk-usage.nix
     ./shell/tools.nix

@@ -7,12 +7,6 @@ let
     hyprshell = [ hyprshell ];
   };
 
-  themeRepo = {
-    owner = "kando-menu";
-    repo = "menu-themes";
-    tag = "v0.2.0";
-  };
-
   clientsPackages = lib.concatMap (client: clientsToPackage.${client} or []) cfg.clients;
 in {
   options.modules.hm.utilities.app-launcher = {

@@ -5,8 +5,7 @@ let
   type = "stable";
   version = "0.0.8";
   system = "x86_64";
-  # Use a simpler pname for the binary inside the wrapper
-  pname = name; # The wrapper will create bin/fluxer
+  pname = name;
 
   src = pkgs.fetchurl {
     url = "https://api.fluxer.app/dl/desktop/stable/linux/x64/latest/appimage";

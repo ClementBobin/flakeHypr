@@ -1,25 +1,214 @@
 title = "Global Gitleaks Config"
 
-[[rules]]
-id = "generic-password-assignment"
-description = "Generic Password Assignment"
-regex = '''(?i)(password|passwd|pwd)\s*[=:]\s*['"][^'"]+['"]'''
-tags = ["password", "secret"]
+# ─── Global exclusions ────────────────────────────────────────────────────────
+[allowlist]
+description = "Global path exclusions"
+paths = [
+  '''(^|/)vendor/''',
+  '''(^|/)node_modules/''',
+  '''(^|/)\.git/''',
+  '''(^|/)dist/''',
+  '''(^|/)build/''',
+  '''package-lock\.json$''',
+  '''yarn\.lock$''',
+  '''pnpm-lock\.yaml$''',
+  '''Gemfile\.lock$''',
+  '''poetry\.lock$''',
+  '''go\.sum$''',
+  '''\.min\.(js|css)$''',
+  '''\.(png|jpg|jpeg|gif|ico|svg|woff2?|ttf|eot|otf|pdf|zip|tar\.gz|gz|bz2|xz|7z|rar|exe|dll|so|dylib|class|pyc|pyo|o|a|lib|bin|dat|db|sqlite|sqlite3)$''',
+  '''(^|/)(test|tests|spec|specs|__tests__|__mocks__|fixtures|testdata)/''',
+  '''(^|/)(docs?|documentation|examples?|samples?)/''',
+  '''\.env\.(example|sample|template|dist|test|local\.example)$''',
+  '''CHANGELOG''',
+  '''\.md$''',
+]
 
+# ─── Rule: password assignment ────────────────────────────────────────────────
 [[rules]]
-id = "generic-api-key"
-description = "Generic API Key"
-regex = '''(?i)(api[_-]?key|secret[_-]?key)\s*[=:]\s*['"][^'"]{10,}['"]'''
-tags = ["key", "API"]
+id          = "password-assignment"
+description = "Password or passwd assignment to a literal string"
+regex       = '''(?i)\b(password|passwd|pwd)\s*[:=]\s*['"`]([^'"`\s]{8,128})['"`]'''
+secretGroup = 2
+tags        = ["password", "secret"]
 
-[[rules]]
-id = "simple-password-variable"
-description = "Simple Password in Variable"
-regex = '''(?i)(password|pass|pwd)\s*=\s*['"][^'"]{6,}['"]'''
-tags = ["password", "secret"]
+[rules.allowlist]
+description = "Common placeholder / test / example values"
+regexes = [
+  '''(?i)\$\{[^}]+\}''',
+  '''\$\([^)]+\)''',
+  '''%\{[^}]+\}''',
+  '''<%[^%]+%>''',
+  '''{{[^}]+}}''',
+  '''(?i)^(password|passwd|pwd|secret|changeme|change_me|change-me|changeit|placeholder|example|sample|your[_-]?password|<password>|INSERT[_-]?PASSWORD|todo|fixme|xxx+|abc+|123+|test\d*)$''',
+  '''(?i)^(os\.environ|getenv|process\.env|ENV|secrets\.|vault:|awsm:|ssm:)''',
+  '''(?i)^(none|null|nil|false|true|n/?a|not[_-]set|unset|empty|\*{3,}|\.{3,})$''',
+  '''(?i)^(REPLACE_ME|SET_IN_CI|FROM_ENV|FROM_VAULT|FROM_SECRET)$''',
+]
+paths = [
+  '''\.env\.(example|sample|template|dist|test|local\.example)$''',
+  '''(^|/)(test|tests|spec|specs|fixtures|testdata)/''',
+  '''(^|/)(docs?|documentation|examples?|samples?)/''',
+]
 
+# ─── Rule: generic API key ────────────────────────────────────────────────────
 [[rules]]
-id = "suspicious-string-assignment"
-description = "Any suspicious string assignment"
-regex = '''\b(?:password|passwd|pwd|secret|key|token|auth)\b\s*[:=]\s*['"`]([^'"`]{4,})['"`]'''
-tags = ["password", "secret", "key", "token"]
+id          = "api-key-assignment"
+description = "API key or secret key assignment"
+regex       = '''(?i)\b(api[_-]?key|secret[_-]?key|access[_-]?key|client[_-]?secret)\s*[:=]\s*['"`]([A-Za-z0-9+/=_\-\.]{16,512})['"`]'''
+secretGroup = 2
+entropy     = 3.5
+tags        = ["api-key", "secret"]
+
+[rules.allowlist]
+description = "Placeholder / reference patterns for API keys"
+regexes = [
+  '''(?i)\$\{[^}]+\}''',
+  '''{{[^}]+}}''',
+  '''%\{[^}]+\}''',
+  '''(?i)^(your[_-]?api[_-]?key|api[_-]?key[_-]?here|<api[_-]?key>|REPLACE|CHANGEME|CHANGE_ME|CHANGE-ME|EXAMPLE|DEMO|FAKE|TEST)''',
+  '''^(.)\1{10,}$''',
+  '''^(abcdefghijklmnopqrstuvwxyz|0123456789){1,3}$''',
+  '''(?i)^(none|null|nil|false|true|n/?a|not[_-]set)$''',
+]
+paths = [
+  '''\.env\.(example|sample|template|dist|test|local\.example)$''',
+  '''(^|/)(test|tests|spec|specs|fixtures|testdata)/''',
+  '''(^|/)(docs?|documentation|examples?|samples?)/''',
+]
+
+# ─── Rule: token / bearer / auth header value ─────────────────────────────────
+[[rules]]
+id          = "auth-token-assignment"
+description = "Auth token, bearer token, or access token literal"
+regex       = '''(?i)\b(token|auth[_-]?token|bearer[_-]?token|access[_-]?token|refresh[_-]?token)\s*[:=]\s*['"`]([A-Za-z0-9+/=_\-\.]{20,512})['"`]'''
+secretGroup = 2
+entropy     = 3.5
+tags        = ["token", "auth"]
+
+[rules.allowlist]
+regexes = [
+  '''(?i)\$\{[^}]+\}''',
+  '''{{[^}]+}}''',
+  '''(?i)^(your[_-]?token|<token>|REPLACE|CHANGEME|CHANGE_ME|CHANGE-ME|EXAMPLE|FAKE|TEST|none|null|nil|false|true)''',
+  '''^(.)\1{10,}$''',
+]
+paths = [
+  '''\.env\.(example|sample|template|dist|test|local\.example)$''',
+  '''(^|/)(test|tests|spec|specs|fixtures|testdata)/''',
+  '''(^|/)(docs?|documentation|examples?|samples?)/''',
+]
+
+# ─── Rule: connection string / DSN ───────────────────────────────────────────
+[[rules]]
+id          = "connection-string"
+description = "Database or service connection string with embedded credentials"
+regex       = '''(?i)(postgres|postgresql|mysql|mariadb|mongodb|redis|amqp|rabbitmq|mssql|sqlserver)://[^:@\s'"]+:([^@\s'"]{6,256})@'''
+secretGroup = 2
+tags        = ["dsn", "connection-string", "secret"]
+
+[rules.allowlist]
+regexes = [
+  # Localhost / loopback on any port or db path
+  '''@(localhost|127\.0\.0\.1|::1|0\.0\.0\.0)(:\d+)?(/[^'"`\s]*)?['"`\s]''',
+  # Obvious placeholder passwords
+  '''(?i)^(password|passwd|secret|changeme|change_me|change-me|example|test|yourpassword|<password>|REPLACE|INSERT)$''',
+  # Interpolation references
+  '''(?i)\$\{[^}]+\}''',
+  '''{{[^}]+}}''',
+]
+paths = [
+  # SQLite files never embed remote credentials
+  '''\.sqlite3?$''',
+  '''\.env\.(example|sample|template|dist|test|local\.example)$''',
+  '''(^|/)(test|tests|spec|specs|fixtures|testdata)/''',
+  '''(^|/)(docs?|documentation|examples?|samples?)/''',
+]
+
+# ─── Rule: private key PEM block ─────────────────────────────────────────────
+[[rules]]
+id          = "private-key-pem"
+description = "PEM-encoded private key block"
+regex       = '''-----BEGIN (RSA |EC |DSA |OPENSSH |PGP )?PRIVATE KEY( BLOCK)?-----'''
+tags        = ["private-key", "crypto"]
+
+[rules.allowlist]
+paths = [
+  '''(^|/)(test|tests|spec|specs|fixtures|testdata)/''',
+  '''(^|/)(docs?|documentation|examples?|samples?)/''',
+  '''_test\.(go|py|rb|js|ts|java|cs)$''',
+  '''\.env\.(example|sample|template|dist|test|local\.example)$''',
+  '''\.example$''',
+  '''\.sample$''',
+]
+
+# ─── Rule: AWS Access Key ID ──────────────────────────────────────────────────
+[[rules]]
+id          = "aws-access-key-id"
+description = "AWS Access Key ID"
+regex       = '''\b(AKIA|ABIA|ACCA|ASIA)[A-Z0-9]{16}\b'''
+tags        = ["aws", "cloud", "access-key"]
+
+[rules.allowlist]
+regexes = [
+  '''AKIAIOSFODNN7EXAMPLE''',
+  '''AKIAI44QH8DHBEXAMPLE''',
+]
+paths = [
+  '''(^|/)(test|tests|spec|specs|fixtures|testdata)/''',
+  '''(^|/)(docs?|documentation|examples?|samples?)/''',
+  '''\.env\.(example|sample|template|dist|test|local\.example)$''',
+]
+
+# ─── Rule: AWS Secret Access Key ─────────────────────────────────────────────
+[[rules]]
+id          = "aws-secret-access-key"
+description = "AWS Secret Access Key"
+regex       = '''(?i)\b(aws[_-]?secret[_-]?(access[_-]?)?key)\s*[:=]\s*['"`]?([A-Za-z0-9/+=]{40})['"`]?'''
+secretGroup = 3
+entropy     = 4.0
+tags        = ["aws", "cloud", "secret"]
+
+[rules.allowlist]
+regexes = [
+  '''(?i)(example|fake|test|dummy|placeholder|REPLACE|CHANGEME|CHANGE_ME)''',
+  '''(?i)\$\{[^}]+\}''',
+  '''{{[^}]+}}''',
+  '''^(.)\1{10,}$''',
+]
+paths = [
+  '''(^|/)(test|tests|spec|specs|fixtures|testdata)/''',
+  '''(^|/)(docs?|documentation|examples?|samples?)/''',
+  '''\.env\.(example|sample|template|dist|test|local\.example)$''',
+]
+
+# ─── Rule: high-entropy catch-all ────────────────────────────────────────────
+[[rules]]
+id          = "high-entropy-secret"
+description = "High-entropy string assigned to a secret-sounding variable"
+regex       = '''\b(?i)(password|passwd|pwd|secret|key|token|auth|credential|cred|apikey|api_key|access_key)\b\s*[:=]\s*['"`]([^'"`\s]{12,256})['"`]'''
+secretGroup = 2
+entropy     = 4.2
+tags        = ["high-entropy", "secret"]
+
+[rules.allowlist]
+description = "Broad false-positive exclusions for the catch-all rule"
+regexes = [
+  '''(?i)\$\{[^}]+\}''',
+  '''\$\([^)]+\)''',
+  '''%\{[^}]+\}''',
+  '''{{[^}]+}}''',
+  '''<%[^%]+%>''',
+  '''(?i)^(password|passwd|secret|changeme|change_me|change-me|changeit|placeholder|example|sample|your[_-]?.*|<[^>]+>|INSERT|REPLACE|CHANGE|TODO|FIXME|XXX|DUMMY|FAKE|DEMO|TEST\w*)$''',
+  '''(?i)^(os\.environ|getenv|process\.env|ENV\[|secrets\.|vault:|ssm:|awssm:|from_env)''',
+  '''(?i)^(none|null|nil|false|true|n/?a|not[_-]?set|unset|empty|disabled|default)$''',
+  '''^(.)\1{8,}$''',
+  '''(?i)^(GITHUB_TOKEN|CIRCLE_TOKEN|TRAVIS_TOKEN|CI_JOB_TOKEN|CODEBUILD_|GITLAB_)''',
+  '''^https?://''',
+  '''^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$''',
+]
+paths = [
+  '''\.env\.(example|sample|template|dist|test|local\.example)$''',
+  '''(^|/)(test|tests|spec|specs|fixtures|testdata)/''',
+  '''(^|/)(docs?|documentation|examples?|samples?)/''',
+]

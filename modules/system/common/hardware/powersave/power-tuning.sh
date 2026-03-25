@@ -1,7 +1,12 @@
 #!/usr/bin/env bash
-
-# Power Tuning Script for ASUS Vivobook Pro 16
-# This script allows runtime adjustment of power settings for testing
+# power-tuning.sh — Low-level kernel power settings for ASUS Vivobook Pro 16
+#
+# Profiles:
+#   max-performance   AC only — full boost, no power saving
+#   balanced          AC/battery — schedutil, sensible defaults
+#   max-powersave     Battery — deep savings, WiFi PS, capped frequency
+#
+# Called by powermode-toggle.sh automatically, or standalone.
 
 set -euo pipefail
 
@@ -12,322 +17,339 @@ log() {
     echo "[$(date '+%Y-%m-%d %H:%M:%S')] $*"
 }
 
+# ── Backup / Restore ──────────────────────────────────────────────────────────
+
 backup_current_settings() {
-    log "Backing up current settings to $SETTINGS_FILE"
-
-    cat > "$SETTINGS_FILE" << EOF
-# Power settings backup - $(date)
-cpu_governor=$(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor 2>/dev/null || echo "unknown")
-EOF
-
-    # Backup PCIe ASPM if available
-    if [[ -f /sys/module/pcie_aspm/parameters/policy ]]; then
-        echo "pcie_aspm=$(cat /sys/module/pcie_aspm/parameters/policy)" >> "$SETTINGS_FILE"
-    fi
-
-    # Backup runtime PM settings (store as path|value pairs)
-    for device in /sys/bus/pci/devices/*/power/control; do
-        if [[ -f "$device" ]]; then
-            local device_path
-            device_path=$(dirname "$device")
-            echo "runtime_pm:${device}|$(cat "$device")" >> "$SETTINGS_FILE"
-        fi
-    done
+    log "Backing up current settings → ${SETTINGS_FILE}"
+    {
+        echo "# Power settings backup — $(date)"
+        echo "cpu_governor=$(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor 2>/dev/null || echo unknown)"
+        [[ -f /sys/module/pcie_aspm/parameters/policy ]] && \
+            echo "pcie_aspm=$(cat /sys/module/pcie_aspm/parameters/policy)"
+        # Runtime PM — stored as path|value pairs
+        for ctrl in /sys/bus/pci/devices/*/power/control; do
+            [[ -f "$ctrl" ]] && echo "runtime_pm:${ctrl}|$(cat "$ctrl")"
+        done
+    } > "$SETTINGS_FILE"
 }
 
 restore_settings() {
-    if [[ ! -f "$SETTINGS_FILE" ]]; then
-        log "No backup file found at $SETTINGS_FILE"
-        return 1
-    fi
+    [[ -f "$SETTINGS_FILE" ]] || { log "No backup at ${SETTINGS_FILE}"; return 1; }
+    log "Restoring settings from ${SETTINGS_FILE}"
 
-    log "Restoring settings from $SETTINGS_FILE"
-
-    # shellcheck source=/dev/null
-    source "$SETTINGS_FILE"
-
-    # Restore CPU governor
-    if [[ -n "${cpu_governor:-}" ]]; then
-        set_cpu_governor "$cpu_governor"
-    fi
-
-    # Restore runtime PM paths
+    local cpu_governor=""
     while IFS= read -r line; do
-        [[ $line == runtime_pm:* ]] || continue
-        local payload=${line#runtime_pm:}
-        local path=${payload%%|*}
-        local val=${payload#*|}
-        echo "$val" | sudo tee "$path" >/dev/null || true
+        case "$line" in
+            cpu_governor=*)
+                cpu_governor="${line#cpu_governor=}"
+                ;;
+            runtime_pm:*)
+                local payload="${line#runtime_pm:}"
+                local path="${payload%%|*}"
+                local val="${payload#*|}"
+                echo "$val" | sudo tee "$path" >/dev/null || true
+                ;;
+        esac
     done < "$SETTINGS_FILE"
 
-    log "Settings restored"
+    [[ -n "$cpu_governor" ]] && set_cpu_governor "$cpu_governor"
+    log "Restore complete"
 }
+
+# ── CPU ───────────────────────────────────────────────────────────────────────
 
 set_cpu_governor() {
-    local governor=$1
-    local available_governors
-    available_governors=$(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors 2>/dev/null || echo "")
+    local governor="$1"
+    local available
+    available=$(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors 2>/dev/null || echo "")
 
-    if ! grep -Eq "(^|[[:space:]])${governor}([[:space:]]|$)" <<< "$available_governors"; then
-        log "Error: Governor '$governor' not available. Available: $available_governors"
+    if [[ ! " $available " =~ " $governor " ]]; then
+        log "Error: governor '${governor}' not available (have: ${available})"
         return 1
     fi
 
-    log "Setting CPU governor to: $governor"
-    for cpu_dir in /sys/devices/system/cpu/cpu*/cpufreq/; do
-        if [[ -f "${cpu_dir}scaling_governor" ]]; then
-            echo "$governor" | sudo tee "${cpu_dir}scaling_governor" >/dev/null
-        fi
+    log "CPU governor → ${governor}"
+    for f in /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor; do
+        [[ -f "$f" ]] && echo "$governor" | sudo tee "$f" >/dev/null
     done
 }
 
-set_cpu_frequency_limits() {
-    local min_freq=${1:-}
-    local max_freq=${2:-}
-
-    if [[ -n "$min_freq" ]]; then
-        log "Setting minimum CPU frequency to: ${min_freq}MHz"
-        for cpu_dir in /sys/devices/system/cpu/cpu*/cpufreq/; do
-            if [[ -f "${cpu_dir}scaling_min_freq" ]]; then
-                echo $((min_freq * 1000)) > "${cpu_dir}scaling_min_freq"
-            fi
-        done
-    fi
-
-    if [[ -n "$max_freq" ]]; then
-        log "Setting maximum CPU frequency to: ${max_freq}MHz"
-        for cpu_dir in /sys/devices/system/cpu/cpu*/cpufreq/; do
-            if [[ -f "${cpu_dir}scaling_max_freq" ]]; then
-                echo $((max_freq * 1000)) > "${cpu_dir}scaling_max_freq"
-            fi
-        done
-    fi
+# Reset frequency limits to hardware maximums (remove any cap)
+clear_cpu_freq_limits() {
+    log "CPU freq limits → hardware max"
+    for cpu_dir in /sys/devices/system/cpu/cpu*/cpufreq/; do
+        local cpuinfo_max="${cpu_dir}cpuinfo_max_freq"
+        local cpuinfo_min="${cpu_dir}cpuinfo_min_freq"
+        [[ -f "${cpu_dir}scaling_max_freq" && -f "$cpuinfo_max" ]] && \
+            cat "$cpuinfo_max" | sudo tee "${cpu_dir}scaling_max_freq" >/dev/null
+        [[ -f "${cpu_dir}scaling_min_freq" && -f "$cpuinfo_min" ]] && \
+            cat "$cpuinfo_min" | sudo tee "${cpu_dir}scaling_min_freq" >/dev/null
+    done
 }
+
+set_cpu_max_freq() {
+    local max_mhz="$1"
+    log "CPU max freq → ${max_mhz} MHz"
+    for f in /sys/devices/system/cpu/cpu*/cpufreq/scaling_max_freq; do
+        [[ -f "$f" ]] && echo $((max_mhz * 1000)) | sudo tee "$f" >/dev/null
+    done
+}
+
+set_cpu_boost() {
+    local state="$1"   # "1" = on, "0" = off
+    local label
+    label=$([ "$state" = "1" ] && echo "enabled" || echo "disabled")
+
+    # AMD: /sys/devices/system/cpu/cpufreq/boost
+    if [[ -f /sys/devices/system/cpu/cpufreq/boost ]]; then
+        echo "$state" | sudo tee /sys/devices/system/cpu/cpufreq/boost >/dev/null
+        log "CPU boost → ${label} (AMD sysfs)"
+        return
+    fi
+    # Intel: /sys/devices/system/cpu/intel_pstate/no_turbo (inverted)
+    if [[ -f /sys/devices/system/cpu/intel_pstate/no_turbo ]]; then
+        local no_turbo=$(( 1 - state ))
+        echo "$no_turbo" | sudo tee /sys/devices/system/cpu/intel_pstate/no_turbo >/dev/null
+        log "CPU boost → ${label} (Intel no_turbo)"
+        return
+    fi
+    log "Notice: no CPU boost control found"
+}
+
+# ── PCIe ASPM ─────────────────────────────────────────────────────────────────
 
 set_pcie_aspm() {
-    local policy=$1
-    local available_policies
+    local policy="$1"
+    local aspm_file="/sys/module/pcie_aspm/parameters/policy"
 
-    if [[ ! -f /sys/module/pcie_aspm/parameters/policy ]]; then
-        log "PCIe ASPM not available"
-        return 1
+    if [[ ! -f "$aspm_file" ]]; then
+        log "PCIe ASPM sysfs not available (kernel param pcie_aspm=force needed)"
+        return 0
     fi
 
-    available_policies=$(cat /sys/module/pcie_aspm/parameters/policy | tr -d '[]')
-
-    if [[ ! "$available_policies" =~ $policy ]]; then
-        log "Error: PCIe ASPM policy '$policy' not available. Available: $available_policies"
-        return 1
+    local available
+    available=$(cat "$aspm_file" | tr -d '[]')
+    if [[ ! " $available " =~ " $policy " ]]; then
+        log "Warning: ASPM policy '${policy}' not available (have: ${available})"
+        return 0
     fi
 
-    log "Setting PCIe ASPM policy to: $policy"
-    echo "$policy" > /sys/module/pcie_aspm/parameters/policy
+    log "PCIe ASPM → ${policy}"
+    echo "$policy" | sudo tee "$aspm_file" >/dev/null
 }
+
+# ── Runtime PM ────────────────────────────────────────────────────────────────
 
 set_runtime_pm() {
-    local mode=$1  # "auto" or "on"
+    local mode="$1"   # "auto" or "on"
+    log "Runtime PM (PCI) → ${mode}"
 
-    log "Setting runtime power management to: $mode"
-
-    # Apply to PCI devices
-    for device in /sys/bus/pci/devices/*/power/control; do
-        if [[ -f "$device" ]]; then
-            echo "$mode" > "$device"
-        fi
+    for ctrl in /sys/bus/pci/devices/*/power/control; do
+        [[ -f "$ctrl" ]] && echo "$mode" | sudo tee "$ctrl" >/dev/null || true
     done
 
-    # Apply to USB devices (be careful with input devices)
-    for device in /sys/bus/usb/devices/*/power/control; do
-        if [[ -f "$device" ]]; then
-            local device_path=$(dirname "$device")
-            local product_file="${device_path}/product"
-
-            # Skip input devices like keyboards and mice
-            if [[ -f "$product_file" ]]; then
-                local product=$(cat "$product_file" 2>/dev/null || echo "")
-                if [[ ! "$product" =~ (Keyboard|Mouse|HID) ]]; then
-                    echo "$mode" > "$device"
-                fi
-            else
-                echo "$mode" > "$device"
-            fi
+    # USB — skip obvious input devices
+    log "Runtime PM (USB) → ${mode} (skipping input devices)"
+    for ctrl in /sys/bus/usb/devices/*/power/control; do
+        [[ -f "$ctrl" ]] || continue
+        local product_file
+        product_file="$(dirname "$ctrl")/product"
+        if [[ -f "$product_file" ]]; then
+            local product
+            product=$(cat "$product_file" 2>/dev/null || echo "")
+            [[ "$product" =~ (Keyboard|Mouse|HID|Touchpad) ]] && continue
         fi
+        echo "$mode" | sudo tee "$ctrl" >/dev/null || true
     done
 }
+
+# ── WiFi ──────────────────────────────────────────────────────────────────────
 
 set_wifi_power_save() {
-    local mode=$1  # "on" or "off"
+    local mode="$1"   # "on" or "off"
 
-    log "Setting WiFi power save to: $mode"
+    if ! command -v iw &>/dev/null; then
+        log "Notice: iw not found — skipping WiFi power save"
+        return 0
+    fi
 
-    # Find wireless interfaces
-    for iface in /sys/class/net/*/wireless; do
-        if [[ -d "$iface" ]]; then
-            local interface=$(basename "$(dirname "$iface")")
-            if command -v iw &> /dev/null; then
-                iw dev "$interface" set power_save "$mode" 2>/dev/null || log "Could not set power save for $interface"
-            fi
-        fi
+    log "WiFi power save → ${mode}"
+    for iface_dir in /sys/class/net/*/wireless; do
+        [[ -d "$iface_dir" ]] || continue
+        local iface
+        iface=$(basename "$(dirname "$iface_dir")")
+        iw dev "$iface" set power_save "$mode" 2>/dev/null \
+            || log "Warning: could not set power_save for ${iface}"
     done
 }
 
+# ── NVMe / disk ───────────────────────────────────────────────────────────────
+
+set_nvme_power_policy() {
+    local policy="$1"   # "min_power" or "balanced" or "performance"
+    log "NVMe APST → ${policy}"
+    for dev in /sys/class/nvme/nvme*/power/pm_qos_latency_tolerance_us; do
+        [[ -f "$dev" ]] || continue
+        case "$policy" in
+            min_power)   echo 1000000 | sudo tee "$dev" >/dev/null ;;  # 1 s tolerance
+            balanced)    echo   10000 | sudo tee "$dev" >/dev/null ;;  # 10 ms
+            performance) echo       0 | sudo tee "$dev" >/dev/null ;;  # no latency tolerance
+        esac
+    done
+}
+
+# ── Profiles ──────────────────────────────────────────────────────────────────
+
 apply_power_profile() {
-    local profile=$1
+    local profile="$1"
 
     backup_current_settings
 
     case "$profile" in
-        "max-performance")
-            log "Applying maximum performance profile"
-            set_cpu_governor "performance"
-            set_pcie_aspm "performance" 2>/dev/null || true
-            set_runtime_pm "on"
+        # ── AC only ───────────────────────────────────────────────────────────
+        max-performance)
+            log "Profile: max-performance (AC)"
+            set_cpu_governor    "performance"
+            set_cpu_boost       "1"
+            clear_cpu_freq_limits
+            set_pcie_aspm       "performance"
+            set_runtime_pm      "on"
             set_wifi_power_save "off"
+            set_nvme_power_policy "performance"
             ;;
-        "balanced")
-            log "Applying balanced profile"
-            set_cpu_governor "schedutil"
-            set_pcie_aspm "default" 2>/dev/null || true
-            set_runtime_pm "auto"
+
+        # ── AC/battery neutral ────────────────────────────────────────────────
+        balanced)
+            log "Profile: balanced"
+            set_cpu_governor    "schedutil"
+            set_cpu_boost       "1"
+            clear_cpu_freq_limits
+            set_pcie_aspm       "default"
+            set_runtime_pm      "auto"
             set_wifi_power_save "on"
+            set_nvme_power_policy "balanced"
             ;;
-        "max-powersave")
-            log "Applying maximum power save profile"
-            set_cpu_governor "powersave"
-            set_pcie_aspm "powersupersave" 2>/dev/null || true
-            set_runtime_pm "auto"
+
+        # ── Battery — maximise longevity ──────────────────────────────────────
+        max-powersave)
+            log "Profile: max-powersave (battery)"
+            set_cpu_governor    "powersave"
+            set_cpu_boost       "0"          # disable boost → less heat, less wear
+            set_cpu_max_freq    "2000"        # cap at 2 GHz
+            set_pcie_aspm       "powersupersave"
+            set_runtime_pm      "auto"
             set_wifi_power_save "on"
+            set_nvme_power_policy "min_power"
             ;;
-        "custom-powersave")
-            log "Applying custom power save profile"
-            set_cpu_governor "powersave"
-            set_cpu_frequency_limits "" "2000"  # Limit max frequency to 2GHz
-            set_pcie_aspm "powersupersave" 2>/dev/null || true
-            set_runtime_pm "auto"
-            set_wifi_power_save "on"
-            ;;
+
         *)
-            log "Unknown profile: $profile"
-            log "Available profiles: max-performance, balanced, max-powersave, custom-powersave"
+            log "Unknown profile: ${profile}"
+            log "Valid: max-performance | balanced | max-powersave"
             return 1
             ;;
     esac
 
-    log "Profile '$profile' applied successfully"
+    log "Profile '${profile}' applied"
 }
 
-run_benchmark() {
-    local duration=${1:-30}
-
-    if [[ -f "$SCRIPT_DIR/power-benchmark.sh" ]]; then
-        log "Running benchmark for $duration seconds..."
-        "$SCRIPT_DIR/power-benchmark.sh" "$duration"
-    else
-        log "Benchmark script not found at $SCRIPT_DIR/power-benchmark.sh"
-    fi
-}
+# ── Status ────────────────────────────────────────────────────────────────────
 
 show_current_settings() {
     log "=== Current Power Settings ==="
-    log "CPU Governor: $(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor 2>/dev/null || echo 'unknown')"
+    log "CPU governor : $(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor 2>/dev/null || echo unknown)"
 
-    # Show frequency limits
-    local min_freq max_freq
-    min_freq=$(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 2>/dev/null || echo 0)
-    max_freq=$(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 2>/dev/null || echo 0)
-    log "CPU Frequency Range: $((min_freq / 1000))MHz - $((max_freq / 1000))MHz"
+    local min_khz max_khz
+    min_khz=$(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 2>/dev/null || echo 0)
+    max_khz=$(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 2>/dev/null || echo 0)
+    log "CPU freq     : $((min_khz / 1000)) MHz – $((max_khz / 1000)) MHz"
 
-    # Show PCIe ASPM
-    if [[ -f /sys/module/pcie_aspm/parameters/policy ]]; then
-        log "PCIe ASPM Policy: $(cat /sys/module/pcie_aspm/parameters/policy)"
+    # Boost
+    if [[ -f /sys/devices/system/cpu/cpufreq/boost ]]; then
+        local boost
+        boost=$(cat /sys/devices/system/cpu/cpufreq/boost)
+        log "CPU boost    : $([ "$boost" = "1" ] && echo enabled || echo disabled) (AMD)"
+    elif [[ -f /sys/devices/system/cpu/intel_pstate/no_turbo ]]; then
+        local no_turbo
+        no_turbo=$(cat /sys/devices/system/cpu/intel_pstate/no_turbo)
+        log "CPU boost    : $([ "$no_turbo" = "0" ] && echo enabled || echo disabled) (Intel)"
     fi
 
-    # Show runtime PM status for a few devices
-    local runtime_pm_count=0
-    for device in /sys/bus/pci/devices/*/power/control; do
-        if [[ -f "$device" && $runtime_pm_count -lt 3 ]]; then
-            local device_id=$(basename "$(dirname "$(dirname "$device")")")
-            log "Runtime PM ($device_id): $(cat "$device")"
-            runtime_pm_count=$((runtime_pm_count + 1))
-        fi
+    if [[ -f /sys/module/pcie_aspm/parameters/policy ]]; then
+        log "PCIe ASPM    : $(cat /sys/module/pcie_aspm/parameters/policy)"
+    fi
+
+    # Sample first 3 PCI runtime PM entries
+    local n=0
+    for ctrl in /sys/bus/pci/devices/*/power/control; do
+        [[ $n -lt 3 && -f "$ctrl" ]] || continue
+        local dev_id
+        dev_id=$(basename "$(dirname "$(dirname "$ctrl")")")
+        log "Runtime PM   : ${dev_id} → $(cat "$ctrl")"
+        (( n++ )) || true
     done
 }
 
+# ── Help ──────────────────────────────────────────────────────────────────────
+
 show_help() {
-    cat << EOF
-Power Tuning Script
+    cat <<EOF
+power-tuning — Low-level kernel power settings
 
 Usage: $0 [command] [options]
 
 Commands:
-    profile <name>           Apply a power profile
-    governor <name>          Set CPU governor
-    freq-limits <min> <max>  Set CPU frequency limits (MHz)
-    pcie-aspm <policy>       Set PCIe ASPM policy
-    runtime-pm <mode>        Set runtime PM (auto/on)
-    wifi-powersave <mode>    Set WiFi power save (on/off)
-    benchmark [duration]     Run power benchmark
-    backup                   Backup current settings
-    restore                  Restore backed up settings
-    status                   Show current settings
-    help                     Show this help
+  profile <name>          Apply a named profile
+  governor <name>         Set CPU governor directly
+  freq-limits [min] [max] Set CPU freq limits in MHz (omit to clear caps)
+  boost <on|off>          Enable/disable CPU boost/turbo
+  pcie-aspm <policy>      Set PCIe ASPM policy
+  runtime-pm <auto|on>    Set runtime power management
+  wifi-powersave <on|off> Set WiFi power save
+  backup                  Save current settings
+  restore                 Restore saved settings
+  status                  Show current settings
+  help                    This help
 
-Power Profiles:
-    max-performance          Maximum performance, highest power
-    balanced                 Balanced performance and power
-    max-powersave           Maximum power savings
-    custom-powersave        Custom power save with frequency limits
+Profiles:
+  max-performance   Full performance, no power saving       (AC only)
+  balanced          schedutil, auto PM, WiFi PS             (AC/battery)
+  max-powersave     powersave governor, boost off, 2 GHz cap (battery)
 
 Examples:
-    $0 profile max-powersave
-    $0 governor powersave
-    $0 freq-limits 800 2000
-    $0 benchmark 60
-    $0 restore
+  sudo $0 profile max-powersave
+  sudo $0 governor schedutil
+  sudo $0 boost off
+  sudo $0 freq-limits 800 2000
 
-Note: Most commands require root privileges
+Note: Most commands require root (sudo).
 EOF
 }
 
+# ── Main ──────────────────────────────────────────────────────────────────────
+
 main() {
-    if [[ $EUID -ne 0 ]]; then
-        log "Warning: Most power tuning operations require root privileges"
-    fi
+    [[ $EUID -ne 0 ]] && log "Warning: most operations need root (sudo)"
 
     case "${1:-help}" in
-        "profile")
-            apply_power_profile "${2:-balanced}"
+        profile)       apply_power_profile "${2:-balanced}" ;;
+        governor)      set_cpu_governor    "${2:?Usage: $0 governor <name>}" ;;
+        freq-limits)
+            if [[ "${2:-}" == "clear" || -z "${2:-}" ]]; then
+                clear_cpu_freq_limits
+            else
+                [[ -n "${3:-}" ]] && set_cpu_max_freq "$3"
+                # min not exposed as standalone command, call sysfs directly
+                log "Note: use 'profile' command for full freq management"
+            fi
             ;;
-        "governor")
-            set_cpu_governor "${2:-}"
-            ;;
-        "freq-limits")
-            set_cpu_frequency_limits "${2:-}" "${3:-}"
-            ;;
-        "pcie-aspm")
-            set_pcie_aspm "${2:-}"
-            ;;
-        "runtime-pm")
-            set_runtime_pm "${2:-auto}"
-            ;;
-        "wifi-powersave")
-            set_wifi_power_save "${2:-on}"
-            ;;
-        "benchmark")
-            run_benchmark "${2:-30}"
-            ;;
-        "backup")
-            backup_current_settings
-            ;;
-        "restore")
-            restore_settings
-            ;;
-        "status")
-            show_current_settings
-            ;;
-        "help"|*)
-            show_help
-            ;;
+        boost)         set_cpu_boost "$([ "${2:-on}" = "on" ] && echo 1 || echo 0)" ;;
+        pcie-aspm)     set_pcie_aspm      "${2:?Usage: $0 pcie-aspm <policy>}" ;;
+        runtime-pm)    set_runtime_pm     "${2:-auto}" ;;
+        wifi-powersave) set_wifi_power_save "${2:-on}" ;;
+        backup)        backup_current_settings ;;
+        restore)       restore_settings ;;
+        status)        show_current_settings ;;
+        help|*)        show_help ;;
     esac
 }
 

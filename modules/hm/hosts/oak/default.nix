@@ -19,7 +19,7 @@
         mangohud = {
           enable = true;
           cpu.text = ["Ryzen 7 7435HS"];
-          gpu.text = [ "RTX 4060 Laptop" "AMD Rembrandt" ];
+          gpu.text = [ "AMD Rembrandt" "RTX 4060 Laptop" ];
         };
         enabledGames = ["minecraft"];
       };
@@ -63,7 +63,7 @@
         tools = {
           git-action.packages = ["act"];
           nix.enable = true;
-          #gitleaks.enable = true;
+          gitleaks.enable = true;
           prisma.enable = true;
         };
       };

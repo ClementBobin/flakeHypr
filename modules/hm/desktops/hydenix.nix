@@ -172,7 +172,7 @@ in
           bind = ALT, Tab, cyclenext
           bind = ALT, Tab, bringactivetotop
 
-          bind = $mainMod Alt, G, exec, powermode-toggle.sh
+          bind = $mainMod Alt, G, exec, power-tools toggle
 
           bind = $mainMod Alt, R, exec, random-theme.sh -all
 
@@ -183,10 +183,6 @@ in
         '';
         force = true;
         mutable = true;
-      };
-      ".local/bin/powermode-toggle.sh" = {
-        source = ./powermode-toggle.sh;
-        executable = true;
       };
       ".local/bin/nvidia-run" = {
         source = ./nvidia-run.sh;
@@ -204,7 +200,6 @@ in
       run-gittype = "nix run github:unhappychoice/gittype";
       run-gitlogue = "nix run github:unhappychoice/gitlogue";
       run-deadnix = "nix run github:astro/deadnix";
-      diiage-vpn = "nix-shell -p openfortivpn --run 'sudo openfortivpn -c ~/vpn-config'";
     };
   };
 }

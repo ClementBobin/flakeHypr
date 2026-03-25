@@ -2,24 +2,19 @@
 {
   imports = [
     ../../common
-    ../../../wrapper/safing/module.nix
   ];
 
   modules.system = {
     nix = {
-      nix-garbage = {
-        enable = true;
-        autoOptimiseStore = true;
-      };
       polkit.enable = true;
     };
     games = {
       clients = ["steam"];
       steamtinkerlauncher = true;
-      # gamemode.enable = true;
+      #gamemode.enable = true;
     };
     virtualisation.wine.enable = true;
-    networks.vpn = ["tailscale"];
+    networks.vpn = ["tailscale" "wireguard" "openfortivpn"];
     # virtualisation.enable = true;
     server.storage.syncthing = {
       enable = true;
@@ -49,10 +44,5 @@
       disk = [ "nvme0n1" "nvme1n1" ];
       asus.enable = true;
     };
-  };
-
-  services.portmaster = {
-    enable = false;
-    devmode.enable = false;
   };
 }
