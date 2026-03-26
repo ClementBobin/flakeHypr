@@ -38,6 +38,7 @@ in
     ./multimedia/player.nix
     ./multimedia/remote-desktop.nix
     ./multimedia/streaming.nix
+    ./multimedia/wallpaper-engine.nix
 
     ./network/tunnel.nix
 

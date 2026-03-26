@@ -28,6 +28,8 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    linux-wallpaper-engine.url = "github:jagrat7/linux-wallpaper-engine";
   };
 
   outputs = { self, ... }@inputs:

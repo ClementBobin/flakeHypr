@@ -44,6 +44,7 @@ regexes = [
   '''(?i)^(os\.environ|getenv|process\.env|ENV|secrets\.|vault:|awsm:|ssm:)''',
   '''(?i)^(none|null|nil|false|true|n/?a|not[_-]set|unset|empty|\*{3,}|\.{3,})$''',
   '''(?i)^(REPLACE_ME|SET_IN_CI|FROM_ENV|FROM_VAULT|FROM_SECRET)$''',
+  '''^\$[A-Za-z_][A-Za-z0-9_]*$''',
 ]
 paths = [
   '''\.env\.(example|sample|template|dist|test|local\.example)$''',
@@ -67,7 +68,6 @@ regexes = [
   '''{{[^}]+}}''',
   '''%\{[^}]+\}''',
   '''(?i)^(your[_-]?api[_-]?key|api[_-]?key[_-]?here|<api[_-]?key>|REPLACE|CHANGEME|CHANGE_ME|CHANGE-ME|EXAMPLE|DEMO|FAKE|TEST)''',
-  '''^(.)\1{10,}$''',
   '''^(abcdefghijklmnopqrstuvwxyz|0123456789){1,3}$''',
   '''(?i)^(none|null|nil|false|true|n/?a|not[_-]set)$''',
 ]
@@ -91,7 +91,6 @@ regexes = [
   '''(?i)\$\{[^}]+\}''',
   '''{{[^}]+}}''',
   '''(?i)^(your[_-]?token|<token>|REPLACE|CHANGEME|CHANGE_ME|CHANGE-ME|EXAMPLE|FAKE|TEST|none|null|nil|false|true)''',
-  '''^(.)\1{10,}$''',
 ]
 paths = [
   '''\.env\.(example|sample|template|dist|test|local\.example)$''',
@@ -109,16 +108,12 @@ tags        = ["dsn", "connection-string", "secret"]
 
 [rules.allowlist]
 regexes = [
-  # Localhost / loopback on any port or db path
   '''@(localhost|127\.0\.0\.1|::1|0\.0\.0\.0)(:\d+)?(/[^'"`\s]*)?['"`\s]''',
-  # Obvious placeholder passwords
   '''(?i)^(password|passwd|secret|changeme|change_me|change-me|example|test|yourpassword|<password>|REPLACE|INSERT)$''',
-  # Interpolation references
   '''(?i)\$\{[^}]+\}''',
   '''{{[^}]+}}''',
 ]
 paths = [
-  # SQLite files never embed remote credentials
   '''\.sqlite3?$''',
   '''\.env\.(example|sample|template|dist|test|local\.example)$''',
   '''(^|/)(test|tests|spec|specs|fixtures|testdata)/''',
@@ -151,13 +146,13 @@ tags        = ["aws", "cloud", "access-key"]
 
 [rules.allowlist]
 regexes = [
-  '''AKIAIOSFODNN7EXAMPLE''',
-  '''AKIAI44QH8DHBEXAMPLE''',
+  '''(?i)(EXAMPLE|FAKE|TEST|DUMMY|SAMPLE|PLACEHOLDER)''',
 ]
 paths = [
   '''(^|/)(test|tests|spec|specs|fixtures|testdata)/''',
   '''(^|/)(docs?|documentation|examples?|samples?)/''',
   '''\.env\.(example|sample|template|dist|test|local\.example)$''',
+  '''\.gitleaks\.toml$''',
 ]
 
 # ─── Rule: AWS Secret Access Key ─────────────────────────────────────────────
@@ -174,7 +169,6 @@ regexes = [
   '''(?i)(example|fake|test|dummy|placeholder|REPLACE|CHANGEME|CHANGE_ME)''',
   '''(?i)\$\{[^}]+\}''',
   '''{{[^}]+}}''',
-  '''^(.)\1{10,}$''',
 ]
 paths = [
   '''(^|/)(test|tests|spec|specs|fixtures|testdata)/''',
@@ -202,10 +196,10 @@ regexes = [
   '''(?i)^(password|passwd|secret|changeme|change_me|change-me|changeit|placeholder|example|sample|your[_-]?.*|<[^>]+>|INSERT|REPLACE|CHANGE|TODO|FIXME|XXX|DUMMY|FAKE|DEMO|TEST\w*)$''',
   '''(?i)^(os\.environ|getenv|process\.env|ENV\[|secrets\.|vault:|ssm:|awssm:|from_env)''',
   '''(?i)^(none|null|nil|false|true|n/?a|not[_-]?set|unset|empty|disabled|default)$''',
-  '''^(.)\1{8,}$''',
   '''(?i)^(GITHUB_TOKEN|CIRCLE_TOKEN|TRAVIS_TOKEN|CI_JOB_TOKEN|CODEBUILD_|GITLAB_)''',
   '''^https?://''',
   '''^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$''',
+  '''^\$[A-Za-z_][A-Za-z0-9_]*$''',
 ]
 paths = [
   '''\.env\.(example|sample|template|dist|test|local\.example)$''',

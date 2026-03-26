@@ -24,6 +24,7 @@
         enabledGames = ["minecraft"];
       };
       multimedia = {
+        wallpaper-engine.enable = true;
         editing.image.enable = true;
         player = {
           clients = ["mpv" "jellyfin-client" "spicetify" "ani-cli" "mangayomi"];
