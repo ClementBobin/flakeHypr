@@ -27,16 +27,5 @@ in
 
   config = {
     home.packages = packagesToInstall;
-
-    programs.thunderbird = lib.mkIf (lib.elem "thunderbird" serviceList) {
-      enable = true;
-      profiles.default = {
-        isDefault = lib.mkDefault true;
-        settings = {
-          "mail.spellcheck.inline" = true;
-          "browser.display.use_system_colors" = true;
-        };
-      };
-    };
   };
 }

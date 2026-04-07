@@ -30,7 +30,7 @@
           clients = ["mpv" "jellyfin-client" "spicetify" "ani-cli" "mangayomi"];
           jellyfin.rpc = true;
         };
-        remote-desktop.clients = ["remote-viewer"]; # "remmina"
+        remote-desktop.clients = ["remote-viewer"];
         management-utility.clients = ["nwg-displays"];
       };
       browser.clients = ["zen"];
@@ -72,7 +72,7 @@
         teams.enable = true;
         mail.services = ["velo"];
         discord = {
-          clients = ["fluxer"];
+          #clients = ["fluxer"];
           rpc.enable = true;
         };
       };

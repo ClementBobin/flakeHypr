@@ -91,13 +91,9 @@ in
     nvidia.prime.amdgpuBusId = lib.mkForce "PCI:36:0:0";
   };
 
-  networking.firewall = {
-    enable = true;
-    allowedTCPPorts = [ 54005 ];
-  };
-
-  # environment.sessionVariables = {
-  #   BROWSER = "zen-browser";
+  # networking.firewall = {
+  #   enable = true;
+  #   allowedTCPPorts = [ 54005 ];
   # };
 
   # boot.kernel.sysctl = {

@@ -6,8 +6,6 @@ let
   # Map services to their packages
   servicesToPackage = with pkgs; {
     localtunnel = [ nodePackages.localtunnel ];
-    cloudflare = [ cloudflared ];
-    ngrok = [ ngrok ];
   };
 
   # Tunnel command aliases
@@ -15,13 +13,6 @@ let
     localtunnel = {
       ltn = "npx localtunnel --port ${toString cfg.localtunnel.port}";
       ltn-custom = "npx localtunnel --port";
-    };
-    cloudflare = {
-      cft = "cloudflared tunnel --config ${cfg.cloudflare.configPath}";
-    };
-    ngrok = {
-      ngt = "ngrok http ${toString cfg.ngrok.port}";
-      ngt-custom = "ngrok http";
     };
   };
 
@@ -32,15 +23,6 @@ let
   enabledAliases = lib.foldl (acc: service:
     acc // (tunnelAliases.${service} or {})
   ) {} cfg.services;
-
-  # Cloudflare token configuration
-  cloudflareTokenConfig = lib.mkIf (builtins.elem "cloudflare" cfg.services && cfg.cloudflare.tokenPath != null) {
-    home.sessionVariables.CLOUDFLARE_TOKEN_FILE = cfg.cloudflare.tokenPath;
-    home.file.".cloudflared/token" = {
-      source = cfg.cloudflare.tokenPath;
-      target.recursive = true;
-    };
-  };
 
 in {
   options.modules.hm.network.tunnel = {
@@ -57,27 +39,6 @@ in {
         description = "Default port for localtunnel";
       };
     };
-
-    cloudflare = {
-      configPath = lib.mkOption {
-        type = lib.types.str;
-        default = "${config.home.homeDirectory}/.cloudflared/config.yml";
-        description = "Path to Cloudflare config file";
-      };
-      tokenPath = lib.mkOption {
-        type = lib.types.nullOr lib.types.str;
-        default = null;
-        description = "Path to Cloudflare token file";
-      };
-    };
-
-    ngrok = {
-      port = lib.mkOption {
-        type = lib.types.port;
-        default = 3000;
-        description = "Default port for ngrok";
-      };
-    };
   };
 
   config = lib.mkMerge [
@@ -85,7 +46,5 @@ in {
       home.packages = lib.unique servicesPackages;
       home.shellAliases = enabledAliases;
     }
-
-    cloudflareTokenConfig
   ];
 }

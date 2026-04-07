@@ -9,7 +9,6 @@ let
   clientsToPackage = {
     nwg-displays    = [ pkgs.nwg-displays ];
     wdisplays = [ pkgs.wdisplays ];
-    wlay = [ pkgs.wlay ];
   };
 
   # Flatten the list of packages from all enabled clients

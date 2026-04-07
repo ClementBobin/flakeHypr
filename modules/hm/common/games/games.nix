@@ -3,18 +3,16 @@
 let
   cfg = config.modules.hm.games;
 
+  viper = pkgs.callPackage ../../../wrapper/viper.nix { };
+
   # Define all available games
   availableGames = {
     minecraft = {
       packages = with pkgs; [ prismlauncher jdk17 gcc glibc ];
       description = "Minecraft Launcher with PrismLauncher";
     };
-    minecraft-modrinth = {
-      packages = with pkgs; [ modrinth-app jdk17 gcc glibc ];
-      description = "Minecraft Launcher with Modrinth Launcher";
-    };
     titanfall2 = {
-      packages = with inputs.nix-gaming.packages.${pkgs.system}; [ viper (lib.hiPrio northstar-proton) ];
+      packages = [ viper (lib.hiPrio inputs.nix-gaming.packages.${pkgs.system}.northstar-proton) ];
       description = "Titanfall 2 via nix-gaming";
     };
     roblox = {

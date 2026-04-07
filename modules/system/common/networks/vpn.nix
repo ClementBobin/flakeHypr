@@ -138,6 +138,7 @@ in {
     tailscaleEnabled    = lib.elem "tailscale"    cfg.vpn;
     wireguardEnabled    = lib.elem "wireguard"    cfg.vpn;
     openfortivpnEnabled = lib.elem "openfortivpn" cfg.vpn;
+
     anyVpnTool          = wireguardEnabled || openfortivpnEnabled;
 
     tsCfg = {
@@ -174,14 +175,6 @@ in {
         source = wireguard-script;
         mode   = "0755";
       };
-
-      # security.sudo.extraRules = [{
-      #   groups   = [ "wheel" ];
-      #   commands = [
-      #     { command = "${pkgs.wireguard-tools}/bin/wg";       options = [ "NOPASSWD" ]; }
-      #     { command = "${pkgs.wireguard-tools}/bin/wg-quick"; options = [ "NOPASSWD" ]; }
-      #   ];
-      # }];
     })
 
     # ── OpenFortiVPN ──────────────────────────────────────────────────────────
@@ -193,13 +186,6 @@ in {
         source = openfortivpn-script;
         mode   = "0755";
       };
-
-      # security.sudo.extraRules = [{
-      #   groups   = [ "wheel" ];
-      #   commands = [
-      #     { command = "${pkgs.openfortivpn}/bin/openfortivpn"; options = [ "NOPASSWD" ]; }
-      #   ];
-      # }];
     })
 
   ];

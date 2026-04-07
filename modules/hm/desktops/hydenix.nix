@@ -47,17 +47,24 @@ in
           "Cat Latte"
           "Catppuccin Latte"
           "Catppuccin Mocha"
-          "Crimson Blade"
+          "Tokyo Night"
           "Ever Blushing"
-          "Greenify"
-          "One Dark"
-          "Oxo Carbon"
           "Pixel Dream"
           "Rain Dark"
           "Rosé Pine"
-          # "Sci-fi"
-          # "Tokyo Night"
+          "Timeless Dream"
+          "Oregairu"
+          "Obsidian-Purple"
+          "Nier"
+          "Green Lush"
         ];
+          #"Greenify"
+          #"Crimson Blade"
+          #"One Dark"
+          #"Oxo Carbon"
+          #"Sci-fi"
+          #"Vanta Black"
+          #"Peace Of Mind"
         description = "List of available themes for Hydenix desktop";
       };
     };
@@ -120,6 +127,7 @@ in
         enable = cfg.enable;
         discord.enable = false;
         vesktop.enable = cfg.enable;
+        webcord.enable = false;
       };
       spotify.enable = cfg.enable && !spicetifyEnabled;
       swww.enable = cfg.enable;
@@ -138,6 +146,9 @@ in
         text = ''
           input {
             kb_layout = fr
+            force_no_accel = true
+            accel_profile = flat
+            sensitivity = 0
           }
 
           ${configHydenix.hyprlandKeybinds}

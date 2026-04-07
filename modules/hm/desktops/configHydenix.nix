@@ -4,10 +4,9 @@ let
   cfg = config.desktops.hydenix;
   utilities = config.modules.hm.utilities;
 
-  zen-browserEnabled = lib.elem "zen-browser" config.modules.hm.browser.clients;
+  wallpaper-engineEnabled = config.modules.hm.multimedia.wallpaper-engine.enable;
 
-  # app-launcher hyprshell actif
-  hyprshellActive = lib.elem "hyprshell" config.modules.hm.utilities.app-launcher.clients;
+  zen-browserEnabled = lib.elem "zen-browser" config.modules.hm.browser.clients;
 
   # Generate random command logic
   randomCommand =
@@ -22,7 +21,6 @@ let
 
   startupCmds = [
     "sleep 5"
-    (lib.optionalString hyprshellActive "hyprshell run &")
     (lib.optionalString (randomCommand != null) randomCommand)
   ];
   filteredCmds = lib.filter (x: x != "") startupCmds;
@@ -38,6 +36,12 @@ in
     ${lib.optionalString zen-browserEnabled ''
       bindd = $mainMod, B, $l zen browser, exec, zen
     ''}
+    ${lib.optionalString wallpaper-engineEnabled ''
+      bindd = $mainMod Shift, Z, $l wallpaper engine, exec, linux-wallpaper-engine
+    ''}
+    bindd = $mainMod Alt, R, $l random wallpaper, exec, wallpaper.sh -r
+    bindd = $mainMod Ctrl, R, $l random theme, exec, random-theme.sh -r
+
     $d=[$l|Rofi menus]
     bindd = $mainMod, colon, $d keybindings hint, exec, pkill -x rofi || $scrPath/keybinds_hint.sh c # launch keybinds hint
     bindd = $mainMod, semicolon , $d glyph picker , exec, pkill -x rofi || $scrPath/glyph-picker.sh # launch glyph picker
@@ -83,7 +87,7 @@ in
 
     $ws=Modes
     $d=[$ws|Safety]
-    bindd = $mainMod Alt, F4, $d emergency shutdown all apps, exec, pkill -KILL -u $USER
+    bindd = Alt, F4, $d emergency shutdown all apps, exec, pkill -KILL -u $USER
 
     $d=#! unset the group name
   '';
