@@ -20,15 +20,15 @@ in {
     systemd.user.services.hyprshell = lib.mkIf (builtins.elem "hyprshell" cfg.clients) {
       Unit = {
         Description = "Hyprshell application launcher daemon";
-        After = [ "hyprland-session.target" ];
-        PartOf = [ "hyprland-session.target" ];
+        After = [ "default.target" ];
+        PartOf = [ "default.target" ];
       };
       Service = {
         ExecStart = "${pkgs.hyprshell}/bin/hyprshell run";
         Restart = "on-failure";
       };
       Install = {
-        WantedBy = [ "hyprland-session.target" ];
+        WantedBy = [ "default.target" ];
       };
     };
   };
