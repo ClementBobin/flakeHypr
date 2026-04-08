@@ -3,6 +3,8 @@
 let
   cfg = config.modules.hm.shell.disk-usage;
 
+
+
   # Map disk usage tools to their packages
   toolToPackage = with pkgs; {
     ncdu = ncdu;
@@ -10,6 +12,7 @@ let
     dust = dust;
     parallel-disk-usage = parallel-disk-usage;
     squirreldisk = squirreldisk;
+    nexis = (import ../../../wrapper/nexis.nix { inherit pkgs lib; });
   };
 
   # Get packages for enabled tools

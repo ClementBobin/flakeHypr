@@ -205,8 +205,7 @@ in
       };
     };
     home.shellAliases = {
-      #fix-hypr-rules = "sudo cp ~/.config/hypr/windowrules.conf ~/.config/hypr/windowrules.conf.local && sed -i 's/initialtitle:/title:/g' ~/.config/hypr/windowrules.conf.local && ln -sf ~/.config/hypr/windowrules.conf.local ~/.config/hypr/windowrules.conf";
-      fix-hypr-rules = "CHANGED=false; [ -s ~/.config/hypr/windowrules.conf ] && sudo mv ~/.config/hypr/windowrules.conf ~/.config/hypr/windowrules.conf.bak && sudo touch ~/.config/hypr/windowrules.conf && CHANGED=true || echo 'First file empty, skipping'; [ -s ~/.local/share/hypr/windowrules.conf ] && sudo mv ~/.local/share/hypr/windowrules.conf ~/.local/share/hypr/windowrules.conf.bak && sudo touch ~/.local/share/hypr/windowrules.conf && CHANGED=true || echo 'Second file empty, skipping'; if [ \"\$CHANGED\" = true ]; then echo 'Changes detected, reloading Hyprland...'; hyprctl reload; else echo 'No changes made.'; fi";
+      fix-hypr-rules = "CHANGED=false; [ -s ~/.config/hypr/windowrules.conf ] && sudo mv ~/.config/hypr/windowrules.conf ~/.config/hypr/windowrules.conf.bak && sudo cp ~/.config/hypr/windowrules-hypr.conf ~/.config/hypr/windowrules.conf && CHANGED=true || echo 'First file empty, skipping'; [ -s ~/.local/share/hypr/windowrules.conf ] && sudo mv ~/.local/share/hypr/windowrules.conf ~/.local/share/hypr/windowrules.conf.bak && sudo cp ~/.local/share/hypr/windowrules-hypr.conf ~/.local/share/hypr/windowrules.conf && CHANGED=true || echo 'Second file empty, skipping'; if [ \"\$CHANGED\" = true ]; then echo 'Changes detected, reloading Hyprland...'; hyprctl reload; else echo 'No changes made.'; fi";
       rebuild-fix = "sudo rm /home/mirage/.local/share/hypr/windowrules.conf && sudo rm /home/mirage/.config/hypr/windowrules.conf";
       run-gittype = "nix run github:unhappychoice/gittype";
       run-gitlogue = "nix run github:unhappychoice/gitlogue";
