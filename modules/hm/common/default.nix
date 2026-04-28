@@ -17,6 +17,7 @@ in
     ./dev/languages/php.nix
     ./dev/languages/python.nix
     ./dev/languages/rust.nix
+    ./dev/tools/claude.nix
     ./dev/tools/git-action.nix
     ./dev/tools/gitleaks
     ./dev/tools/nix.nix

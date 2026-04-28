@@ -14,7 +14,7 @@
       #gamemode.enable = true;
     };
     virtualisation.wine.enable = true;
-    networks.vpn = ["tailscale" "wireguard" "openfortivpn"];
+    networks.vpn = ["tailscale" "openfortivpn"];
     # virtualisation.enable = true;
     server.storage.syncthing = {
       enable = true;

@@ -29,6 +29,7 @@
     ./server/storage/forgejo.nix
     ./server/storage/syncthing.nix
     ./server/meal.nix
+    ./server/ollama.nix
     ./server/print.nix
 
     ./virtualisation

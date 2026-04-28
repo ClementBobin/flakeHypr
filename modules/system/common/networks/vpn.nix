@@ -78,7 +78,7 @@ in {
   options.modules.system.networks = {
 
     vpn = mkOption {
-      type = types.listOf (types.enum [ "tailscale" "wireguard" "openfortivpn" ]);
+      type = types.listOf (types.enum [ "tailscale" "wireguard" "openfortivpn" "tor" ]);
       default = [];
       description = "List of VPN services to enable.";
       example = [ "wireguard" "openfortivpn" ];
@@ -138,6 +138,7 @@ in {
     tailscaleEnabled    = lib.elem "tailscale"    cfg.vpn;
     wireguardEnabled    = lib.elem "wireguard"    cfg.vpn;
     openfortivpnEnabled = lib.elem "openfortivpn" cfg.vpn;
+    torEnabled          = lib.elem "tor"          cfg.vpn;
 
     anyVpnTool          = wireguardEnabled || openfortivpnEnabled;
 
@@ -156,6 +157,10 @@ in {
           ++ lib.optional tsCfg.ssh "--ssh"
           ++ lib.optional (tsCfg.operator != null) "--operator=${tsCfg.operator}";
       };
+    })
+
+    (lib.mkIf torEnabled {
+      environment.systemPackages = [ pkgs.tor ];
     })
 
     # ── Shared VPN tools (vpn dispatcher) ─────────────────────────────────────

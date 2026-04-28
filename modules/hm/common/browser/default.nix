@@ -9,6 +9,7 @@ let
     firefox  = [ firefox ];
     brave    = [ brave ];
     zen      = [ (inputs.zen-browser.packages.${pkgs.system}.default) ];
+    tor      = [ tor-browser ];
   };
 
   # Map browsers to their drivers (using pkgs.)
@@ -17,6 +18,7 @@ let
     brave    = chromedriver;
     firefox  = geckodriver;
     zen      = geckodriver;
+    tor      = null;
   };
 
   # Get packages for enabled browsers
