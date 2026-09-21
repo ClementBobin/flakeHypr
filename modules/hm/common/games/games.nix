@@ -12,12 +12,8 @@ let
       description = "Minecraft Launcher with PrismLauncher";
     };
     titanfall2 = {
-      packages = [ viper (lib.hiPrio inputs.nix-gaming.packages.${pkgs-unstable.system}.northstar-proton) ];
+      packages = with inputs.nix-gaming.packages.${pkgs-unstable.system}; [ viper (lib.hiPrio northstar-proton) ];
       description = "Titanfall 2 via nix-gaming";
-    };
-    roblox = {
-      packages = with inputs.nix-gaming.packages.${pkgs-unstable.system}; [ roblox-player ];
-      description = "Roblox Player";
     };
     rocket-league = {
       packages = with inputs.nix-gaming.packages.${pkgs-unstable.system}; [ rocket-league ];

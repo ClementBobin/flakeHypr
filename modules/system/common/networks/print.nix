@@ -8,6 +8,31 @@ in {
   options.modules.system.server.print = {
     enable = mkEnableOption "Enable CUPS (Common Unix Printing System)";
     browsed.enable = mkEnableOption "Enable CUPS Browsed for automatic printer discovery";
+    shared.enable = mkEnableOption "Enable printer sharing over the network";
+
+    # Define custom options for declarative printers
+    ensurePrinters = mkOption {
+      type = types.listOf types.attrs;
+      default = [];
+      example = literalExpression ''
+        [
+          {
+            name = "EPSON_ET_1810_Series";
+            location = "Home";
+            deviceUri = "ipp://192.168.1.14:631/ipp/print";
+            model = "everywhere";
+          }
+        ]
+      '';
+      description = "List of printers to ensure are configured in CUPS.";
+    };
+
+    ensureDefaultPrinter = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      example = "EPSON_ET_1810_Series";
+      description = "The default system printer.";
+    };
 
     drivers = mkOption {
       type = types.listOf types.package;
@@ -106,6 +131,13 @@ in {
       logLevel = cfg.logLevel;
       openFirewall = cfg.openFirewall;
       webInterface = cfg.webInterface;
+      browsing = cfg.browsed.enable;
+      defaultShared = cfg.shared.enable;
+    };
+
+    hardware.printers = {
+      ensurePrinters = cfg.ensurePrinters;
+      ensureDefaultPrinter = cfg.ensureDefaultPrinter;
     };
 
     services.avahi = {
