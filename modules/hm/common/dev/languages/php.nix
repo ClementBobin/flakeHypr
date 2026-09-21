@@ -1,15 +1,15 @@
-{ pkgs, lib, config, ... }:
+{ pkgs-unstable, lib, config, ... }:
 let
   cfg = config.modules.hm.dev.languages.php;
 
   # Build PHP environment with selected extensions and config
   phpWithExtensions = version: let
     phpAttr = "php${version}";
-    phpPkg = pkgs.${phpAttr};
+    phpPkg = pkgs-unstable.${phpAttr};
     phpExtsAttr = "${phpAttr}Extensions";
-    phpExts = pkgs.${phpExtsAttr};
+    phpExts = pkgs-unstable.${phpExtsAttr};
     phpPkgsAttr = "${phpAttr}Packages";
-    phpPkgs = pkgs.${phpPkgsAttr};
+    phpPkgs = pkgs-unstable.${phpPkgsAttr};
 
     # Map extra extension names to actual derivations
     extraExtsMapped = map (ext: phpExts.${ext}) cfg.extraExtensions;
@@ -123,11 +123,11 @@ in {
   config = lib.mkIf cfg.enable {
     home.packages =
       [ selectedPhp ]
-      ++ lib.optional cfg.composer.enable pkgs."php${cfg.version}Packages".composer;
+      ++ lib.optional cfg.composer.enable pkgs-unstable."php${cfg.version}Packages".composer;
 
     home.shellAliases = {
       php = "${selectedPhp}/bin/php";
-      composer = lib.mkIf cfg.composer.enable "${pkgs."php${cfg.version}Packages".composer}/bin/composer";
+      composer = lib.mkIf cfg.composer.enable "${pkgs-unstable."php${cfg.version}Packages".composer}/bin/composer";
     };
   };
 }

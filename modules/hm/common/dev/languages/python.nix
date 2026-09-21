@@ -1,4 +1,4 @@
-{ pkgs, lib, config, ... }:
+{ pkgs-unstable, lib, config, ... }:
 
 let
   # Shorthand for accessing module config
@@ -7,9 +7,9 @@ let
   # Function to get the required Python version with pipx, pip, and extra packages
   pythonWithPipx = version: let
     pythonAttr = "python${version}";
-    pythonPkg = pkgs.${pythonAttr};
+    pythonPkg = pkgs-unstable.${pythonAttr};
     pythonPkgsAttr = "${pythonAttr}Packages";
-    pythonPkgs = pkgs.${pythonPkgsAttr};
+    pythonPkgs = pkgs-unstable.${pythonPkgsAttr};
 
     # Map extra package names to actual derivations
     extraPkgsMapped = map (pkg: pythonPkgs.${pkg}) cfg.extraPackages;
@@ -18,9 +18,9 @@ let
     # hydenix.hm already provides the Python 3.12 interpreter,
     # so only pipx and pip (plus extras) are needed here.
     if version == "312" && config.hydenix.hm.enable then
-      [ pythonPkgs.pipx pythonPkgs.pip ] ++ extraPkgsMapped
+      [ pythonPkgs.pip ] ++ extraPkgsMapped
     else
-      [ pythonPkg pythonPkgs.pipx pythonPkgs.pip ] ++ extraPkgsMapped;
+      [ pythonPkg pythonPkgs.pip ] ++ extraPkgsMapped;
 
   # Flattened list of all selected Python versions with extras
   allPythonPackages = lib.flatten (map pythonWithPipx cfg.versions);
@@ -64,11 +64,11 @@ in {
     home = {
       packages =
         allPythonPackages
-        ++ lib.optional cfg.pdm.enable pkgs.pdm
+        ++ lib.optional cfg.pdm.enable pkgs-unstable.pdm
         ++ lib.optionals cfg.tools.enable [
-          pkgs."python${cfg.defaultVersion}Packages".black
-          pkgs."python${cfg.defaultVersion}Packages".flake8
-          pkgs."python${cfg.defaultVersion}Packages".pytest
+          pkgs-unstable."python${cfg.defaultVersion}Packages".black
+          pkgs-unstable."python${cfg.defaultVersion}Packages".flake8
+          pkgs-unstable."python${cfg.defaultVersion}Packages".pytest
         ];
 
       # Shell aliases

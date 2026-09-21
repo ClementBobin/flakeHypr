@@ -1,10 +1,10 @@
-{ pkgs, lib, config, ... }:
+{ pkgs-unstable, lib, config, ... }:
 
 let
   cfg = config.modules.hm.network.tunnel;
 
   # Map services to their packages
-  servicesToPackage = with pkgs; {
+  servicesToPackage = with pkgs-unstable; {
     localtunnel = [ nodePackages.localtunnel ];
   };
 

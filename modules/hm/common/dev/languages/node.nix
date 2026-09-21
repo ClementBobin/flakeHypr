@@ -1,4 +1,4 @@
-{ pkgs, lib, config, ... }:
+{ pkgs-unstable, lib, config, ... }:
 
 let
   cfg = config.modules.hm.dev.languages.node;
@@ -13,18 +13,18 @@ let
     nodeAttr = "nodejs_${version}";
 
     # Validate that the Node.js version exists
-    nodePkg = if builtins.hasAttr nodeAttr pkgs
-      then pkgs.${nodeAttr}
-      else throw "Node.js version ${version} not available in nixpkgs";
+    nodePkg = if builtins.hasAttr nodeAttr pkgs-unstable
+      then pkgs-unstable.${nodeAttr}
+      else throw "Node.js version ${version} not available in nixpkgs-unstable";
 
     managerPkg = {
-      pnpm = pkgs.pnpm;
-      yarn = pkgs.yarn;
+      pnpm = pkgs-unstable.pnpm;
+      yarn = pkgs-unstable.yarn;
       npm = null;    # npm ships with node, no extra package
     }.${cfg.packageManager};
   in lib.filter (x: x != null) [ nodePkg managerPkg ];
 
-  allNodePackages = lib.flatten (map nodeWithPackageManager cfg.versions) ++ (map (pkgName: pkgs.${pkgName}) cfg.extraPackages);
+  allNodePackages = lib.flatten (map nodeWithPackageManager cfg.versions) ++ (map (pkgName: pkgs-unstable.${pkgName}) cfg.extraPackages);
 in
 {
   options.modules.hm.dev.languages.node = {
@@ -36,7 +36,7 @@ in
     };
     versions = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      default = [ "22" ];
+      default = [ "24" ];
       description = "List of Node.js versions to install (e.g. ["18" "20"])";
     };
     extraPackages = lib.mkOption {

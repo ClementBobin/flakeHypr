@@ -1,11 +1,9 @@
-{ inputs, lib, config, pkgs, ... }:
+{ lib, config, ... }:
 let
   cfg = config.modules.hm.nh;
 in
 {
   imports = [
-    ./browser
-
     ./communication/mail.nix
     ./communication/discord.nix
     ./communication/teams.nix
@@ -17,7 +15,7 @@ in
     ./dev/languages/php.nix
     ./dev/languages/python.nix
     ./dev/languages/rust.nix
-    ./dev/tools/claude.nix
+    ./dev/tools/opencode.nix
     ./dev/tools/git-action.nix
     ./dev/tools/gitleaks
     ./dev/tools/nix.nix
@@ -35,7 +33,6 @@ in
 
     ./multimedia/editing/image.nix
     ./multimedia/editing/video.nix
-    ./multimedia/management-utility.nix
     ./multimedia/player.nix
     ./multimedia/remote-desktop.nix
     ./multimedia/streaming.nix
@@ -47,10 +44,6 @@ in
     ./shell/tools.nix
 
     ./utilities/api.nix
-    ./utilities/app-launcher.nix
-    ./utilities/tracker.nix
-
-    inputs.nix-podman-stacks.homeModules.nps
   ];
 
   options.modules.hm.nh = {

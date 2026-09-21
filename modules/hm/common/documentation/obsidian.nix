@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs-unstable, ... }:
 
 let
   cfg = config.modules.hm.documentation.obsidian;
@@ -11,12 +11,12 @@ let
   /*──────────────────────────
   │ Assets (theme & colors)  │
   └──────────────────────────*/
-  obsidianDcol = pkgs.fetchurl {
+  obsidianDcol = pkgs-unstable.fetchurl {
     url    = "https://github.com/HyDE-Project/obsidian/raw/refs/heads/main/obsidian.dcol";
     sha256 = "sha256-yaGOGoCcPANjVT7yvtg01Odd1MFj1pkdXILTY9+PU7k=";
   };
 
-  wallbashTheme = pkgs.fetchFromGitHub {
+  wallbashTheme = pkgs-unstable.fetchFromGitHub {
     owner   = "HyDE-Project";
     repo    = "obsidian";
     rev     = "main";
@@ -26,7 +26,7 @@ let
   /*──────────────────────────
   │ Find-based TODO copier   │
   └──────────────────────────*/
-  copyScript = pkgs.writeShellScript "obsidian-todo-copier" (''
+  copyScript = pkgs-unstable.writeShellScript "obsidian-todo-copier" (''
     OBSIDIAN_DIR="${cfg.projectsDir}"
     DEV_DIR="${cfg.devDir}"
 
@@ -69,7 +69,7 @@ in
 
     linker = lib.mkOption {
       type        = lib.types.bool;
-      default     = true;
+      default     = false;
       description = "Enable automatic TODO.md copying at startup";
     };
   };
@@ -79,7 +79,7 @@ in
   └──────────────────────────*/
   config = lib.mkIf cfg.enable (lib.mkMerge [
     {
-      home.packages = with pkgs; [
+      home.packages = with pkgs-unstable; [
         obsidian
       ];
 

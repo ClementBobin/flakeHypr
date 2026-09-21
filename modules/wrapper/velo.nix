@@ -10,7 +10,7 @@ let
   };
 
   # Extract the AppImage contents to get icons and desktop file
-  appimageContents = appimageTools.extractType2 {
+  appimageContents = appimageTools.extract {
     inherit pname version src;
   };
 in

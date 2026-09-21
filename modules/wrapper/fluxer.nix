@@ -13,7 +13,7 @@ let
   };
 
   # Extract with the original complex name to avoid hash issues, but we'll reference contents carefully
-  appimageContents = pkgs.appimageTools.extractType2 {
+  appimageContents = pkgs.appimageTools.extract {
     pname = "${name}-${version}-${system}";
     inherit src version;
   };

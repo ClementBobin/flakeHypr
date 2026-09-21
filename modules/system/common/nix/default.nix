@@ -18,6 +18,7 @@ in
   };
 
   config = {
+    services.flatpak.enable = true;
     environment.systemPackages = [
       (lib.mkIf cfg.rebootTo (pkgs.writeScriptBin "reboot-to" ''
         #!${pkgs.bash}/bin/bash

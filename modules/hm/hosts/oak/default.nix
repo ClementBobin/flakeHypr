@@ -27,13 +27,10 @@
         wallpaper-engine.enable = true;
         editing.image.enable = true;
         player = {
-          clients = ["mpv" "jellyfin-client" "spicetify" "ani-cli" "mangayomi"];
+          clients = ["mpv" "jellyfin-client"];
           jellyfin.rpc = true;
         };
-        remote-desktop.clients = ["remote-viewer"];
-        management-utility.clients = ["nwg-displays"];
       };
-      browser.clients = ["zen"];
       documentation = {
         editors = ["onlyoffice"];
         obsidian.enable = true;
@@ -54,18 +51,15 @@
             enable = true;
             extraPackages = ["dotnet-ef"];
           };
-          node = {
-            enable = true;
-            extraPackages = ["node2nix" "fnm" "npm-check-updates"];
-          };
-          rust.enable = true;
+          node.enable = true;
           python.enable = true;
         };
         tools = {
           git-action.packages = ["act"];
           nix.enable = true;
-          gitleaks.enable = true;
+          gitleaks.enable = false;
           prisma.enable = true;
+          opencode.enable = true;
         };
       };
       communication = {
@@ -78,13 +72,11 @@
       };
       utilities = {
         api.clients = ["scalar"];
-        tracker.enable = true;
-        app-launcher.clients = ["hyprshell"];
       };
-      extra.syncthing-ignore = {
-        enable = true;
-        excludedDirs = ["node_modules" "vendor" "storage" ".idea"];
-      };
+      # extra.syncthing-ignore = {
+      #   enable = true;
+      #   excludedDirs = ["node_modules" "vendor" "storage" ".idea"];
+      # };
     };
   };
 }

@@ -1,10 +1,10 @@
-{ pkgs, lib, config, ... }:
+{ pkgs-unstable, lib, config, ... }:
 
 let
   cfg = config.modules.hm.multimedia.remote-desktop;
 
   # Map clients to their packages
-  clientsToPackage = with pkgs; {
+  clientsToPackage = with pkgs-unstable; {
     parsec = [ parsec-bin ];
     rustdesk = [ rustdesk-flutter ];
     remmina = [ remmina ];

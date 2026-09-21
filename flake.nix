@@ -6,29 +6,16 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-stable.url = "github:nixos/nixpkgs/release-25.05";
     nix-gaming.url = "github:fufexan/nix-gaming";
-    sops-nix.url = "github:Mic92/sops-nix";
 
     # Hydenix and its nixpkgs - kept separate to avoid conflicts
-    hydenix.url = "github:richen604/hydenix/v5.0.0";
+    #hydenix.url = "path:/home/mirage/Documents/dev/multi-stack-project/nixos/hydenix";
+    hydenix.url = "github:ClementBobin/hydenix/v1.18.0";
     nixos-hardware.url = "github:nixos/nixos-hardware/master";
-
-    nix-podman-stacks = {
-      url = "github:Tarow/nix-podman-stacks";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    spicetify-nix.url = "github:Gerg-L/spicetify-nix";
-
-    zen-browser = {
-      url = "github:youwen5/zen-browser-flake";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
 
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
     linux-wallpaper-engine.url = "github:jagrat7/linux-wallpaper-engine";
   };
 
@@ -46,6 +33,17 @@
           inherit inputs system;
           vars = vars // extraVars;
           hostname = hostname;
+          pkgs-unstable = import inputs.nixpkgs {
+            inherit system;
+            config.allowUnfree = true;
+            config.permittedInsecurePackages = [
+              "electron-39.8.10"
+            ];
+          };
+          pkgs-stable = import inputs.nixpkgs-stable {
+            inherit system;
+            config.allowUnfree = true;
+          };
         };
         modules = [
           ./hosts/${hostname}

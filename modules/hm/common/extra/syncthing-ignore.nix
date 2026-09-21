@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs-unstable, ... }:
 
 with lib;
 
@@ -13,10 +13,10 @@ buildFindCommand = targetDir: excludedDirs:
     else
       " " + (concatMapStrings (dir: "-not -path '*/${dir}/*' ") excludedDirs);
   in
-    ''${pkgs.findutils}/bin/find "$TARGET_DIR" -name ".gitignore" -type f -readable${excludePart} 2>/dev/null || true'';
+    ''${pkgs-unstable.findutils}/bin/find "$TARGET_DIR" -name ".gitignore" -type f -readable${excludePart} 2>/dev/null || true'';
 
   # The script that finds Syncthing folders from config.xml and aggregates .gitignore files
-  ignoreAggregatorScript = pkgs.writeShellScriptBin "aggregate-ignores" ''
+  ignoreAggregatorScript = pkgs-unstable.writeShellScriptBin "aggregate-ignores" ''
     #!/usr/bin/env bash
     set -euo pipefail
 
@@ -79,8 +79,8 @@ buildFindCommand = targetDir: excludedDirs:
       fi
 
       # Use xmlstarlet to extract folder paths
-      if command -v ${pkgs.xmlstarlet}/bin/xmlstarlet &> /dev/null; then
-        ${pkgs.xmlstarlet}/bin/xmlstarlet sel -t -m "//folder" -v "@path" -n "$config_file" 2>/dev/null
+      if command -v ${pkgs-unstable.xmlstarlet}/bin/xmlstarlet &> /dev/null; then
+        ${pkgs-unstable.xmlstarlet}/bin/xmlstarlet sel -t -m "//folder" -v "@path" -n "$config_file" 2>/dev/null
       else
         # Fallback: use grep and sed (less reliable but works)
         grep -o 'path="[^"]*"' "$config_file" | sed 's/path="//;s/"$//'
@@ -123,7 +123,7 @@ buildFindCommand = targetDir: excludedDirs:
       fi
 
       local found_count
-      found_count=$(echo "$IGNORE_FILES" | ${pkgs.coreutils}/bin/wc -l)
+      found_count=$(echo "$IGNORE_FILES" | ${pkgs-unstable.coreutils}/bin/wc -l)
       echo "Found $found_count .gitignore file(s) in $TARGET_DIR."
 
       echo "Aggregating to $STIGNORE_FILE..."
@@ -285,7 +285,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    home.packages = [ ignoreAggregatorScript pkgs.xmlstarlet ];
+    home.packages = [ ignoreAggregatorScript pkgs-unstable.xmlstarlet ];
 
     systemd.user = {
       services.syncthing-ignore-aggregator = {

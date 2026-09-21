@@ -1,4 +1,4 @@
-{ lib, config, pkgs, ... }:
+{ lib, config, pkgs-unstable, ... }:
 
 let
   cfg = config.modules.system.nix.polkit;
@@ -19,6 +19,6 @@ in
       });
     '';
 
-    environment.systemPackages = with pkgs; [ kdePackages.kdenetwork-filesharing ];
+    environment.systemPackages = with pkgs-unstable; [ kdePackages.kdenetwork-filesharing ];
   };
 }

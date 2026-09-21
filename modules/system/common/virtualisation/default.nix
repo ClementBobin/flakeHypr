@@ -1,4 +1,4 @@
-{ config, lib, pkgs, vars, ... }:
+{ config, lib, pkgs-unstable, vars, ... }:
 
 let
   inherit (lib) mkEnableOption mkOption types;
@@ -12,7 +12,7 @@ let
   supportedClients = [ "virt-manager" "droidcam" "quickemu" ];
 
   # Map emulators to their packages
-  emulatorToPackage = with pkgs; {
+  emulatorToPackage = with pkgs-unstable; {
     playonlinux = [ playonlinux ];
     bottles = [ bottles ];
     dosbox = [ dosbox ];
@@ -21,15 +21,15 @@ let
   };
 
   # Wine packages based on version
-  winePackages = with pkgs; {
-    stable64 = wineWowPackages.wayland;
+  winePackages = with pkgs-unstable; {
+    stable64 = wineWow64Packages.wayland;
     stable = wine;
     staging = wine-staging;
     wayland = wineWayland;
   };
 
   # Proton packages
-  protonPackages = with pkgs; [
+  protonPackages = with pkgs-unstable; [
     protonup-qt
     protontricks
     proton-caller
@@ -39,8 +39,8 @@ let
   baseEmulatorPackages = lib.concatMap (emulator: emulatorToPackage.${emulator} or []) cfg.emulators;
 
   # Additional packages based on configuration
-  additionalPackages = with pkgs; []
-    ++ lib.optionals cfg.wine.enable [ (winePackages.${cfg.wine.version} or pkgs.wine-stable) ]
+  additionalPackages = with pkgs-unstable; []
+    ++ lib.optionals cfg.wine.enable [ (winePackages.${cfg.wine.version} or pkgs-unstable.wine-stable) ]
     ++ lib.optionals (cfg.wine.enable && cfg.wine.compatibilityTools.enable) [ winetricks winboat ]
     ++ lib.optionals cfg.proton.enable protonPackages
     ++ lib.optionals (lib.elem "podman" cfg.engines) [ podman-compose ]
@@ -240,7 +240,7 @@ in {
 
     (lib.mkIf (lib.elem "waydroid" cfg.engines) {
       virtualisation.waydroid.enable = true;
-      environment.systemPackages = [ pkgs.waydroid ];
+      environment.systemPackages = [ pkgs-unstable.waydroid ];
     })
 
     (lib.mkIf (lib.elem "virt-manager" cfg.gui.clients) {
@@ -248,7 +248,7 @@ in {
     })
 
     (lib.mkIf (lib.elem "droidcam" cfg.gui.clients) {
-      environment.systemPackages = [ pkgs.droidcam ];
+      environment.systemPackages = [ pkgs-unstable.droidcam ];
     })
 
     (lib.mkIf (cfg.emulators != []) {

@@ -3,6 +3,8 @@
   vars,
   lib,
   system,
+  pkgs-stable,
+  pkgs-unstable,
   ...
 }:
 let
@@ -10,6 +12,9 @@ let
     inherit system;
     config = {
       allowUnfree = true;
+      permittedInsecurePackages = [
+        "electron-41.10.6"
+      ];
     };
     overlays = [
       inputs.hydenix.overlays.default
@@ -42,10 +47,12 @@ in
   ];
 
   home-manager = {
+    backupFileExtension = "bak";
     useGlobalPkgs = true;
     useUserPackages = true;
     extraSpecialArgs = {
-      inherit inputs;
+      inherit inputs pkgs-stable pkgs-unstable;
+      pkgs-hydenix = pkgs;
     };
     users."${vars.user}" =
       { ... }:
@@ -59,8 +66,13 @@ in
         desktops.hydenix = {
           enable = true;
           hostname = "oak";
-          browser.enable = false;
+          random = "all";
         };
+
+        home.packages = with pkgs; [
+          solidtime-desktop
+          flatpak
+        ];
       };
   };
 
@@ -83,7 +95,6 @@ in
     hostname = "oak";
     timezone = "Europe/Paris";
     locale = "fr_FR.UTF-8";
-    gaming.enable = false;
   };
 
   hardware = {
@@ -91,18 +102,19 @@ in
     nvidia.prime.amdgpuBusId = lib.mkForce "PCI:36:0:0";
   };
 
-  # networking.firewall = {
-  #   enable = true;
-  #   allowedTCPPorts = [ 54005 ];
-  # };
+  networking = {
+    firewall = {
+      enable = true;
+      allowedTCPPorts = [ 8080 4433 ];
+    };
+    networkmanager.plugins = with pkgs; [
+      networkmanager-fortisslvpn
+    ];
+  };
 
-  # boot.kernel.sysctl = {
-  #   "net.core.rmem_max" = 25165824;
-  #   "net.core.wmem_max" = 25165824;
-  #   "net.core.rmem_default" = 65536;
-  #   "net.core.wmem_default" = 65536;
-  #   #"net.ipv4.ip_unprivileged_port_start" = 0;
-  # };
+  boot.kernelParams = [
+    "amdgpu.freesync_video=0"
+  ];
 
-  system.stateVersion = "25.05";
+  system.stateVersion = "26.05";
 }

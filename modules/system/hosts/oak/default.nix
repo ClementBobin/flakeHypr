@@ -16,11 +16,11 @@
     virtualisation.wine.enable = true;
     networks.vpn = ["tailscale" "openfortivpn"];
     # virtualisation.enable = true;
-    server.storage.syncthing = {
-      enable = true;
-      dirSync = "/home/${vars.user}";
-      subDir = "Documents";
-    };
+    # server.storage.syncthing = {
+    #   enable = true;
+    #   dirSync = "/home/${vars.user}";
+    #   subDir = "Documents";
+    # };
     server.print = {
       enable = true;
       browsed.enable = true;

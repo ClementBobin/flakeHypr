@@ -26,15 +26,15 @@ stdenv.mkDerivation rec {
     curl
     systemd
     xorg.libX11
-    xorg.libXcomposite
+    libxcomposite
     xorg.libXcursor
-    xorg.libXdamage
+    libxdamage
     xorg.libXext
     xorg.libXfixes
     xorg.libXi
     xorg.libXrender
-    xorg.libXtst
-    xorg.libXrandr
+    libxtst
+    libxrandr
     xorg.libXScrnSaver
     xorg.libxcb
     alsa-lib

@@ -1,34 +1,34 @@
-{ config, lib, pkgs, inputs, ... }:
+{ config, lib, pkgs-unstable, inputs, ... }:
 
 let
   cfg = config.modules.hm.games;
 
-  viper = pkgs.callPackage ../../../wrapper/viper.nix { };
+  viper = pkgs-unstable.callPackage ../../../wrapper/viper.nix { };
 
   # Define all available games
   availableGames = {
     minecraft = {
-      packages = with pkgs; [ prismlauncher jdk17 gcc glibc ];
+      packages = with pkgs-unstable; [ prismlauncher jdk21 gcc glibc ];
       description = "Minecraft Launcher with PrismLauncher";
     };
     titanfall2 = {
-      packages = [ viper (lib.hiPrio inputs.nix-gaming.packages.${pkgs.system}.northstar-proton) ];
+      packages = [ viper (lib.hiPrio inputs.nix-gaming.packages.${pkgs-unstable.system}.northstar-proton) ];
       description = "Titanfall 2 via nix-gaming";
     };
     roblox = {
-      packages = with inputs.nix-gaming.packages.${pkgs.system}; [ roblox-player ];
+      packages = with inputs.nix-gaming.packages.${pkgs-unstable.system}; [ roblox-player ];
       description = "Roblox Player";
     };
     rocket-league = {
-      packages = with inputs.nix-gaming.packages.${pkgs.system}; [ rocket-league ];
+      packages = with inputs.nix-gaming.packages.${pkgs-unstable.system}; [ rocket-league ];
       description = "Rocket League via nix-gaming";
     };
     star-citizen = {
-      packages = [ inputs.nix-gaming.packages.${pkgs.system}.star-citizen ]; #pkgs.lug-helper ];
+      packages = [ inputs.nix-gaming.packages.${pkgs-unstable.system}.star-citizen ]; #pkgs-unstable.lug-helper ];
       description = "Star Citizen Launcher";
     };
     geforce-now = {
-      packages = with pkgs; [ gfn-electron];
+      packages = with pkgs-unstable; [ gfn-electron];
       description = "NVIDIA GeForce Now Client";
     };
   };

@@ -1,4 +1,4 @@
-{ pkgs, config, lib, ... }:
+{ pkgs-unstable, config, lib, ... }:
 
 let
   cfg = config.modules.hm.multimedia.streaming;
@@ -10,14 +10,14 @@ in
   };
 
   config = {
-    home.packages = (with pkgs; []
+    home.packages = (with pkgs-unstable; []
       ++ (lib.optional cfg.kooha.enable kooha)
       ++ (lib.optional cfg.obs.enable v4l-utils)
     );
 
     programs.obs-studio = lib.mkIf cfg.obs.enable {
       enable = true;
-      plugins = with pkgs.obs-studio-plugins; [
+      plugins = with pkgs-unstable.obs-studio-plugins; [
         wlrobs
         looking-glass-obs
         obs-pipewire-audio-capture

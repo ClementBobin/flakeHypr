@@ -1,4 +1,4 @@
-{ lib, config, pkgs, vars, ... }:
+{ lib, config, pkgs-unstable, vars, ... }:
 
 let
   inherit (lib) mkEnableOption mkOption types;
@@ -6,10 +6,10 @@ let
 
   # ── Script derivations ────────────────────────────────────────────────────
 
-  wireguard-script = pkgs.writeShellScript "wireguard-vpn"
+  wireguard-script = pkgs-unstable.writeShellScript "wireguard-vpn"
     (builtins.readFile ./wireguard-vpn.sh);
 
-  openfortivpn-script = pkgs.writeShellScript "openfortivpn-vpn"
+  openfortivpn-script = pkgs-unstable.writeShellScript "openfortivpn-vpn"
     (builtins.readFile ./openfortivpn.sh);
 
   # ── Unified `vpn` dispatcher ──────────────────────────────────────────────
@@ -18,7 +18,7 @@ let
   #   vpn of  [up|down|status|config|edit|menu]
   #   vpn     → interactive picker then delegates
   #
-  vpn-tool = pkgs.writeShellScriptBin "vpn" ''
+  vpn-tool = pkgs-unstable.writeShellScriptBin "vpn" ''
     usage() {
       echo "VPN Manager"
       echo "Usage: vpn <backend> [command]"
@@ -160,7 +160,7 @@ in {
     })
 
     (lib.mkIf torEnabled {
-      environment.systemPackages = [ pkgs.tor ];
+      environment.systemPackages = [ pkgs-unstable.tor ];
     })
 
     # ── Shared VPN tools (vpn dispatcher) ─────────────────────────────────────
@@ -172,7 +172,7 @@ in {
     # ── WireGuard ─────────────────────────────────────────────────────────────
 
     (lib.mkIf wireguardEnabled {
-      environment.systemPackages = [ pkgs.wireguard-tools ];
+      environment.systemPackages = [ pkgs-unstable.wireguard-tools ];
 
       boot.kernelModules = lib.mkIf cfg.wireguard.autoLoadKernelModule [ "wireguard" ];
 
@@ -185,7 +185,7 @@ in {
     # ── OpenFortiVPN ──────────────────────────────────────────────────────────
 
     (lib.mkIf openfortivpnEnabled {
-      environment.systemPackages = [ pkgs.openfortivpn ];
+      environment.systemPackages = [ pkgs-unstable.openfortivpn ];
 
       environment.etc."vpn-scripts/openfortivpn-vpn.sh" = {
         source = openfortivpn-script;

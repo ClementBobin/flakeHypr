@@ -1,4 +1,4 @@
-{ config, lib, pkgs, vars, ... }:
+{ config, lib, pkgs-unstable, vars, ... }:
 
 with lib;
 
@@ -11,9 +11,9 @@ in {
 
     drivers = mkOption {
       type = types.listOf types.package;
-      default = [ pkgs.epson-escpr2 ];
+      default = [ pkgs-unstable.epson-escpr2 ];
       example = literalExpression ''
-        with pkgs; [
+        with pkgs-unstable; [
           cnijfilter2
           gutenprint
           hplip
@@ -21,7 +21,7 @@ in {
         ]
       '';
       description = ''
-        List of printer drivers to use. Defaults to [ pkgs.cnijfilter2 ], which
+        List of printer drivers to use. Defaults to [ pkgs-unstable.cnijfilter2 ], which
         is an unfree package for Canon printers.
       '';
     };
@@ -81,9 +81,9 @@ in {
 
       packages = mkOption {
         type = types.listOf types.package;
-        default = [ pkgs.system-config-printer ];
+        default = [ pkgs-unstable.system-config-printer ];
         example = literalExpression ''
-          with pkgs; [
+          with pkgs-unstable; [
             system-config-printer
             print-manager
             gtklp
@@ -91,7 +91,7 @@ in {
         '';
         description = ''
           List of GUI tools for managing printers. Defaults to
-          [ pkgs.system-config-printer ].
+          [ pkgs-unstable.system-config-printer ].
         '';
       };
     };

@@ -1,12 +1,12 @@
-{ pkgs, lib, config, ... }:
+{ pkgs-unstable, lib, config, ... }:
 
 let
   cfg = config.modules.hm.dev.languages.rust;
 
-  rustDefaultPackages = with pkgs; [rustc cargo rust-analyzer clippy rustfmt];
+  rustDefaultPackages = with pkgs-unstable; [rustc cargo rust-analyzer clippy rustfmt];
 
   rustPackages = rustDefaultPackages
-  ++ (map (pkgName: pkgs.${pkgName} or (abort "Unknown Rust pkg: ${pkgName}"))
+  ++ (map (pkgName: pkgs-unstable.${pkgName} or (abort "Unknown Rust pkg: ${pkgName}"))
         cfg.extraPackages);
 
 in

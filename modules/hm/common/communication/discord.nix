@@ -1,17 +1,17 @@
-{ pkgs, lib, config, ... }:
+{ pkgs-unstable, lib, config, ... }:
 
 let
   cfg = config.modules.hm.communication.discord;
 
   # Map Discord clients to their packages
   clientsToPackage = {
-    fluxer = (import ../../../wrapper/fluxer.nix { inherit pkgs lib; });
-    discord-sh = pkgs.discord-sh;
-    discord-ptb = pkgs.discord-ptb;
+    fluxer = (import ../../../wrapper/fluxer.nix { inherit pkgs-unstable lib; });
+    discord-sh = pkgs-unstable.discord-sh;
+    discord-ptb = pkgs-unstable.discord-ptb;
   };
 
   # Map overlay names to their packages
-  overlaysToPackage = with pkgs; {
+  overlaysToPackage = with pkgs-unstable; {
     "discover-overlay" = discover-overlay;
     overlayed = overlayed;
   };
@@ -23,7 +23,7 @@ let
   overlayPackages = map (overlay: overlaysToPackage.${overlay}) cfg.overlays;
 
   # RPC package
-  rpcPackage = lib.optional cfg.rpc.enable pkgs.discord-rpc;
+  rpcPackage = lib.optional cfg.rpc.enable pkgs-unstable.discord-rpc;
 
 in
 {

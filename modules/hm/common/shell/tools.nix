@@ -1,4 +1,4 @@
-{ pkgs, lib, config, ... }:
+{ pkgs-unstable, lib, config, ... }:
 
 let
   cfg = config.modules.hm.shell.tools;
@@ -17,7 +17,7 @@ in
   config = lib.mkIf cfg.enable {
     # Install shell tools via home-manager
     home = {
-      packages = (with pkgs; [
+      packages = (with pkgs-unstable; [
         tree
       ]);
       shellAliases = cfg.shellAliases;

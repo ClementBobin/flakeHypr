@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs-unstable, ... }:
 
 with lib;
 
@@ -12,7 +12,7 @@ let
   ];
 
   # The script that handles the cleanup
-  cleanupScript = pkgs.writeShellScriptBin "cleanup-shader-caches" ''
+  cleanupScript = pkgs-unstable.writeShellScriptBin "cleanup-shader-caches" ''
     set -euo pipefail
 
     # Help function
@@ -193,7 +193,7 @@ let
     fi
 
     # Use eval to properly handle the complex find command
-    eval "${pkgs.findutils}/bin/find \"''${FIND_CMD[@]}\" \
+    eval "${pkgs-unstable.findutils}/bin/find \"''${FIND_CMD[@]}\" \
       -type f \
       \( $PATTERN_CMD \) \
       -mtime +$DAYS_THRESHOLD \

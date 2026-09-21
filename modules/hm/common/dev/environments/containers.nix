@@ -1,11 +1,11 @@
-{ pkgs, lib, config, ... }:
+{ pkgs-unstable, lib, config, ... }:
 
 let
   cfg = config.modules.hm.dev.environments.containers;
   
   enginePackages = engine:
-    if engine == "docker" then [ pkgs.docker-compose ]
-    else if engine == "podman" then [ pkgs.podman-compose ]
+    if engine == "docker" then [ pkgs-unstable.docker-compose ]
+    else if engine == "podman" then [ pkgs-unstable.podman-compose ]
     else [];
 
   hasDocker = lib.lists.elem "docker" cfg.engine;
@@ -57,13 +57,13 @@ in
           Type = "exec";
           KillMode = "process";
           Environment = ["LOGGING=--log-level=info"];
-          ExecStart = "${lib.getExe pkgs.podman} $LOGGING system service";
+          ExecStart = "${lib.getExe pkgs-unstable.podman} $LOGGING system service";
         };
       };
     }
 
     {
-      home.packages = with pkgs;
+      home.packages = with pkgs-unstable;
         (lib.concatMap enginePackages cfg.engine)
         ++ lib.optionals cfg.gui.enable [ podman-desktop ]
         ++ lib.optionals cfg.tui.enable (

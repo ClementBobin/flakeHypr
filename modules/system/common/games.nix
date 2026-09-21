@@ -1,10 +1,10 @@
-{ pkgs, config, lib, ... }:
+{ pkgs-unstable, config, lib, ... }:
 
 let
   cfg = config.modules.system.games;
 
   # Map gaming clients to their packages
-  clientToPackage = with pkgs; {
+  clientToPackage = with pkgs-unstable; {
     steam = [ ];
     lutris = [ lutris ];
     heroic = [ heroic ];
@@ -178,7 +178,7 @@ in {
 
   config = lib.mkMerge [
     {
-      environment.systemPackages = lib.unique clientPackages ++ (if cfg.steamtinkerlauncher then [ pkgs.steamtinkerlaunch ] else []);
+      environment.systemPackages = lib.unique clientPackages ++ (if cfg.steamtinkerlauncher then [ pkgs-unstable.steamtinkerlaunch ] else []);
       environment.sessionVariables = lib.mkIf (lib.elem "steam" cfg.clients) {
         STEAM_EXTRA_COMPAT_TOOLS_PATHS = cfg.steam.compatToolsPath;
       };
@@ -220,7 +220,8 @@ in {
           protontricks.enable = true;
           localNetworkGameTransfers.openFirewall = true;
           dedicatedServer.openFirewall = true;
-          extraCompatPackages = with pkgs; [
+          extraCompatPackages = with pkgs-unstable; [
+            dwproton-bin
             proton-ge-bin
             steam-play-none
           ];
