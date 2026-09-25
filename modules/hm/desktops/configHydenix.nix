@@ -4,91 +4,95 @@ let
   cfg = config.desktops.hydenix;
   utilities = config.modules.hm.utilities;
 
-  zen-browserEnabled = lib.elem "zen-browser" config.modules.hm.browser.clients;
-
-  # app-launcher hyprshell actif
-  hyprshellActive = lib.elem "hyprshell" config.modules.hm.utilities.app-launcher.clients;
-
-  # Generate random command logic
-  randomCommand =
-    if cfg.randomOnBoot.wallpaper && cfg.randomOnBoot.theme then
-      "random-theme.sh -a"
-    else if cfg.randomOnBoot.wallpaper then
-      "wallpaper.sh -r"
-    else if cfg.randomOnBoot.theme then
-      "random-theme.sh -r"
-    else
-      null;
+  wallpaper-engineEnabled = config.modules.hm.multimedia.wallpaper-engine.enable;
 
   startupCmds = [
     "sleep 5"
-    (lib.optionalString hyprshellActive "hyprshell run &")
-    (lib.optionalString (randomCommand != null) randomCommand)
   ];
   filteredCmds = lib.filter (x: x != "") startupCmds;
   execCmd = lib.concatStringsSep " && " filteredCmds;
 in
 {
-  hyprlandKeybinds = ''
-    ## █▄▀ █▀▀ █▄█ █▄▄ █ █▄░█ █▀▄ █ █▄░█ █▀▀ █▀
-    ## █░█ ██▄ ░█░ █▄█ █ █░▀█ █▄▀ █ █░▀█ █▄█ ▄█
-    # $scrPath=$HOME/.local/lib/hyde # set scripts path
+  hyprlandConfig = ''
+    local MOD = hyde.config.modifiers.main
 
-    $l=Launcher
-    ${lib.optionalString zen-browserEnabled ''
-      bindd = $mainMod, B, $l zen browser, exec, zen
+    hl.config({
+      input = {
+        kb_layout = "fr",
+        force_no_accel = true,
+        accel_profile = "flat",
+        sensitivity = 0,
+      }
+    })
+
+
+    local kp_fr = {
+      [1]  = "ampersand",
+      [2]  = "eacute",
+      [3]  = "quotedbl",
+      [4]  = "apostrophe",
+      [5]  = "parenleft",
+      [6]  = "minus",
+      [7]  = "egrave",
+      [8]  = "underscore",
+      [9]  = "ccedilla",
+      [10] = "agrave",
+    }
+
+    for i = 1, 10 do
+      _F = {description = "[Workspaces|Navigation] navigate to workspace " .. i}
+      hl.bind(MOD .. " + " .. kp_fr[i], hl.dsp.focus({workspace = i}), _F)
+    end
+
+    for i = 1, 10 do
+      _F = {description = "[Workspaces|Move window to workspace] move to workspace " .. i}
+      hl.bind(MOD .. " + SHIFT + " .. kp_fr[i], hl.dsp.window.move({workspace = i}), _F)
+    end
+
+    for i = 1, 10 do
+      _F = {description = "[Workspaces|Move window (Don't follow)] move silently to workspace " .. i}
+      hl.bind(MOD .. " + ALT + " .. kp_fr[i], hl.dsp.window.move({workspace = i, follow = false}), _F)
+    end
+
+
+    ${lib.optionalString wallpaper-engineEnabled ''
+      _F = {description = "[Launcher] wallpaper engine"}
+      hl.bind(MOD .. " + SHIFT + Z", hl.dsp.exec_cmd("linux-wallpaper-engine"), _F)
     ''}
-    $d=[$l|Rofi menus]
-    bindd = $mainMod, colon, $d keybindings hint, exec, pkill -x rofi || $scrPath/keybinds_hint.sh c # launch keybinds hint
-    bindd = $mainMod, semicolon , $d glyph picker , exec, pkill -x rofi || $scrPath/glyph-picker.sh # launch glyph picker
 
-    $ws=Workspaces
-    $d=[$ws|Navigation]
-    bindd = $mainMod, ampersand, $d navigate to workspace 1 , workspace, 1
-    bindd = $mainMod, eacute, $d navigate to workspace 2 , workspace, 2
-    bindd = $mainMod, quotedbl, $d navigate to workspace 3 , workspace, 3
-    bindd = $mainMod, apostrophe, $d navigate to workspace 4 , workspace, 4
-    bindd = $mainMod, parenleft, $d navigate to workspace 5 , workspace, 5
-    bindd = $mainMod, minus, $d navigate to workspace 6 , workspace, 6
-    bindd = $mainMod, egrave, $d navigate to workspace 7 , workspace, 7
-    bindd = $mainMod, underscore, $d navigate to workspace 8 , workspace, 8
-    bindd = $mainMod, ccedilla, $d navigate to workspace 9 , workspace, 9
-    bindd = $mainMod, agrave, $d navigate to workspace 10 , workspace, 10
+    _F = {description = "[Launcher|Apps] spotify"}
+    hl.bind(MOD .. " + M", hl.dsp.exec_cmd("spotify"), _F)
 
-    # Move focused window to a workspace
-    $d=[$ws|Move window to workspace]
-    bindd = $mainMod Shift, ampersand, $d move to workspace 1 , movetoworkspace, 1
-    bindd = $mainMod Shift, eacute, $d move to workspace 2 , movetoworkspace, 2
-    bindd = $mainMod Shift, quotedbl, $d move to workspace 3 , movetoworkspace, 3
-    bindd = $mainMod Shift, apostrophe, $d move to workspace 4 , movetoworkspace, 4
-    bindd = $mainMod Shift, parenleft, $d move to workspace 5 , movetoworkspace, 5
-    bindd = $mainMod Shift, minus, $d move to workspace 6 , movetoworkspace, 6
-    bindd = $mainMod Shift, egrave, $d move to workspace 7 , movetoworkspace, 7
-    bindd = $mainMod Shift, underscore, $d move to workspace 8 , movetoworkspace, 8
-    bindd = $mainMod Shift, ccedilla, $d move to workspace 9 , movetoworkspace, 9
-    bindd = $mainMod Shift, agrave, $d move to workspace 10 , movetoworkspace, 10
+    _F = {description = "[Launcher|Apps] obsidian"}
+    hl.bind(MOD .. " + O", hl.dsp.exec_cmd("obsidian"), _F)
 
-    # Move focused window to a workspace silently
-    $d=[$ws|Navigation|Move window silently]
-    bindd = $mainMod Alt, ampersand, $d move to workspace 1  (silent), movetoworkspacesilent, 1
-    bindd = $mainMod Alt, eacute, $d move to workspace 2  (silent), movetoworkspacesilent, 2
-    bindd = $mainMod Alt, quotedbl, $d move to workspace 3  (silent), movetoworkspacesilent, 3
-    bindd = $mainMod Alt, apostrophe, $d move to workspace 4  (silent), movetoworkspacesilent, 4
-    bindd = $mainMod Alt, parenleft, $d move to workspace 5  (silent), movetoworkspacesilent, 5
-    bindd = $mainMod Alt, minus, $d move to workspace 6  (silent), movetoworkspacesilent, 6
-    bindd = $mainMod Alt, egrave, $d move to workspace 7  (silent), movetoworkspacesilent, 7
-    bindd = $mainMod Alt, underscore, $d move to workspace 8  (silent), movetoworkspacesilent, 8
-    bindd = $mainMod Alt, ccedilla, $d move to workspace 9  (silent), movetoworkspacesilent, 9
-    bindd = $mainMod Alt, agrave, $d move to workspace 10 (silent), movetoworkspacesilent, 10
+    _F = {description = "[Workflows & Power] toggle performance/default/powersaver"}
+    hl.bind(MOD .. " + ALT + G", hl.dsp.exec_cmd("power-tools toggle"), _F)
 
-    $ws=Modes
-    $d=[$ws|Safety]
-    bindd = $mainMod Alt, F4, $d emergency shutdown all apps, exec, pkill -KILL -u $USER
+    -- Rofi and utility launchers translated to Lua bindings
+    _F = {description = "[Launcher|Rofi menus] keybindings hint"}
+    hl.bind(MOD .. " + colon", hl.dsp.exec_cmd(hyde.sh.menu.binds()), _F)
 
-    $d=#! unset the group name
-  '';
+    _F = {description = "[Launcher|Rofi menus] glyph picker"}
+    hl.bind(MOD .. " + semicolon", hl.dsp.exec_cmd(hyde.sh.menu.glyph()), _F)
 
-  exec-once = ''
-    exec-once = ${execCmd}
+    _F = {description = "[Launcher|Rofi menus] Web Search"}
+    hl.bind(MOD .. " + SHIFT + colon", hl.dsp.exec_cmd(hyde.sh.menu.search()), _F)
+
+    -- Safety / Emergency shutdown
+    _F = {description = "[Modes|Safety] emergency shutdown all apps"}
+    hl.bind(MOD .. " + ALT + F4", hl.dsp.exec_cmd("pkill -KILL -u $USER"), _F)
+
+    -- Open workflow selector with rofi
+    _F = {description = "[Launcher|Rofi menus] workflow selector"}
+    hl.bind(MOD .. " + SHIFT + S", hl.dsp.exec_cmd("hyde-shell workflows --select"), _F)
+
+    -- Toggle between US and FR keyboard layouts with setxkbmap and send a notification
+    _F = {description = "[Keyboard|Layout] toggle between US and FR layouts"}
+    hl.bind(MOD .. " + SHIFT + K", hl.dsp.exec_cmd("bash -c 'if setxkbmap -query | grep -q \"layout:[[:space:]]*fr\"; then setxkbmap us && notify-send \"Keyboard\" \"Switched to US\"; else setxkbmap fr && notify-send \"Keyboard\" \"Switched to FR\"; fi'"), _F)
+
+    -- Toggle between editing and previous workflow with hyde-shell and send a notification
+    _F = {description = "[Workflow|Toggle] toggle between editing and previous workflow"}
+    hl.bind(MOD .. " + SHIFT + C", hl.dsp.exec_cmd("bash -c 'current=$(hyde-shell workflows --current); if echo \"$current\" | grep -qi \"editing\"; then hyde-shell workflows --set Default; notify-send \"Workflow\" \"Switched to Default\"; else hyde-shell workflows --set Editing; notify-send \"Workflow\" \"Switched to Editing\"; fi'"), _F)
   '';
 }

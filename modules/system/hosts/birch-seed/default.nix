@@ -49,6 +49,5 @@
 
 #  services.portmaster = {
 #    enable = true;
-#    devmode.enable = true;
 #  };
 }

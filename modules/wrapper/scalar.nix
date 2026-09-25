@@ -3,7 +3,7 @@
 let
   scalar-deb = pkgs.fetchurl {
     url = "https://download.scalar.com/linux/deb/x64";
-    sha256 = "sha256-PyMxXf0uOkI+jUU6gOpV9T3nsXUBkAgUKUCvNic20ew=";
+    sha256 = "sha256-95B+6NK5emhpZWObqKmKApn1BCVZd0l48vXpTvcEZS4=";
   };
 
   scalar-app = pkgs.stdenv.mkDerivation {
@@ -21,10 +21,10 @@ let
       gtk3
       libsecret
       nss
-      xorg.libXdamage
-      xorg.libXtst
-      xorg.libXcomposite
-      xorg.libXrandr
+      libxdamage
+      libxtst
+      libxcomposite
+      libxrandr
     ];
 
     unpackPhase = "dpkg -x $src .";
@@ -53,7 +53,7 @@ let
           vulkan-loader
           libva
         ])} \
-        --prefix PATH : ${lib.makeBinPath [ pkgs.xorg.xrandr ]}
+        --prefix PATH : ${lib.makeBinPath [ pkgs.xrandr ]}
     '';
   };
 in

@@ -1,4 +1,4 @@
-{ pkgs, lib, config, ... }:
+{ lib, config, ... }:
 
 let
   cfg = config.modules.hm.games.mangohud;
@@ -9,7 +9,7 @@ in
 
     enableSessionWide = lib.mkOption {
         type = lib.types.bool;
-        default = false;
+        default = true;
         description = ''
           Enable MangoHud globally for all applications. When disabled,
           MangoHud must be launched per-application using the mangohud

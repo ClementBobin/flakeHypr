@@ -19,7 +19,8 @@ in
 
     boot = {
       plymouth.enable = true;
-      kernelPackages = pkgs.linuxPackages_zen;
+      kernelPackages = pkgs.linuxPackages_latest;
+      #kernelPackages = pkgs.linuxPackages_zen;
       loader.systemd-boot.enable = pkgs.lib.mkForce false;
       loader = {
         efi = {

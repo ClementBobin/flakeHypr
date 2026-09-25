@@ -8,8 +8,9 @@
     ./hardware/autologin.nix
     ./hardware/boot.nix
 
-    ./networks/vpn.nix
+    ./networks/vpn
     ./networks/wol.nix
+    ./networks/print.nix
 
     ./nix
     ./nix/nix-garbage.nix
@@ -18,18 +19,6 @@
     ./security/antivirus.nix
     ./security/password-manager.nix
 
-    ./server/communication/agents.nix
-    ./server/communication/ntfy-sh.nix
-    ./server/dev/vs-code.nix
-    ./server/games/sunshine.nix
-    ./server/media/multimedia.nix
-    ./server/media/paperless.nix
-    ./server/media/photoprism.nix
-    ./server/password-manager/vaultwarden.nix
-    ./server/storage/forgejo.nix
-    ./server/storage/syncthing.nix
-    ./server/meal.nix
-    ./server/print.nix
 
     ./virtualisation
     ./games.nix

@@ -319,7 +319,6 @@ in {
       # ASUS control services
       asusd = lib.mkIf cfg.asus.enable {
         enable = true;
-        enableUserService = true;
       };
       supergfxd = lib.mkIf cfg.asus.enable {
         enable = true;

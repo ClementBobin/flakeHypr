@@ -1,13 +1,10 @@
-{ inputs, lib, config, pkgs, ... }:
+{ lib, config, ... }:
 let
   cfg = config.modules.hm.nh;
 in
 {
   imports = [
-    ./browser
-
     ./communication/mail.nix
-    ./communication/discord.nix
     ./communication/teams.nix
 
     ./dev/environments/containers.nix
@@ -16,7 +13,7 @@ in
     ./dev/languages/node.nix
     ./dev/languages/php.nix
     ./dev/languages/python.nix
-    ./dev/languages/rust.nix
+    ./dev/tools/opencode.nix
     ./dev/tools/git-action.nix
     ./dev/tools/gitleaks
     ./dev/tools/nix.nix
@@ -34,21 +31,16 @@ in
 
     ./multimedia/editing/image.nix
     ./multimedia/editing/video.nix
-    ./multimedia/management-utility.nix
     ./multimedia/player.nix
     ./multimedia/remote-desktop.nix
     ./multimedia/streaming.nix
-
-    ./network/tunnel.nix
+    ./multimedia/wallpaper-engine.nix
 
     ./shell/disk-usage.nix
     ./shell/tools.nix
 
     ./utilities/api.nix
-    ./utilities/app-launcher.nix
-    ./utilities/tracker.nix
-
-    inputs.nix-podman-stacks.homeModules.nps
+    ./utilities/time-tracker.nix
   ];
 
   options.modules.hm.nh = {
@@ -71,7 +63,6 @@ in
 
   config = {
     programs = {
-      #home-manager.enable = true;
       nh = {
         enable = cfg.enable;
         clean = {

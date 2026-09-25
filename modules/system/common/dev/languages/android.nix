@@ -11,6 +11,7 @@ in
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
       android-studio
+      android-tools.out
     ];
 
     environment.shellAliases = {

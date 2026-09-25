@@ -13,7 +13,6 @@ in
     home.packages = (with pkgs; [
       nixfmt
       nix-direnv
-      direnv
       nix-output-monitor
       nix-fast-build
       openssl
@@ -28,7 +27,7 @@ in
     };
 
     programs.zsh = {
-      initExtra = lib.mkAfter ''
+      initContent = lib.mkAfter ''
         source ${pkgs.nix-index}/etc/profile.d/command-not-found.sh
       '';
     };

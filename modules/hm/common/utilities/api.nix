@@ -5,7 +5,10 @@ let
 
   # Map client to their packages
   clientToPackage = {
-    scalar = (import ../../../wrapper/scalar.nix { inherit pkgs lib config; }).scalarApp;
+    scalar = (import ../../../wrapper/scalar.nix {
+      pkgs = pkgs;
+      inherit lib config;
+    }).scalarApp;
     yaak   = pkgs.yaak;
     requestly = pkgs.requestly;
   };

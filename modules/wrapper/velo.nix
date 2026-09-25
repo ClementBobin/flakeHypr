@@ -10,7 +10,7 @@ let
   };
 
   # Extract the AppImage contents to get icons and desktop file
-  appimageContents = appimageTools.extractType2 {
+  appimageContents = appimageTools.extract {
     inherit pname version src;
   };
 in
@@ -19,12 +19,12 @@ appimageTools.wrapType2 {
   inherit pname version src;
 
   extraInstallCommands = ''
-    # Install desktop file
     install -m 444 -D "${appimageContents}/Velo.desktop" "$out/share/applications/${pname}.desktop"
-
-    # Install icon
-    install -m 444 -D "${appimageContents}/usr/share/icons/hicolor/256x256@2/apps/velo.png" \
-      "$out/share/icons/hicolor/512x512/apps/${pname}.png"
+    install -m 444 -D "${appimageContents}/usr/share/icons/hicolor/256x256@2/apps/velo.png" "$out/share/icons/hicolor/256x256/apps/${pname}.png"
+    
+    # Ensure the desktop file points to the correct executable
+    substituteInPlace "$out/share/applications/${pname}.desktop" \
+      --replace "Exec=Velo" "Exec=${pname}"
   '';
 
   meta = with lib; {

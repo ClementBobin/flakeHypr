@@ -78,7 +78,7 @@ in {
   options.modules.system.networks = {
 
     vpn = mkOption {
-      type = types.listOf (types.enum [ "tailscale" "wireguard" "openfortivpn" ]);
+      type = types.listOf (types.enum [ "tailscale" "wireguard" "openfortivpn" "tor" ]);
       default = [];
       description = "List of VPN services to enable.";
       example = [ "wireguard" "openfortivpn" ];
@@ -138,6 +138,8 @@ in {
     tailscaleEnabled    = lib.elem "tailscale"    cfg.vpn;
     wireguardEnabled    = lib.elem "wireguard"    cfg.vpn;
     openfortivpnEnabled = lib.elem "openfortivpn" cfg.vpn;
+    torEnabled          = lib.elem "tor"          cfg.vpn;
+
     anyVpnTool          = wireguardEnabled || openfortivpnEnabled;
 
     tsCfg = {
@@ -157,6 +159,10 @@ in {
       };
     })
 
+    (lib.mkIf torEnabled {
+      environment.systemPackages = [ pkgs.tor ];
+    })
+
     # ── Shared VPN tools (vpn dispatcher) ─────────────────────────────────────
 
     (lib.mkIf anyVpnTool {
@@ -174,14 +180,6 @@ in {
         source = wireguard-script;
         mode   = "0755";
       };
-
-      # security.sudo.extraRules = [{
-      #   groups   = [ "wheel" ];
-      #   commands = [
-      #     { command = "${pkgs.wireguard-tools}/bin/wg";       options = [ "NOPASSWD" ]; }
-      #     { command = "${pkgs.wireguard-tools}/bin/wg-quick"; options = [ "NOPASSWD" ]; }
-      #   ];
-      # }];
     })
 
     # ── OpenFortiVPN ──────────────────────────────────────────────────────────
@@ -193,13 +191,6 @@ in {
         source = openfortivpn-script;
         mode   = "0755";
       };
-
-      # security.sudo.extraRules = [{
-      #   groups   = [ "wheel" ];
-      #   commands = [
-      #     { command = "${pkgs.openfortivpn}/bin/openfortivpn"; options = [ "NOPASSWD" ]; }
-      #   ];
-      # }];
     })
 
   ];

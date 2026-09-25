@@ -6,7 +6,6 @@ let
   # Map document editors to their packages
   editorsToPackage = with pkgs; {
     onlyoffice = null;
-    okular = okular;
   };
 
   # Get packages for enabled editors
@@ -19,13 +18,12 @@ in
     editors = lib.mkOption {
       type = lib.types.listOf (lib.types.enum (lib.attrNames editorsToPackage));
       default = [];
-      example = [ "onlyoffice" "okular" ];
+      example = [ "onlyoffice" ];
       description = "List of document editors to install";
     };
   };
 
   config = {
-    home.packages = editorsPackages;
     programs.onlyoffice.enable = lib.elem "onlyoffice" cfg.editors;
   };
 }

@@ -131,5 +131,5 @@ in
   services.displayManager.autoLogin.enable = true;
   services.displayManager.autoLogin.user = "${vars.user}";
 
-  system.stateVersion = "25.05";
+  system.stateVersion = "26.05";
 }

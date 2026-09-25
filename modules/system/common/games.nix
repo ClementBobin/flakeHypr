@@ -221,6 +221,7 @@ in {
           localNetworkGameTransfers.openFirewall = true;
           dedicatedServer.openFirewall = true;
           extraCompatPackages = with pkgs; [
+            dwproton-bin
             proton-ge-bin
             steam-play-none
           ];

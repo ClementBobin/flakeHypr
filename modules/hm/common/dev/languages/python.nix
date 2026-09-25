@@ -18,9 +18,9 @@ let
     # hydenix.hm already provides the Python 3.12 interpreter,
     # so only pipx and pip (plus extras) are needed here.
     if version == "312" && config.hydenix.hm.enable then
-      [ pythonPkgs.pipx pythonPkgs.pip ] ++ extraPkgsMapped
+      [ pythonPkgs.pip ] ++ extraPkgsMapped
     else
-      [ pythonPkg pythonPkgs.pipx pythonPkgs.pip ] ++ extraPkgsMapped;
+      [ pythonPkg pythonPkgs.pip ] ++ extraPkgsMapped;
 
   # Flattened list of all selected Python versions with extras
   allPythonPackages = lib.flatten (map pythonWithPipx cfg.versions);
