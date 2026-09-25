@@ -216,14 +216,18 @@
         "zen-browser": "zen-browser"
       },
       "locked": {
-        "lastModified": 1790243577,
-        "narHash": "sha256-33fq6pIEhkDt5tc6IAygMVSBZDhBXJ05LSRESj3qSj0=",
-        "path": "/home/mirage/Documents/dev/multi-stack-project/nixos/hydenix",
-        "type": "path"
+        "lastModified": 1790323750,
+        "narHash": "sha256-4ARgCMrgxUNsYwHUKq8UaPeBvGCRnxlWn4o2lSg/Ywk=",
+        "owner": "ClementBobin",
+        "repo": "hydenix",
+        "rev": "351bf7458cc723b8dd0f88e5e3361db75b8d8ae1",
+        "type": "github"
       },
       "original": {
-        "path": "/home/mirage/Documents/dev/multi-stack-project/nixos/hydenix",
-        "type": "path"
+        "owner": "ClementBobin",
+        "ref": "v1.19.0",
+        "repo": "hydenix",
+        "type": "github"
       }
     },
     "hyq": {

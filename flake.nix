@@ -12,7 +12,7 @@
 
     # Hydenix and its nixpkgs - kept separate to avoid conflicts
     #hydenix.url = "path:/home/mirage/Documents/dev/multi-stack-project/nixos/hydenix";
-    hydenix.url = "github:ClementBobin/hydenix/v1.18.0";
+    hydenix.url = "github:ClementBobin/hydenix/v1.19.0";
     nixos-hardware.url = "github:nixos/nixos-hardware/master";
 
     linux-wallpaper-engine.url = "github:jagrat7/linux-wallpaper-engine";
