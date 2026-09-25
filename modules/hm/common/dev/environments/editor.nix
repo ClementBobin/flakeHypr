@@ -1,10 +1,10 @@
-{ pkgs-unstable, lib, config, ... }:
+{ pkgs, lib, config, ... }:
 
 let
   cfg = config.modules.hm.dev.environments;
 
   # Categorize different types of IDEs
-  jetbrainsIDEs = with pkgs-unstable; {
+  jetbrainsIDEs = with pkgs; {
     datagrip = jetbrains.datagrip;
     dataspell = jetbrains.dataspell;
     fleet = jetbrains.fleet;
@@ -18,7 +18,7 @@ let
     goland = jetbrains.goland;
   };
 
-  otherIDEs = with pkgs-unstable; {
+  otherIDEs = with pkgs; {
     dbeaver = dbeaver-bin;
     vs-code = null;
     codium = vscodium;

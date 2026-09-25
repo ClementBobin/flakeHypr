@@ -1,4 +1,4 @@
-{ pkgs-unstable, lib, config, ... }:
+{ pkgs, lib, config, ... }:
 
 let
   cfg = config.modules.hm.shell.disk-usage;
@@ -6,13 +6,13 @@ let
 
 
   # Map disk usage tools to their packages
-  toolToPackage = with pkgs-unstable; {
+  toolToPackage = with pkgs; {
     ncdu = ncdu;
     gdu = gdu;
     dust = dust;
     parallel-disk-usage = parallel-disk-usage;
     squirreldisk = squirreldisk;
-    nexis = (import ../../../wrapper/nexis.nix { pkgs = pkgs-unstable; inherit lib; });
+    nexis = (import ../../../wrapper/nexis.nix { pkgs = pkgs; inherit lib; });
   };
 
   # Get packages for enabled tools

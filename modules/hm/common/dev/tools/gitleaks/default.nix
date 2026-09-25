@@ -1,4 +1,4 @@
-{ pkgs-unstable, lib, config, ... }:
+{ pkgs, lib, config, ... }:
 
 let
   cfg = config.modules.hm.dev.tools.gitleaks;
@@ -12,7 +12,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    home.packages = [ pkgs-unstable.gitleaks ];
+    home.packages = [ pkgs.gitleaks ];
 
     programs.git.enable = true;
 

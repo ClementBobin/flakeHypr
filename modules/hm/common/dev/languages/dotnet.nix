@@ -1,15 +1,15 @@
-{ pkgs-unstable, lib, config, ... }:
+{ pkgs, lib, config, ... }:
 
 let
   cfg = config.modules.hm.dev.languages.dotnet;
 
   sdkVersions = cfg.sdk-versions;
 
-  dotnetPackages = (map (v: pkgs-unstable."dotnet-sdk_${v}") sdkVersions) ++
+  dotnetPackages = (map (v: pkgs."dotnet-sdk_${v}") sdkVersions) ++
     (map (pkgName:
-      if pkgs-unstable ? ${pkgName}
-      then pkgs-unstable.${pkgName}
-      else throw "Package '${pkgName}' not found in pkgs-unstable"
+      if pkgs ? ${pkgName}
+      then pkgs.${pkgName}
+      else throw "Package '${pkgName}' not found in pkgs"
     ) cfg.extraPackages);
 
 in

@@ -8,7 +8,7 @@
     ./hardware/autologin.nix
     ./hardware/boot.nix
 
-    ./networks/vpn.nix
+    ./networks/vpn
     ./networks/wol.nix
     ./networks/print.nix
 

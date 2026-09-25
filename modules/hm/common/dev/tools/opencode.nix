@@ -1,4 +1,4 @@
-{ pkgs-unstable, lib, config, ... }:
+{ pkgs, lib, config, ... }:
 let
   cfg = config.modules.hm.dev.tools.opencode;
 in
@@ -8,7 +8,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    home.packages = with pkgs-unstable; [
+    home.packages = with pkgs; [
       opencode
       opencode-desktop
     ];

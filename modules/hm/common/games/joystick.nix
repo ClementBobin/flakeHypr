@@ -1,4 +1,4 @@
-{ config, lib, pkgs-unstable, ... }:
+{ config, lib, pkgs, ... }:
 
 let
   cfg = config.modules.hm.games.joystick;
@@ -9,7 +9,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    home.packages = (with pkgs-unstable; [
+    home.packages = (with pkgs; [
       joystickwake
       qjoypad
     ]);

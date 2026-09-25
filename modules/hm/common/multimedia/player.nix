@@ -1,10 +1,10 @@
-{ pkgs-unstable, lib, config, inputs, ... }:
+{ pkgs, lib, config, inputs, ... }:
 
 let
   cfg = config.modules.hm.multimedia.player;
 
   # Map document clients to their packages
-  clientsToPackage = with pkgs-unstable; {
+  clientsToPackage = with pkgs; {
     mpv = null;
     vlc = vlc;
     jellyfin = jellyfin-media-player;
@@ -22,7 +22,7 @@ let
 
   # Add jellyfin-rpc if enabled
   finalPackages = enabledPackages ++
-    (lib.optional cfg.jellyfin.rpc pkgs-unstable.jellyfin-rpc);
+    (lib.optional cfg.jellyfin.rpc pkgs.jellyfin-rpc);
 
 in
 {
@@ -43,7 +43,7 @@ in
     programs = {
       mpv = lib.mkIf (lib.elem "mpv" cfg.clients) {
         enable = true;
-        scripts = with pkgs-unstable.mpvScripts; [
+        scripts = with pkgs.mpvScripts; [
           uosc
         ];
         scriptOpts."uosc" = {

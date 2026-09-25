@@ -1,10 +1,10 @@
-{ pkgs-unstable, lib, config, ... }:
+{ pkgs, lib, config, ... }:
 
 let
   cfg = config.modules.hm.documentation;
 
   # Map document editors to their packages
-  editorsToPackage = with pkgs-unstable; {
+  editorsToPackage = with pkgs; {
     onlyoffice = null;
   };
 

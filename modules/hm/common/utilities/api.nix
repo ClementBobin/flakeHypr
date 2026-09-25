@@ -1,4 +1,4 @@
-{ pkgs-unstable, lib, config, ... }:
+{ pkgs, lib, config, ... }:
 
 let
   cfg = config.modules.hm.utilities.api;
@@ -6,11 +6,11 @@ let
   # Map client to their packages
   clientToPackage = {
     scalar = (import ../../../wrapper/scalar.nix {
-      pkgs = pkgs-unstable;
+      pkgs = pkgs;
       inherit lib config;
     }).scalarApp;
-    yaak   = pkgs-unstable.yaak;
-    requestly = pkgs-unstable.requestly;
+    yaak   = pkgs.yaak;
+    requestly = pkgs.requestly;
   };
 
   # Get packages for enabled clients

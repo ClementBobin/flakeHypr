@@ -5,7 +5,6 @@ in
 {
   imports = [
     ./communication/mail.nix
-    ./communication/discord.nix
     ./communication/teams.nix
 
     ./dev/environments/containers.nix
@@ -14,7 +13,6 @@ in
     ./dev/languages/node.nix
     ./dev/languages/php.nix
     ./dev/languages/python.nix
-    ./dev/languages/rust.nix
     ./dev/tools/opencode.nix
     ./dev/tools/git-action.nix
     ./dev/tools/gitleaks
@@ -38,12 +36,11 @@ in
     ./multimedia/streaming.nix
     ./multimedia/wallpaper-engine.nix
 
-    ./network/tunnel.nix
-
     ./shell/disk-usage.nix
     ./shell/tools.nix
 
     ./utilities/api.nix
+    ./utilities/time-tracker.nix
   ];
 
   options.modules.hm.nh = {
@@ -66,7 +63,6 @@ in
 
   config = {
     programs = {
-      #home-manager.enable = true;
       nh = {
         enable = cfg.enable;
         clean = {

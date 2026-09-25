@@ -65,13 +65,10 @@
       communication = {
         teams.enable = true;
         mail.services = ["velo"];
-        discord = {
-          #clients = ["fluxer"];
-          rpc.enable = true;
-        };
       };
       utilities = {
         api.clients = ["scalar"];
+        time-tracker.enabledTrackers = ["solidtime"];
       };
       # extra.syncthing-ignore = {
       #   enable = true;

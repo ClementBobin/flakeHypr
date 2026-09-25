@@ -1,15 +1,15 @@
-{ config, lib, pkgs-unstable, ... }:
+{ config, lib, pkgs, ... }:
 
 let
   cfg = config.modules.system.security;
 
   # Map password managers to their packages
-  passwordManagerToPackage = with pkgs-unstable; {
+  passwordManagerToPackage = with pkgs; {
     bitwarden = [ bitwarden-desktop ];
   };
 
   # YubiKey packages
-  yubikeyPackages = with pkgs-unstable; [
+  yubikeyPackages = with pkgs; [
     yubikey-manager
     yubikey-personalization
     yubioath-flutter
@@ -41,7 +41,7 @@ in {
     (lib.mkIf cfg.yubikey.enable {
       security.pam.u2f.enable = true;
       services.pcscd.enable = true;
-      services.udev.packages = with pkgs-unstable; [
+      services.udev.packages = with pkgs; [
         yubikey-personalization
         yubikey-manager
       ];

@@ -1,4 +1,4 @@
-{ pkgs-unstable, lib, config, ... }:
+{ pkgs, lib, config, ... }:
 
 let
   cfg = config.modules.hm.dev.tools.nix;
@@ -10,7 +10,7 @@ in
 
   config = lib.mkIf cfg.enable {
     # Install nix-related tools via home-manager
-    home.packages = (with pkgs-unstable; [
+    home.packages = (with pkgs; [
       nixfmt
       nix-direnv
       nix-output-monitor
@@ -28,7 +28,7 @@ in
 
     programs.zsh = {
       initContent = lib.mkAfter ''
-        source ${pkgs-unstable.nix-index}/etc/profile.d/command-not-found.sh
+        source ${pkgs.nix-index}/etc/profile.d/command-not-found.sh
       '';
     };
   };

@@ -1,14 +1,14 @@
-{ config, lib, pkgs-unstable, vars, ... }:
+{ config, lib, pkgs, vars, ... }:
 
 let
   cfg = config.modules.system.hardware.powersave;
 
   # Import scripts as derivations
-  power-toggle = pkgs-unstable.writeShellScript "power-toggle" (builtins.readFile ./power-toggle.sh);
-  power-benchmark = pkgs-unstable.writeShellScript "power-benchmark" (builtins.readFile ./power-benchmark.sh);
-  power-tuning = pkgs-unstable.writeShellScript "power-tuning" (builtins.readFile ./power-tuning.sh);
+  power-toggle = pkgs.writeShellScript "power-toggle" (builtins.readFile ./power-toggle.sh);
+  power-benchmark = pkgs.writeShellScript "power-benchmark" (builtins.readFile ./power-benchmark.sh);
+  power-tuning = pkgs.writeShellScript "power-tuning" (builtins.readFile ./power-tuning.sh);
 
-  power-tools = pkgs-unstable.writeShellScriptBin "power-tools" ''
+  power-tools = pkgs.writeShellScriptBin "power-tools" ''
     case "$1" in
       benchmark)
         shift
@@ -188,7 +188,7 @@ in {
 
   config = lib.mkIf cfg.enable {
     # Add required packages
-    environment.systemPackages = with pkgs-unstable; [
+    environment.systemPackages = with pkgs; [
       powertop
       acpi
     ] ++ lib.optional (cfg.architecture == "amd") amdctl

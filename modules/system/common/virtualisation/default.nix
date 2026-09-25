@@ -1,4 +1,4 @@
-{ config, lib, pkgs-unstable, vars, ... }:
+{ config, lib, pkgs, vars, ... }:
 
 let
   inherit (lib) mkEnableOption mkOption types;
@@ -12,7 +12,7 @@ let
   supportedClients = [ "virt-manager" "droidcam" "quickemu" ];
 
   # Map emulators to their packages
-  emulatorToPackage = with pkgs-unstable; {
+  emulatorToPackage = with pkgs; {
     playonlinux = [ playonlinux ];
     bottles = [ bottles ];
     dosbox = [ dosbox ];
@@ -21,7 +21,7 @@ let
   };
 
   # Wine packages based on version
-  winePackages = with pkgs-unstable; {
+  winePackages = with pkgs; {
     stable64 = wineWow64Packages.wayland;
     stable = wine;
     staging = wine-staging;
@@ -29,7 +29,7 @@ let
   };
 
   # Proton packages
-  protonPackages = with pkgs-unstable; [
+  protonPackages = with pkgs; [
     protonup-qt
     protontricks
     proton-caller
@@ -39,8 +39,8 @@ let
   baseEmulatorPackages = lib.concatMap (emulator: emulatorToPackage.${emulator} or []) cfg.emulators;
 
   # Additional packages based on configuration
-  additionalPackages = with pkgs-unstable; []
-    ++ lib.optionals cfg.wine.enable [ (winePackages.${cfg.wine.version} or pkgs-unstable.wine-stable) ]
+  additionalPackages = with pkgs; []
+    ++ lib.optionals cfg.wine.enable [ (winePackages.${cfg.wine.version} or pkgs.wine-stable) ]
     ++ lib.optionals (cfg.wine.enable && cfg.wine.compatibilityTools.enable) [ winetricks winboat ]
     ++ lib.optionals cfg.proton.enable protonPackages
     ++ lib.optionals (lib.elem "podman" cfg.engines) [ podman-compose ]
@@ -240,7 +240,7 @@ in {
 
     (lib.mkIf (lib.elem "waydroid" cfg.engines) {
       virtualisation.waydroid.enable = true;
-      environment.systemPackages = [ pkgs-unstable.waydroid ];
+      environment.systemPackages = [ pkgs.waydroid ];
     })
 
     (lib.mkIf (lib.elem "virt-manager" cfg.gui.clients) {
@@ -248,7 +248,7 @@ in {
     })
 
     (lib.mkIf (lib.elem "droidcam" cfg.gui.clients) {
-      environment.systemPackages = [ pkgs-unstable.droidcam ];
+      environment.systemPackages = [ pkgs.droidcam ];
     })
 
     (lib.mkIf (cfg.emulators != []) {

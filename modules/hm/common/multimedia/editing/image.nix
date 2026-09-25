@@ -1,4 +1,4 @@
-{ pkgs-unstable, lib, config, ... }:
+{ pkgs, lib, config, ... }:
 
 let
   cfg = config.modules.hm.multimedia.editing.image;
@@ -9,7 +9,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    home.packages = (with pkgs-unstable; [
+    home.packages = (with pkgs; [
       krita
     ]);
   };

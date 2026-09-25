@@ -1,4 +1,4 @@
-{ pkgs-unstable, lib, config, ... }:
+{ pkgs, lib, config, ... }:
 
 let
   # Shorthand for accessing module config
@@ -7,9 +7,9 @@ let
   # Function to get the required Python version with pipx, pip, and extra packages
   pythonWithPipx = version: let
     pythonAttr = "python${version}";
-    pythonPkg = pkgs-unstable.${pythonAttr};
+    pythonPkg = pkgs.${pythonAttr};
     pythonPkgsAttr = "${pythonAttr}Packages";
-    pythonPkgs = pkgs-unstable.${pythonPkgsAttr};
+    pythonPkgs = pkgs.${pythonPkgsAttr};
 
     # Map extra package names to actual derivations
     extraPkgsMapped = map (pkg: pythonPkgs.${pkg}) cfg.extraPackages;
@@ -64,11 +64,11 @@ in {
     home = {
       packages =
         allPythonPackages
-        ++ lib.optional cfg.pdm.enable pkgs-unstable.pdm
+        ++ lib.optional cfg.pdm.enable pkgs.pdm
         ++ lib.optionals cfg.tools.enable [
-          pkgs-unstable."python${cfg.defaultVersion}Packages".black
-          pkgs-unstable."python${cfg.defaultVersion}Packages".flake8
-          pkgs-unstable."python${cfg.defaultVersion}Packages".pytest
+          pkgs."python${cfg.defaultVersion}Packages".black
+          pkgs."python${cfg.defaultVersion}Packages".flake8
+          pkgs."python${cfg.defaultVersion}Packages".pytest
         ];
 
       # Shell aliases

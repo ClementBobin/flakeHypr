@@ -1,4 +1,4 @@
-{ pkgs-unstable, lib, config, ... }:
+{ pkgs, lib, config, ... }:
 
 let
   cfg = config.modules.hm.dev.tools.git-action;
@@ -14,7 +14,7 @@ in
 
   config = {
     home.packages =
-      (lib.optional (lib.elem "act" cfg.packages) pkgs-unstable.act) ++
-      (lib.optional (lib.elem "wrkflw" cfg.packages) pkgs-unstable.wrkflw);
+      (lib.optional (lib.elem "act" cfg.packages) pkgs.act) ++
+      (lib.optional (lib.elem "wrkflw" cfg.packages) pkgs.wrkflw);
   };
 }
