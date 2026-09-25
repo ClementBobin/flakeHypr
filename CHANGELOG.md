@@ -1,3 +1,20 @@
+# [1.6.0](https://github.com/ClementBobin/flakeHypr/compare/v1.5.0...v1.6.0) (2026-09-25)
+
+
+### Bug Fixes
+
+* change from hyprland to default ([3cea2f2](https://github.com/ClementBobin/flakeHypr/commit/3cea2f21ace4638b248e7d750c1119f68df2fe22))
+
+
+### Features
+
+* add support for Tor and Ollama server, update VPN configuration ([1cca2d3](https://github.com/ClementBobin/flakeHypr/commit/1cca2d3ffc533cc090e5c67fc34b1a3628b0ae34))
+* **hydenix:** update hydenix version to v1.19.0 in flake configuration ([3fab52a](https://github.com/ClementBobin/flakeHypr/commit/3fab52aee0180702c0b82fc2986452faa269b4a3))
+* **multimedia:** integrate Wallpaper Engine and enable in oak host configuration ([2313620](https://github.com/ClementBobin/flakeHypr/commit/2313620bbcea0763efdd5c3d009e66ccfd34bca4))
+* **nexis:** add Nexis application and integrate into shell environment ([8fb1e19](https://github.com/ClementBobin/flakeHypr/commit/8fb1e1959e23cdb4e705059ea356b006b3cfd5c0))
+* **print:** add printer sharing and configuration options for cups ([bd3f652](https://github.com/ClementBobin/flakeHypr/commit/bd3f6522e4edf13f0fd5aeed00730635d4f9627b))
+* **vpn:** add WireGuard VPN Manager script with TUI interface for managing VPN connections ([7955271](https://github.com/ClementBobin/flakeHypr/commit/79552712831ffa3dfbb9f6df2fa42b7ad4ad2b8c))
+
 # [1.5.0](https://github.com/ClementBobin/flakeHypr/compare/v1.4.0...v1.5.0) (2026-03-25)
 
 
